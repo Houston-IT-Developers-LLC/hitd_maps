@@ -1,0 +1,61 @@
+name: hitd_maps
+description: >
+  Houston IT Developers Maps Package - A comprehensive Flutter mapping toolkit
+  for outdoor/hunting applications. Features MapLibre GL integration, PMTiles
+  support, solunar calculations, wind overlays, and public lands data.
+version: 1.0.0
+homepage: https://github.com/Houston-IT-Developers/hitd_maps
+repository: https://github.com/Houston-IT-Developers/hitd_maps
+issue_tracker: https://github.com/Houston-IT-Developers/hitd_maps/issues
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Map rendering
+  maplibre_gl: ^0.19.0
+
+  # HTTP client for API calls
+  dio: ^5.4.1
+
+  # State management (optional - users can use their own)
+  get: ^4.6.6
+
+  # Utilities
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  mocktail: ^1.0.4
+
+# Feature flags for optional dependencies
+# Users can exclude features they don't need
+features:
+  solunar:
+    description: Solunar calculator for hunting/fishing predictions
+    default: true
+  wind:
+    description: Wind overlay with Open-Meteo integration
+    default: true
+  public_lands:
+    description: PAD-US public lands layer support
+    default: true
+
+flutter:
+  assets:
+    - assets/styles/
+
+# Platform support
+platforms:
+  android:
+  ios:
+  web:
+  macos:
+  linux:
+  windows:
