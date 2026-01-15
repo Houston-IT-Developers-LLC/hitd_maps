@@ -19,7 +19,7 @@ Add to your `pubspec.yaml`:
 dependencies:
   hitd_maps:
     git:
-      url: https://github.com/Houston-IT-Developers/hitd_maps.git
+      url: https://github.com/RORHITD/hitd_maps.git
       ref: main
 ```
 
@@ -164,7 +164,7 @@ This package is designed to work with PMTiles generated from:
 - National Wetlands Inventory
 - Other GIS data sources
 
-See the [data-pipeline](https://github.com/Houston-IT-Developers/hitd_maps/tree/main/data-pipeline) directory for scripts to download and process this data.
+See the [data-pipeline](https://github.com/RORHITD/hitd_maps/tree/main/data-pipeline) directory for scripts to download and process this data.
 
 ## License
 
@@ -174,4 +174,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 Houston IT Developers LLC
 - Website: [houstonitdev.com](https://houstonitdev.com)
-- GitHub: [@Houston-IT-Developers](https://github.com/Houston-IT-Developers)
+- GitHub: [@RORHITD](https://github.com/RORHITD/hitd_maps)

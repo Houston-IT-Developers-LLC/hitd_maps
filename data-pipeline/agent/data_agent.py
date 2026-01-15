@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
 """
-Autonomous Data Agent for MyGSpot Outdoors
-==========================================
+Autonomous Data Agent for HITD Maps
+====================================
 Continuously monitors data sources, runs scrapers, and updates documentation.
 Uses local Ollama models for intelligent decision-making.
 
+Part of the HITD Maps package by Houston IT Developers LLC.
+
 Run as: python3 data_agent.py
-Or install as systemd service: sudo systemctl start data-agent
+Or install as systemd service: sudo systemctl start hitd-data-agent
+
+Commands:
+  python3 data_agent.py --once           # Single monitoring cycle
+  python3 data_agent.py --pipeline       # Run full pipeline only
+  python3 data_agent.py --cleanup        # Cleanup uploaded files
+  python3 data_agent.py --scrape TX      # Scrape specific state
+  python3 data_agent.py --interval 360   # Run continuously (6hr interval)
+  python3 data_agent.py --update-docs    # Update documentation only
 """
 
 import asyncio
@@ -614,15 +624,130 @@ class DataAgent:
                 await asyncio.sleep(60)  # Short sleep on error
 
 
+async def update_all_docs(agent: "DataAgent"):
+    """Update all documentation with current state."""
+    print("Updating documentation...")
+
+    # Run API checks first
+    api_results = await agent.api_monitor.check_all_apis()
+
+    # Update DATA_FRESHNESS.md
+    await agent.docs.update_progress_doc(api_results)
+
+    # Update R2 inventory
+    await update_r2_inventory()
+
+    print("Documentation updated.")
+    return {"status": "success", "apis_checked": len(api_results)}
+
+
+async def update_r2_inventory():
+    """Update the R2 inventory documentation."""
+    try:
+        import boto3
+        from datetime import datetime
+
+        R2_ACCESS_KEY = os.environ.get("R2_ACCESS_KEY", "ecd653afe3300fdc045b9980df0dbb14")
+        R2_SECRET_KEY = os.environ.get("R2_SECRET_KEY", "c115d1780b2d7b8ce22d37f2416306a692ce177364cb320608fb761881c17f35")
+        R2_BUCKET = os.environ.get("R2_BUCKET", "gspot-tiles")
+        R2_ENDPOINT = os.environ.get("R2_ENDPOINT", "https://551bf8d24bb6069fbaa10e863a672fd5.r2.cloudflarestorage.com")
+
+        client = boto3.client(
+            's3',
+            endpoint_url=R2_ENDPOINT,
+            aws_access_key_id=R2_ACCESS_KEY,
+            aws_secret_access_key=R2_SECRET_KEY,
+        )
+
+        # Get all objects
+        inventory = {"parcels": [], "enrichment": [], "basemap": [], "other": []}
+        total_size = 0
+
+        paginator = client.get_paginator('list_objects_v2')
+        for page in paginator.paginate(Bucket=R2_BUCKET):
+            for obj in page.get('Contents', []):
+                key = obj['Key']
+                size = obj['Size']
+                total_size += size
+
+                entry = {
+                    "key": key,
+                    "size_mb": round(size / 1024 / 1024, 2),
+                    "modified": obj['LastModified'].isoformat()
+                }
+
+                if key.startswith('parcels/'):
+                    inventory["parcels"].append(entry)
+                elif key.startswith('enrichment/'):
+                    inventory["enrichment"].append(entry)
+                elif key.startswith('basemap'):
+                    inventory["basemap"].append(entry)
+                else:
+                    inventory["other"].append(entry)
+
+        # Write inventory doc
+        doc_path = DOCS_DIR / "R2_INVENTORY.md"
+        content = f"""# R2 Bucket Inventory
+
+Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+## Summary
+
+| Category | Files | Size |
+|----------|-------|------|
+| Parcels | {len(inventory['parcels'])} | {sum(p['size_mb'] for p in inventory['parcels']):.1f} MB |
+| Enrichment | {len(inventory['enrichment'])} | {sum(p['size_mb'] for p in inventory['enrichment']):.1f} MB |
+| Basemap | {len(inventory['basemap'])} | {sum(p['size_mb'] for p in inventory['basemap']):.1f} MB |
+| Other | {len(inventory['other'])} | {sum(p['size_mb'] for p in inventory['other']):.1f} MB |
+| **Total** | **{sum(len(v) for v in inventory.values())}** | **{total_size / 1024 / 1024:.1f} MB** |
+
+## Parcel Files
+
+| File | Size (MB) | Last Modified |
+|------|-----------|---------------|
+"""
+        for p in sorted(inventory['parcels'], key=lambda x: x['key']):
+            content += f"| {p['key']} | {p['size_mb']} | {p['modified'][:10]} |\n"
+
+        content += """
+## Enrichment Layers
+
+| File | Size (MB) | Last Modified |
+|------|-----------|---------------|
+"""
+        for p in sorted(inventory['enrichment'], key=lambda x: x['key']):
+            content += f"| {p['key']} | {p['size_mb']} | {p['modified'][:10]} |\n"
+
+        doc_path.write_text(content)
+        logger.info(f"Updated R2 inventory: {sum(len(v) for v in inventory.values())} files")
+
+    except Exception as e:
+        logger.error(f"Failed to update R2 inventory: {e}")
+
+
 async def main():
     """Main entry point."""
     import argparse
 
-    parser = argparse.ArgumentParser(description="MyGSpot Data Agent - Autonomous Data Pipeline")
-    parser.add_argument("--once", action="store_true", help="Run one monitoring cycle and exit")
+    parser = argparse.ArgumentParser(
+        description="HITD Maps Data Agent - Autonomous Data Pipeline",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  %(prog)s --once                    # Run one monitoring cycle
+  %(prog)s --pipeline                # Process and upload files
+  %(prog)s --scrape TX               # Scrape Texas data
+  %(prog)s --scrape CA --county LA   # Scrape LA County, CA
+  %(prog)s --update-docs             # Update documentation only
+  %(prog)s --interval 360            # Run continuously (6hr)
+        """
+    )
+    parser.add_argument("--once", action="store_true",
+                        help="Run one monitoring cycle and exit")
     parser.add_argument("--interval", type=int, default=360,
                         help="Check interval in minutes (default: 360)")
-    parser.add_argument("--check-api", type=str, help="Check a specific API")
+    parser.add_argument("--check-api", type=str,
+                        help="Check a specific API")
     parser.add_argument("--pipeline", action="store_true",
                         help="Run full pipeline only (reproject → tile → upload → cleanup)")
     parser.add_argument("--cleanup", action="store_true",
@@ -633,11 +758,23 @@ async def main():
                         help="Scrape a specific state (e.g., TX)")
     parser.add_argument("--county", type=str,
                         help="Scrape a specific county (use with --scrape)")
+    parser.add_argument("--update-docs", action="store_true",
+                        help="Update documentation files only")
+    parser.add_argument("--verbose", "-v", action="store_true",
+                        help="Verbose logging output")
     args = parser.parse_args()
+
+    if args.verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
 
     agent = DataAgent()
 
-    if args.check_api:
+    if args.update_docs:
+        # Update documentation only
+        result = await update_all_docs(agent)
+        print(json.dumps(result, indent=2, default=str))
+
+    elif args.check_api:
         # Check single API
         if args.check_api in agent.api_monitor.MONITORED_APIS:
             result = await agent.api_monitor.check_api(
@@ -667,7 +804,7 @@ async def main():
         result = await agent.scraper.run_scraper(args.scrape, args.county)
         print(json.dumps(result, indent=2, default=str))
 
-        # Ask if user wants to run pipeline
+        # Run pipeline after successful scrape
         if result.get("status") == "success":
             print("\nScrape complete. Running full pipeline...")
             pipeline_result = await agent.scraper.run_full_pipeline(workers=args.workers)

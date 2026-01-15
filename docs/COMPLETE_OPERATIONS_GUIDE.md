@@ -1,9 +1,29 @@
-# Complete Operations Guide - Autonomous Data Pipeline
+# HITD Maps - Complete Operations Guide
 
-**Purpose**: This document contains EVERYTHING needed for an AI agent or the local Exxact server to autonomously scrape, process, upload, and manage parcel data for My G Spot Outdoors.
+**Purpose**: This document contains EVERYTHING needed to autonomously scrape, process, upload, and manage parcel data for HITD Maps.
 
+**Package**: hitd_maps (Houston IT Developers LLC)
 **Last Updated**: 2026-01-15
 **Server**: Exxact 512GB RAM / 48 CPU cores
+
+---
+
+## Quick Start
+
+```bash
+# One-command setup
+cd /home/exx/Documents/C/hitd_maps/data-pipeline
+./scripts/setup_environment.sh
+
+# Check status
+make status
+
+# Run full update
+make update
+
+# Or start autonomous agent
+make agent
+```
 
 ---
 
@@ -19,6 +39,7 @@
 8. [Continuous Operation Mode](#8-continuous-operation-mode)
 9. [R2 Upload & Cleanup](#9-r2-upload--cleanup)
 10. [Verification & Testing](#10-verification--testing)
+11. [Makefile Reference](#11-makefile-reference)
 
 ---
 
@@ -55,7 +76,7 @@ python3 --version      # Python 3.8+
 ### Python Dependencies
 
 ```bash
-cd /home/exx/Documents/C/my-gspot-outdoors-flutter/data-pipeline
+cd /home/exx/Documents/C/hitd_maps/data-pipeline
 
 # Create virtual environment (recommended)
 python3 -m venv venv
@@ -85,7 +106,7 @@ pip install sqlite3  # Usually built-in
 ### Directory Structure
 
 ```
-/home/exx/Documents/C/my-gspot-outdoors-flutter/data-pipeline/
+/home/exx/Documents/C/hitd_maps/data-pipeline/
 ├── scripts/                    # All processing scripts
 │   ├── export_county_parcels.py    # Main scraper (200+ county configs)
 │   ├── reproject_to_wgs84.sh       # Coordinate reprojection
@@ -110,7 +131,7 @@ pip install sqlite3  # Usually built-in
 
 ### Environment Variables
 
-Create `/home/exx/Documents/C/my-gspot-outdoors-flutter/data-pipeline/.env`:
+Create `/home/exx/Documents/C/hitd_maps/data-pipeline/.env`:
 
 ```bash
 # Cloudflare R2 Credentials
@@ -132,7 +153,7 @@ MAX_WORKERS=4
 Load environment:
 
 ```bash
-source /home/exx/Documents/C/my-gspot-outdoors-flutter/data-pipeline/.env
+source /home/exx/Documents/C/hitd_maps/data-pipeline/.env
 export R2_ACCESS_KEY R2_SECRET_KEY R2_BUCKET R2_ENDPOINT R2_PUBLIC_URL
 ```
 
@@ -274,7 +295,7 @@ curl http://10.8.0.1:11434/api/tags
 ### Operation 1: Scrape a Single County
 
 ```bash
-cd /home/exx/Documents/C/my-gspot-outdoors-flutter/data-pipeline
+cd /home/exx/Documents/C/hitd_maps/data-pipeline
 
 # List available counties
 python3 scripts/export_county_parcels.py --list
@@ -515,7 +536,7 @@ python3 scripts/export_county_parcels.py --county STATE_COUNTY
 ### Start Autonomous Agent
 
 ```bash
-cd /home/exx/Documents/C/my-gspot-outdoors-flutter/data-pipeline
+cd /home/exx/Documents/C/hitd_maps/data-pipeline
 
 # Activate virtual environment
 source venv/bin/activate
@@ -545,14 +566,14 @@ Create `/etc/systemd/system/data-agent.service`:
 
 ```ini
 [Unit]
-Description=MyGSpot Data Agent
+Description=HITD Maps Data Agent
 After=network.target
 
 [Service]
 Type=simple
 User=exx
-WorkingDirectory=/home/exx/Documents/C/my-gspot-outdoors-flutter/data-pipeline
-ExecStart=/home/exx/Documents/C/my-gspot-outdoors-flutter/data-pipeline/venv/bin/python3 agent/data_agent.py --interval 360
+WorkingDirectory=/home/exx/Documents/C/hitd_maps/data-pipeline
+ExecStart=/home/exx/Documents/C/hitd_maps/data-pipeline/venv/bin/python3 agent/data_agent.py --interval 360
 Restart=always
 RestartSec=60
 Environment="OLLAMA_BASE=http://10.8.0.1:11434"
@@ -698,7 +719,7 @@ curl -s http://10.8.0.1:11434/api/tags | jq '.models[].name'
 ### Test 5: Run Mini Pipeline Test
 
 ```bash
-cd /home/exx/Documents/C/my-gspot-outdoors-flutter/data-pipeline
+cd /home/exx/Documents/C/hitd_maps/data-pipeline
 
 # Scrape a small county
 python3 scripts/export_county_parcels.py --county TX_LOVING  # Tiny county
@@ -767,5 +788,55 @@ python3 scripts/upload_to_r2_boto3.py --list
 
 ---
 
-*This document is the SINGLE SOURCE OF TRUTH for all data pipeline operations.*
-*Created: 2026-01-15 by Data Agent*
+## 11. Makefile Reference
+
+The data-pipeline includes a Makefile for common operations:
+
+```bash
+cd /home/exx/Documents/C/hitd_maps/data-pipeline
+
+# Setup
+make setup          # Full server setup
+make setup-dev      # Development setup (lighter)
+
+# Operations
+make status         # Show pipeline status
+make update         # Run full update (scrape + pipeline)
+make pipeline       # Process existing files only
+make cleanup        # Remove uploaded local files
+make docs           # Update documentation
+
+# Agent
+make agent          # Start autonomous agent (6hr interval)
+make agent-once     # Run one monitoring cycle
+
+# Scraping
+make scrape STATE=TX             # Scrape Texas
+make scrape STATE=CA COUNTY=LA   # Scrape LA County, CA
+
+# Testing
+make test           # Run all tests
+make check-api      # Check all monitored APIs
+
+# Service
+make install-service  # Install systemd service
+make logs             # View agent logs
+
+# R2
+make r2-inventory     # List R2 bucket contents
+```
+
+### Environment Variables
+
+Set these before running make commands:
+
+```bash
+export WORKERS=4      # Number of parallel workers
+export INTERVAL=360   # Agent check interval (minutes)
+```
+
+---
+
+*This document is the SINGLE SOURCE OF TRUTH for all HITD Maps data pipeline operations.*
+*Package: hitd_maps by Houston IT Developers LLC*
+*Updated: 2026-01-15*

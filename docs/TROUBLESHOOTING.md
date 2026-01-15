@@ -454,7 +454,7 @@ If you can't resolve an issue:
    - Isolate the problem
 
 3. **File an issue:**
-   - GitHub: https://github.com/Houston-IT-Developers/hitd_maps/issues
+   - GitHub: https://github.com/RORHITD/hitd_maps/issues
    - Include: version, steps to reproduce, logs
 
 4. **Contact:**

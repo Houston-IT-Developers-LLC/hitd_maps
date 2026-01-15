@@ -1,0 +1,26 @@
+[Unit]
+Description=HITD Maps Data Agent - Autonomous Data Pipeline
+Documentation=https://github.com/RORHITD/hitd_maps
+After=network.target
+
+[Service]
+Type=simple
+User=exx
+Group=exx
+WorkingDirectory=/home/exx/Documents/C/hitd_maps/data-pipeline
+Environment=PATH=/home/exx/Documents/C/hitd_maps/data-pipeline/venv/bin:/usr/local/bin:/usr/bin:/bin
+EnvironmentFile=/home/exx/Documents/C/hitd_maps/data-pipeline/.env
+ExecStart=/home/exx/Documents/C/hitd_maps/data-pipeline/venv/bin/python3 agent/data_agent.py --interval 360
+Restart=on-failure
+RestartSec=60
+
+# Logging
+StandardOutput=append:/home/exx/Documents/C/hitd_maps/data-pipeline/agent/agent.log
+StandardError=append:/home/exx/Documents/C/hitd_maps/data-pipeline/agent/agent_error.log
+
+# Resource limits
+MemoryMax=8G
+CPUQuota=200%
+
+[Install]
+WantedBy=multi-user.target

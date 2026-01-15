@@ -1,17 +1,25 @@
 #!/bin/bash
 #
-# Setup Environment for My G Spot Outdoors Data Pipeline
-# ======================================================
+# Setup Environment for HITD Maps Data Pipeline
+# ==============================================
 # This script installs all dependencies needed for the data pipeline
-# to run autonomously on the Exxact server.
+# to run autonomously. Supports both local development and server deployments.
 #
-# Usage: ./scripts/setup_environment.sh
+# Usage: ./scripts/setup_environment.sh [--dev|--server|--ci]
+#
+# Options:
+#   --dev     Development setup (lighter dependencies)
+#   --server  Full server setup with all tools
+#   --ci      CI/CD setup (minimal, no interactive prompts)
 #
 
 set -e
 
+SETUP_MODE="${1:-server}"
+
 echo "=============================================="
-echo "My G Spot Outdoors - Data Pipeline Setup"
+echo "HITD Maps - Data Pipeline Setup"
+echo "Mode: $SETUP_MODE"
 echo "=============================================="
 echo ""
 
@@ -229,21 +237,106 @@ else
     print_warning "Ollama not reachable at http://10.8.0.1:11434"
 fi
 
+# ==== 10. Create Convenience Scripts ====
+echo ""
+echo "10. Creating Convenience Scripts..."
+echo "------------------------------------"
+
+# Create update_all.sh wrapper
+cat > "$DATA_PIPELINE_DIR/update_all.sh" << 'UPDATEEOF'
+#!/bin/bash
+# HITD Maps - Update All
+# Runs the complete pipeline to fetch, process, and upload all data
+
+set -e
+cd "$(dirname "$0")"
+source venv/bin/activate 2>/dev/null || true
+
+echo "HITD Maps - Running Full Update Pipeline"
+echo "========================================="
+
+# Check if we should do a full scrape or just process existing
+if [ "$1" == "--full" ]; then
+    echo "Running full scrape + pipeline..."
+    python3 agent/data_agent.py --once
+    python3 agent/data_agent.py --pipeline --workers ${WORKERS:-4}
+else
+    echo "Running pipeline only (use --full for scraping)..."
+    python3 agent/data_agent.py --pipeline --workers ${WORKERS:-4}
+fi
+
+echo ""
+echo "Update complete!"
+UPDATEEOF
+chmod +x "$DATA_PIPELINE_DIR/update_all.sh"
+print_status "Created update_all.sh"
+
+# Create quick-status.sh
+cat > "$DATA_PIPELINE_DIR/quick-status.sh" << 'STATUSEOF'
+#!/bin/bash
+# Quick status check for HITD Maps data pipeline
+
+cd "$(dirname "$0")"
+source venv/bin/activate 2>/dev/null || true
+
+echo "HITD Maps - Pipeline Status"
+echo "============================"
+echo ""
+
+# Check local files
+echo "Local Files:"
+echo "  GeoJSON: $(find output/geojson -name "*.geojson" 2>/dev/null | wc -l) files"
+echo "  PMTiles: $(find output/pmtiles -name "*.pmtiles" 2>/dev/null | wc -l) files"
+
+# Check R2 if credentials available
+if [ -f .env ]; then
+    source .env
+    echo ""
+    echo "R2 Status: Checking..."
+    python3 -c "
+import boto3
+client = boto3.client('s3',
+    endpoint_url='$R2_ENDPOINT',
+    aws_access_key_id='$R2_ACCESS_KEY',
+    aws_secret_access_key='$R2_SECRET_KEY')
+response = client.list_objects_v2(Bucket='$R2_BUCKET', Prefix='parcels/', MaxKeys=1000)
+count = response.get('KeyCount', 0)
+print(f'  R2 Parcels: {count} files')
+" 2>/dev/null || echo "  R2: Could not connect"
+fi
+
+# Check agent state
+if [ -f agent/agent_state.db ]; then
+    echo ""
+    echo "Last Agent Activity:"
+    sqlite3 agent/agent_state.db "SELECT source_id, status, last_check FROM api_checks ORDER BY last_check DESC LIMIT 5;" 2>/dev/null || true
+fi
+STATUSEOF
+chmod +x "$DATA_PIPELINE_DIR/quick-status.sh"
+print_status "Created quick-status.sh"
+
 # ==== Done ====
 echo ""
 echo "=============================================="
-echo "Setup Complete!"
+echo "HITD Maps Setup Complete!"
 echo "=============================================="
 echo ""
-echo "To activate the environment:"
+echo "Quick Start:"
 echo "  cd $DATA_PIPELINE_DIR"
 echo "  source venv/bin/activate"
-echo "  source .env"
 echo ""
-echo "To start the autonomous agent:"
+echo "Check Status:"
+echo "  ./quick-status.sh"
+echo ""
+echo "Run Full Update:"
+echo "  ./update_all.sh --full"
+echo ""
+echo "Start Autonomous Agent (checks every 6 hours):"
 echo "  python3 agent/data_agent.py --interval 360"
 echo ""
-echo "Or run the full pipeline manually:"
-echo "  python3 scripts/parallel_process_upload.py 4"
+echo "Or use Makefile:"
+echo "  make status      # Check pipeline status"
+echo "  make update      # Run pipeline"
+echo "  make agent       # Start autonomous agent"
 echo ""
 echo "=============================================="

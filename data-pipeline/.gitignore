@@ -1,0 +1,25 @@
+# Environment and credentials
+.env
+*.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Output directories (processed data)
+output/
+logs/
+
+# Agent state
+agent/agent_state.db
+agent/*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

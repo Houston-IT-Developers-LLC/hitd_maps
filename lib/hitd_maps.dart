@@ -35,7 +35,7 @@
 ///
 /// ## Documentation
 ///
-/// See the [README](https://github.com/Houston-IT-Developers/hitd_maps) for
+/// See the [README](https://github.com/RORHITD/hitd_maps) for
 /// full documentation and examples.
 library hitd_maps;
 

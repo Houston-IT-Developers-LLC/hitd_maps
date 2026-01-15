@@ -25,7 +25,7 @@ Add to your `pubspec.yaml`:
 dependencies:
   hitd_maps:
     git:
-      url: https://github.com/Houston-IT-Developers/hitd_maps.git
+      url: https://github.com/RORHITD/hitd_maps.git
       ref: main  # or specific version tag like v1.0.0
 ```
 
