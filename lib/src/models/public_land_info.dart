@@ -1,3 +1,56 @@
+import 'package:flutter/material.dart';
+
+/// Types of public land.
+enum PublicLandType {
+  blm,
+  nationalForest,
+  nationalPark,
+  fishAndWildlife,
+  state,
+  local,
+  other;
+
+  /// Human-readable display name.
+  String get displayName {
+    switch (this) {
+      case PublicLandType.blm:
+        return 'BLM Land';
+      case PublicLandType.nationalForest:
+        return 'National Forest';
+      case PublicLandType.nationalPark:
+        return 'National Park';
+      case PublicLandType.fishAndWildlife:
+        return 'Fish & Wildlife';
+      case PublicLandType.state:
+        return 'State Land';
+      case PublicLandType.local:
+        return 'Local/County';
+      case PublicLandType.other:
+        return 'Other Public';
+    }
+  }
+
+  /// Color for this land type.
+  Color get color {
+    switch (this) {
+      case PublicLandType.blm:
+        return const Color(0xFFFF9800); // Orange
+      case PublicLandType.nationalForest:
+        return const Color(0xFF4CAF50); // Green
+      case PublicLandType.nationalPark:
+        return const Color(0xFF8BC34A); // Light green
+      case PublicLandType.fishAndWildlife:
+        return const Color(0xFF00BCD4); // Cyan
+      case PublicLandType.state:
+        return const Color(0xFF2196F3); // Blue
+      case PublicLandType.local:
+        return const Color(0xFF9C27B0); // Purple
+      case PublicLandType.other:
+        return const Color(0xFF9E9E9E); // Grey
+    }
+  }
+}
+
 /// Information about a public land area.
 class PublicLandInfo {
   /// Name of the protected area
@@ -9,8 +62,11 @@ class PublicLandInfo {
   /// Managing agency (USFS, BLM, NPS, State, etc.)
   final String? manager;
 
+  /// Manager type (FED, STAT, LOC, etc.)
+  final String? managerType;
+
   /// GAP Status Code (1-4, indicates protection level)
-  final int? gapStatus;
+  final String? gapStatus;
 
   /// Access level (Open, Restricted, Closed)
   final String? accessLevel;
@@ -19,7 +75,7 @@ class PublicLandInfo {
   final String? state;
 
   /// Acreage
-  final double? acreage;
+  final double? acres;
 
   /// Owner type (Federal, State, Local, Private Conservation)
   final String? ownerType;
@@ -34,10 +90,11 @@ class PublicLandInfo {
     this.name,
     this.designation,
     this.manager,
+    this.managerType,
     this.gapStatus,
     this.accessLevel,
     this.state,
-    this.acreage,
+    this.acres,
     this.ownerType,
     this.unitName,
     this.properties = const {},
@@ -48,14 +105,32 @@ class PublicLandInfo {
     return PublicLandInfo(
       name: _getString(props, ['Unit_Nm', 'UNIT_NM', 'name', 'NAME', 'Loc_Nm']),
       designation: _getString(props, ['Des_Tp', 'DES_TP', 'designation', 'DESIGNATION']),
-      manager: _getString(props, ['Mang_Name', 'MANG_NAME', 'manager', 'MANAGER']),
-      gapStatus: _getInt(props, ['GAP_Sts', 'GAP_STS', 'gap_status']),
+      manager: _getString(props, ['Mang_Name', 'MANG_NAME', 'manager', 'MANAGER', 'AGENCY']),
+      managerType: _getString(props, ['Mang_Type', 'MANG_TYPE', 'TYPE']),
+      gapStatus: _getString(props, ['GAP_Sts', 'GAP_STS', 'gap_status']),
       accessLevel: _getString(props, ['Access', 'ACCESS', 'Pub_Access', 'PUB_ACCESS']),
       state: _getString(props, ['State_Nm', 'STATE_NM', 'state', 'STATE']),
-      acreage: _getDouble(props, ['GIS_Acres', 'GIS_ACRES', 'acres', 'ACRES']),
+      acres: _getDouble(props, ['GIS_Acres', 'GIS_ACRES', 'acres', 'ACRES']),
       ownerType: _getString(props, ['Own_Type', 'OWN_TYPE', 'owner_type']),
       unitName: _getString(props, ['Unit_Nm', 'UNIT_NM']),
       properties: props,
+    );
+  }
+
+  /// Create from JSON map.
+  factory PublicLandInfo.fromJson(Map<String, dynamic> json) {
+    return PublicLandInfo(
+      name: json['name'] as String?,
+      designation: json['designation'] as String?,
+      manager: json['manager'] as String?,
+      managerType: json['managerType'] as String?,
+      gapStatus: json['gapStatus'] as String?,
+      accessLevel: json['accessLevel'] as String?,
+      state: json['state'] as String?,
+      acres: (json['acres'] as num?)?.toDouble(),
+      ownerType: json['ownerType'] as String?,
+      unitName: json['unitName'] as String?,
+      properties: json['properties'] as Map<String, dynamic>? ?? {},
     );
   }
 
@@ -81,16 +156,41 @@ class PublicLandInfo {
     return null;
   }
 
-  static int? _getInt(Map<String, dynamic> props, List<String> keys) {
-    for (final key in keys) {
-      final value = props[key];
-      if (value != null) {
-        if (value is int) return value;
-        final parsed = int.tryParse(value.toString());
-        if (parsed != null) return parsed;
-      }
+  /// Get the land type based on manager and designation.
+  PublicLandType get landType {
+    final mgr = manager?.toUpperCase() ?? '';
+    final mgrType = managerType?.toUpperCase() ?? '';
+
+    if (mgr.contains('BLM') || mgr == 'BUREAU OF LAND MANAGEMENT') {
+      return PublicLandType.blm;
+    } else if (mgr.contains('USFS') || mgr.contains('FOREST SERVICE')) {
+      return PublicLandType.nationalForest;
+    } else if (mgr.contains('NPS') || mgr.contains('NATIONAL PARK')) {
+      return PublicLandType.nationalPark;
+    } else if (mgr.contains('FWS') || mgr.contains('FISH') || mgr.contains('WILDLIFE')) {
+      return PublicLandType.fishAndWildlife;
+    } else if (mgrType.contains('STAT') || mgrType == 'STATE') {
+      return PublicLandType.state;
+    } else if (mgrType.contains('LOC') || mgrType == 'LOCAL') {
+      return PublicLandType.local;
     }
-    return null;
+    return PublicLandType.other;
+  }
+
+  /// Whether hunting is typically allowed on this land type.
+  bool get isHuntingAllowed {
+    switch (landType) {
+      case PublicLandType.blm:
+      case PublicLandType.nationalForest:
+      case PublicLandType.fishAndWildlife:
+      case PublicLandType.state:
+        return true;
+      case PublicLandType.nationalPark:
+        return false;
+      case PublicLandType.local:
+      case PublicLandType.other:
+        return false; // Usually not, but varies
+    }
   }
 
   /// Whether this land is publicly accessible.
@@ -104,36 +204,50 @@ class PublicLandInfo {
   String? get gapStatusDescription {
     if (gapStatus == null) return null;
     switch (gapStatus) {
-      case 1:
+      case '1':
         return 'Permanent protection, natural state';
-      case 2:
+      case '2':
         return 'Permanent protection, some use allowed';
-      case 3:
+      case '3':
         return 'Multiple use, some protection';
-      case 4:
+      case '4':
         return 'No known mandate for protection';
       default:
         return 'Unknown';
     }
   }
 
-  /// Get a color for this land type.
-  int get colorValue {
-    final type = designation?.toLowerCase() ?? '';
-    final owner = ownerType?.toLowerCase() ?? '';
-
-    if (type.contains('wilderness') || gapStatus == 1) {
-      return 0xFF1B5E20; // Dark green
-    } else if (type.contains('national forest') || owner.contains('usfs')) {
-      return 0xFF4CAF50; // Green
-    } else if (type.contains('blm') || owner.contains('blm')) {
-      return 0xFFFF9800; // Orange
-    } else if (type.contains('state') || owner.contains('state')) {
-      return 0xFF2196F3; // Blue
-    } else if (type.contains('wildlife') || type.contains('refuge')) {
-      return 0xFF8BC34A; // Light green
-    } else {
-      return 0xFF9E9E9E; // Grey
+  /// Format acres for display.
+  String? get formattedAcres {
+    if (acres == null) return null;
+    if (acres! >= 1000) {
+      return '${(acres! / 1000).toStringAsFixed(1)}K acres';
     }
+    return '${acres!.toStringAsFixed(0)} acres';
+  }
+
+  /// Get a color for this land type (as int).
+  int get colorValue {
+    return landType.color.value;
+  }
+
+  /// Convert to JSON map.
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'designation': designation,
+    'manager': manager,
+    'managerType': managerType,
+    'gapStatus': gapStatus,
+    'accessLevel': accessLevel,
+    'state': state,
+    'acres': acres,
+    'ownerType': ownerType,
+    'unitName': unitName,
+    'properties': properties,
+  };
+
+  @override
+  String toString() {
+    return 'PublicLandInfo(name: $name, manager: $manager, acres: $acres)';
   }
 }

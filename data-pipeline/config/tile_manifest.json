@@ -1,0 +1,297 @@
+{
+  "name": "GSpot Outdoors",
+  "description": "Comprehensive property and outdoor recreation data for the United States",
+  "version": "1.0.0",
+  "attribution": "Data from US Government open sources. Free for public use.",
+  "generated": "2026-01-13T00:00:00Z",
+  "contact": {
+    "website": "https://gspotoutdoors.com",
+    "support": "support@gspotoutdoors.com"
+  },
+  "cdn": {
+    "base_url": "https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev",
+    "provider": "Cloudflare R2",
+    "cors_enabled": true,
+    "cache_control": "public, max-age=86400"
+  },
+  "tile_format": {
+    "type": "pmtiles",
+    "version": "3",
+    "compression": "gzip",
+    "protocol": "pmtiles://"
+  },
+  "bounds": {
+    "conus": [-125.0, 24.0, -66.0, 50.0],
+    "alaska": [-180.0, 51.0, -129.0, 72.0],
+    "hawaii": [-161.0, 18.0, -154.0, 23.0]
+  },
+  "layers": {
+    "parcels": {
+      "id": "parcels",
+      "name": "Property Parcels",
+      "description": "Property boundaries with owner information, addresses, and acreage",
+      "category": "base",
+      "source_layer": "parcels",
+      "geometry_type": "polygon",
+      "min_zoom": 10,
+      "max_zoom": 16,
+      "update_frequency": "quarterly",
+      "record_count_estimate": 150000000,
+      "coverage": "nationwide",
+      "path_pattern": "pmtiles/parcels_{state}.pmtiles",
+      "attributes": [
+        {"name": "apn", "type": "string", "description": "Assessor Parcel Number"},
+        {"name": "owner_name", "type": "string", "description": "Property owner name"},
+        {"name": "situs_address", "type": "string", "description": "Physical address"},
+        {"name": "acres", "type": "number", "description": "Parcel size in acres"},
+        {"name": "county", "type": "string", "description": "County name"},
+        {"name": "state", "type": "string", "description": "State abbreviation"}
+      ],
+      "sources": [
+        "State GIS Portals",
+        "County Assessor Offices",
+        "TNRIS (Texas)",
+        "PASDA (Pennsylvania)"
+      ]
+    },
+    "public_lands": {
+      "id": "public_lands",
+      "name": "Public Lands",
+      "description": "Federal, state, and local protected areas including national forests, BLM lands, parks, and wildlife refuges",
+      "category": "enrichment",
+      "source_layer": "public_lands",
+      "geometry_type": "polygon",
+      "min_zoom": 4,
+      "max_zoom": 14,
+      "update_frequency": "annual",
+      "coverage": "nationwide",
+      "path_pattern": "enrichment/pad_us/pad_us_{state}.pmtiles",
+      "attributes": [
+        {"name": "Unit_Nm", "type": "string", "description": "Unit name"},
+        {"name": "Mang_Name", "type": "string", "description": "Managing agency"},
+        {"name": "Des_Tp", "type": "string", "description": "Designation type"},
+        {"name": "Pub_Access", "type": "string", "description": "Public access level"},
+        {"name": "GIS_Acres", "type": "number", "description": "Area in acres"}
+      ],
+      "designation_types": {
+        "NF": "National Forest",
+        "NP": "National Park",
+        "NWR": "National Wildlife Refuge",
+        "BLM": "Bureau of Land Management",
+        "WA": "Wilderness Area",
+        "SP": "State Park",
+        "SF": "State Forest"
+      },
+      "access_levels": {
+        "OA": "Open Access",
+        "RA": "Restricted Access",
+        "XA": "Closed",
+        "UK": "Unknown"
+      },
+      "data_source": {
+        "name": "PAD-US (Protected Areas Database)",
+        "provider": "USGS Gap Analysis Project",
+        "url": "https://www.usgs.gov/programs/gap-analysis-project",
+        "version": "4.0",
+        "license": "Public Domain"
+      }
+    },
+    "wetlands": {
+      "id": "wetlands",
+      "name": "Wetlands",
+      "description": "National Wetlands Inventory including marshes, swamps, ponds, and other wetland habitats",
+      "category": "enrichment",
+      "source_layer": "wetlands",
+      "geometry_type": "polygon",
+      "min_zoom": 8,
+      "max_zoom": 14,
+      "update_frequency": "biannual",
+      "coverage": "nationwide",
+      "path_pattern": "enrichment/nwi/nwi_{state}.pmtiles",
+      "attributes": [
+        {"name": "WETLAND_TYPE", "type": "string", "description": "Cowardin classification code"},
+        {"name": "ACRES", "type": "number", "description": "Wetland area"},
+        {"name": "wetland_system", "type": "string", "description": "Wetland system name"},
+        {"name": "wetland_class", "type": "string", "description": "Wetland class name"}
+      ],
+      "wetland_types": {
+        "PEM": {"name": "Palustrine Emergent", "description": "Freshwater marshes", "waterfowl": "excellent"},
+        "PFO": {"name": "Palustrine Forested", "description": "Forested wetlands/swamps", "waterfowl": "good"},
+        "PSS": {"name": "Palustrine Scrub-Shrub", "description": "Shrub wetlands", "waterfowl": "moderate"},
+        "PUB": {"name": "Palustrine Unconsolidated Bottom", "description": "Ponds", "waterfowl": "good"},
+        "L1": {"name": "Lacustrine Limnetic", "description": "Deep lake areas", "waterfowl": "moderate"},
+        "L2": {"name": "Lacustrine Littoral", "description": "Shallow lake edges", "waterfowl": "good"},
+        "R1": {"name": "Riverine Upper Perennial", "description": "Rivers/streams", "waterfowl": "low"}
+      },
+      "data_source": {
+        "name": "National Wetlands Inventory",
+        "provider": "US Fish & Wildlife Service",
+        "url": "https://www.fws.gov/program/national-wetlands-inventory",
+        "license": "Public Domain"
+      }
+    },
+    "hydrography": {
+      "id": "hydrography",
+      "name": "Water Features",
+      "description": "Rivers, streams, lakes, ponds, and other water bodies from the National Hydrography Dataset",
+      "category": "enrichment",
+      "source_layer": "hydrography",
+      "geometry_type": "mixed",
+      "min_zoom": 6,
+      "max_zoom": 14,
+      "update_frequency": "continuous",
+      "coverage": "nationwide",
+      "path_pattern": "enrichment/nhd/nhd_{state}.pmtiles",
+      "attributes": [
+        {"name": "GNIS_Name", "type": "string", "description": "Geographic name"},
+        {"name": "FType", "type": "number", "description": "Feature type code"},
+        {"name": "feature_type_name", "type": "string", "description": "Feature type name"},
+        {"name": "LengthKM", "type": "number", "description": "Length in kilometers"},
+        {"name": "AreaSqKm", "type": "number", "description": "Area in square kilometers"}
+      ],
+      "feature_types": {
+        "460": "Stream/River",
+        "390": "Lake/Pond",
+        "336": "Canal/Ditch",
+        "431": "Dam/Weir",
+        "558": "Artificial Path"
+      },
+      "data_source": {
+        "name": "National Hydrography Dataset",
+        "provider": "USGS",
+        "url": "https://www.usgs.gov/national-hydrography",
+        "license": "Public Domain"
+      }
+    },
+    "wildlife_areas": {
+      "id": "wildlife_areas",
+      "name": "Wildlife Management Areas",
+      "description": "State-managed wildlife areas, game lands, and walk-in hunting access programs",
+      "category": "enrichment",
+      "source_layer": "wildlife_areas",
+      "geometry_type": "polygon",
+      "min_zoom": 6,
+      "max_zoom": 14,
+      "update_frequency": "annual",
+      "coverage": "state_by_state",
+      "path_pattern": "enrichment/state_wma/wma_{state}.pmtiles",
+      "attributes": [
+        {"name": "name", "type": "string", "description": "Area name"},
+        {"name": "acres", "type": "number", "description": "Area size"},
+        {"name": "state", "type": "string", "description": "State"},
+        {"name": "source_agency", "type": "string", "description": "Managing agency"}
+      ],
+      "programs": {
+        "WIHA": {"name": "Walk-In Hunting Areas", "states": ["KS"]},
+        "PLOTS": {"name": "Private Land Open To Sportsmen", "states": ["ND"]},
+        "Block_Management": {"name": "Block Management", "states": ["MT"]},
+        "Open_Fields": {"name": "Open Fields and Waters", "states": ["NE"]}
+      },
+      "data_source": {
+        "name": "State Fish & Game Agencies",
+        "license": "Varies by state"
+      }
+    },
+    "flood_zones": {
+      "id": "flood_zones",
+      "name": "Flood Zones",
+      "description": "FEMA flood hazard areas including 100-year and 500-year floodplains",
+      "category": "enrichment",
+      "source_layer": "flood_zones",
+      "geometry_type": "polygon",
+      "min_zoom": 8,
+      "max_zoom": 14,
+      "update_frequency": "continuous",
+      "coverage": "nationwide",
+      "path_pattern": "enrichment/fema/fema_flood_{state}.pmtiles",
+      "attributes": [
+        {"name": "FLD_ZONE", "type": "string", "description": "Flood zone code"},
+        {"name": "flood_risk", "type": "string", "description": "Risk level"},
+        {"name": "in_100yr_floodplain", "type": "boolean", "description": "In 100-year floodplain"}
+      ],
+      "flood_zones": {
+        "A": {"risk": "high", "description": "100-year flood zone"},
+        "AE": {"risk": "high", "description": "100-year flood zone with base elevation"},
+        "V": {"risk": "high", "description": "Coastal flood zone"},
+        "X500": {"risk": "moderate", "description": "500-year flood zone"},
+        "X": {"risk": "minimal", "description": "Outside 500-year floodplain"}
+      },
+      "data_source": {
+        "name": "National Flood Hazard Layer",
+        "provider": "FEMA",
+        "url": "https://www.fema.gov/flood-maps",
+        "license": "Public Domain"
+      }
+    }
+  },
+  "states": {
+    "AL": {"name": "Alabama", "fips": "01", "parcels": true, "enrichment": true},
+    "AK": {"name": "Alaska", "fips": "02", "parcels": true, "enrichment": true},
+    "AZ": {"name": "Arizona", "fips": "04", "parcels": true, "enrichment": true},
+    "AR": {"name": "Arkansas", "fips": "05", "parcels": true, "enrichment": true},
+    "CA": {"name": "California", "fips": "06", "parcels": true, "enrichment": true},
+    "CO": {"name": "Colorado", "fips": "08", "parcels": true, "enrichment": true},
+    "CT": {"name": "Connecticut", "fips": "09", "parcels": true, "enrichment": true},
+    "DE": {"name": "Delaware", "fips": "10", "parcels": true, "enrichment": true},
+    "FL": {"name": "Florida", "fips": "12", "parcels": true, "enrichment": true},
+    "GA": {"name": "Georgia", "fips": "13", "parcels": true, "enrichment": true},
+    "HI": {"name": "Hawaii", "fips": "15", "parcels": true, "enrichment": true},
+    "ID": {"name": "Idaho", "fips": "16", "parcels": true, "enrichment": true},
+    "IL": {"name": "Illinois", "fips": "17", "parcels": true, "enrichment": true},
+    "IN": {"name": "Indiana", "fips": "18", "parcels": true, "enrichment": true},
+    "IA": {"name": "Iowa", "fips": "19", "parcels": true, "enrichment": true},
+    "KS": {"name": "Kansas", "fips": "20", "parcels": true, "enrichment": true},
+    "KY": {"name": "Kentucky", "fips": "21", "parcels": true, "enrichment": true},
+    "LA": {"name": "Louisiana", "fips": "22", "parcels": true, "enrichment": true},
+    "ME": {"name": "Maine", "fips": "23", "parcels": true, "enrichment": true},
+    "MD": {"name": "Maryland", "fips": "24", "parcels": true, "enrichment": true},
+    "MA": {"name": "Massachusetts", "fips": "25", "parcels": true, "enrichment": true},
+    "MI": {"name": "Michigan", "fips": "26", "parcels": true, "enrichment": true},
+    "MN": {"name": "Minnesota", "fips": "27", "parcels": true, "enrichment": true},
+    "MS": {"name": "Mississippi", "fips": "28", "parcels": true, "enrichment": true},
+    "MO": {"name": "Missouri", "fips": "29", "parcels": true, "enrichment": true},
+    "MT": {"name": "Montana", "fips": "30", "parcels": true, "enrichment": true},
+    "NE": {"name": "Nebraska", "fips": "31", "parcels": true, "enrichment": true},
+    "NV": {"name": "Nevada", "fips": "32", "parcels": true, "enrichment": true},
+    "NH": {"name": "New Hampshire", "fips": "33", "parcels": true, "enrichment": true},
+    "NJ": {"name": "New Jersey", "fips": "34", "parcels": true, "enrichment": true},
+    "NM": {"name": "New Mexico", "fips": "35", "parcels": true, "enrichment": true},
+    "NY": {"name": "New York", "fips": "36", "parcels": true, "enrichment": true},
+    "NC": {"name": "North Carolina", "fips": "37", "parcels": true, "enrichment": true},
+    "ND": {"name": "North Dakota", "fips": "38", "parcels": true, "enrichment": true},
+    "OH": {"name": "Ohio", "fips": "39", "parcels": true, "enrichment": true},
+    "OK": {"name": "Oklahoma", "fips": "40", "parcels": true, "enrichment": true},
+    "OR": {"name": "Oregon", "fips": "41", "parcels": true, "enrichment": true},
+    "PA": {"name": "Pennsylvania", "fips": "42", "parcels": true, "enrichment": true},
+    "RI": {"name": "Rhode Island", "fips": "44", "parcels": true, "enrichment": true},
+    "SC": {"name": "South Carolina", "fips": "45", "parcels": true, "enrichment": true},
+    "SD": {"name": "South Dakota", "fips": "46", "parcels": true, "enrichment": true},
+    "TN": {"name": "Tennessee", "fips": "47", "parcels": true, "enrichment": true},
+    "TX": {"name": "Texas", "fips": "48", "parcels": true, "enrichment": true},
+    "UT": {"name": "Utah", "fips": "49", "parcels": true, "enrichment": true},
+    "VT": {"name": "Vermont", "fips": "50", "parcels": true, "enrichment": true},
+    "VA": {"name": "Virginia", "fips": "51", "parcels": true, "enrichment": true},
+    "WA": {"name": "Washington", "fips": "53", "parcels": true, "enrichment": true},
+    "WV": {"name": "West Virginia", "fips": "54", "parcels": true, "enrichment": true},
+    "WI": {"name": "Wisconsin", "fips": "55", "parcels": true, "enrichment": true},
+    "WY": {"name": "Wyoming", "fips": "56", "parcels": true, "enrichment": true}
+  },
+  "data_quality": {
+    "coordinate_system": "EPSG:4326 (WGS84)",
+    "positional_accuracy": "Varies by source, typically 1-10 meters",
+    "temporal_currency": "Updated quarterly for parcels, varies for enrichment",
+    "completeness": "Nationwide coverage, ~150M parcels",
+    "validation": [
+      "Coordinate bounds validation",
+      "Geometry validity checks",
+      "Schema conformance",
+      "Duplicate detection"
+    ]
+  },
+  "legal": {
+    "terms_of_use": "Data provided for informational purposes. Verify with official sources for legal matters.",
+    "data_sources": "US Government open data (USGS, FEMA, FWS, NRCS, State GIS Portals)",
+    "license": "Data is in the public domain. No restrictions on use.",
+    "disclaimer": "Property boundaries are approximate. Always verify with county records for legal purposes."
+  }
+}

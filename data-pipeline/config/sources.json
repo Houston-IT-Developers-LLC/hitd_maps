@@ -1,0 +1,849 @@
+{
+  "schema_version": "1.0",
+  "description": "Registry of parcel data sources by state. Used by ETL scripts to track sources, field mappings, and acquisition tiers.",
+  "states": {
+    "AL": {
+      "name": "Alabama",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "County-level only",
+        "url": "https://revenue.alabama.gov/property-tax/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "No statewide aggregation. Each county maintains own GIS. Some counties have ArcGIS REST services."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "AK": {
+      "name": "Alaska",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "Alaska DNR Mapper",
+        "url": "https://dnr.alaska.gov/mapper-statewide/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Cadastral survey data available. Large parcels, sparse population."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "AZ": {
+      "name": "Arizona",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "AZGEO Clearinghouse",
+        "url": "https://azgeo.az.gov/",
+        "format": "varies",
+        "cost": "free",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "County-level downloads available. Maricopa, Pima, Pinal have good portals."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "AR": {
+      "name": "Arkansas",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "GeoStor/AGIO",
+        "url": "https://gis.arkansas.gov/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "CAMP program data. All 75 counties via ftp.geostor.arkansas.gov"
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "CA": {
+      "name": "California",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "County-level only",
+        "url": "https://gis.data.ca.gov/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "No statewide aggregation. Each of 58 counties maintains own data. Many have open portals (LA, SF, San Diego)."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "CO": {
+      "name": "Colorado",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "CIM/DOLA",
+        "url": "https://demography.dola.colorado.gov/gis/gis-data/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Statewide parcel dataset from Dept of Local Affairs. ~3M parcels."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "CT": {
+      "name": "Connecticut",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "CT DEEP GIS",
+        "url": "https://ct-deep-gis-open-data-website-ctdeep.hub.arcgis.com/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "biennial",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Statewide parcel composite. CT is small so manageable."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "DE": {
+      "name": "Delaware",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "FirstMap Delaware",
+        "url": "https://firstmap.delaware.gov/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Small state, only 3 counties. Statewide available."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "FL": {
+      "name": "Florida",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "FGDL/GeoPlan",
+        "url": "https://www.fgdl.org/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "2007-2024 historic + current available. All 67 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "GA": {
+      "name": "Georgia",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "Georgia GIS Clearinghouse",
+        "url": "https://gis.ga.gov/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "County-level only. 159 counties, many with open portals. No state aggregation."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "HI": {
+      "name": "Hawaii",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "Hawaii Statewide GIS",
+        "url": "https://geoportal.hawaii.gov/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Only 5 counties. TMK (Tax Map Key) parcels available."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "ID": {
+      "name": "Idaho",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "Idaho Geospatial Office",
+        "url": "https://gis.idaho.gov/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Statewide parcel framework available. 44 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "IL": {
+      "name": "Illinois",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "Illinois Geospatial Data Clearinghouse",
+        "url": "https://clearinghouse.isgs.illinois.edu/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "County-level only. 102 counties. Cook County has good open data."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "IN": {
+      "name": "Indiana",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "IndianaMap/IGIO",
+        "url": "https://www.indianamap.org/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "All 92 counties, mandated by state law. High quality."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "IA": {
+      "name": "Iowa",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "Iowa Geodata",
+        "url": "https://geodata.iowa.gov/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Iowa Geographic Map Server. 99 counties consolidated."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "KS": {
+      "name": "Kansas",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "Kansas Data Access & Support Center",
+        "url": "https://www.kansasgis.org/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "DASC provides statewide parcels. 105 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "KY": {
+      "name": "Kentucky",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "Kentucky Geography Network",
+        "url": "https://kygisserver.ky.gov/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "KYGeoPortal has statewide parcel data. 120 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "LA": {
+      "name": "Louisiana",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "Louisiana GIS Digital Map",
+        "url": "https://atlas.ga.lsu.edu/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Parish-level only. 64 parishes, data availability varies."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "ME": {
+      "name": "Maine",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "Maine GeoLibrary",
+        "url": "https://www.maine.gov/geolib/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Statewide parcel composite available. 16 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "MD": {
+      "name": "Maryland",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "Maryland iMap",
+        "url": "https://imap.maryland.gov/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "MD PropertyView has statewide parcels. 23 counties + Baltimore City."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "MA": {
+      "name": "Massachusetts",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "MassGIS",
+        "url": "https://www.mass.gov/orgs/massgis-bureau-of-geographic-information",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Standardized statewide parcel layer. Well documented."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "MI": {
+      "name": "Michigan",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "Michigan Open Data Portal",
+        "url": "https://gis.michigan.opendata.arcgis.com/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "County-level only. 83 counties. Many have open portals."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "MN": {
+      "name": "Minnesota",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "Minnesota Geospatial Commons",
+        "url": "https://gisdata.mn.gov/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "quarterly",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Statewide parcel dataset. 87 counties consolidated. High quality."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "MS": {
+      "name": "Mississippi",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "MARIS",
+        "url": "https://www.maris.state.ms.us/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "County-level only. 82 counties, limited online availability."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "MO": {
+      "name": "Missouri",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "MSDIS",
+        "url": "https://msdis.missouri.edu/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Missouri Spatial Data Information Service. County-level parcels, no statewide."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "MT": {
+      "name": "Montana",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "State Library Cadastral",
+        "url": "https://svc.mt.gov/msl/cadastral/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Cadastral parcels statewide. 56 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "NE": {
+      "name": "Nebraska",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "Nebraska GIS",
+        "url": "https://gis.ne.gov/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "NEGIS has statewide parcel layer. 93 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "NV": {
+      "name": "Nevada",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "Nevada GeoData Portal",
+        "url": "https://geohub-snwa.hub.arcgis.com/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "County-level only. 17 counties. Clark County (Las Vegas) has open data."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "NH": {
+      "name": "New Hampshire",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "NH GRANIT",
+        "url": "https://www.granit.unh.edu/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "UNH GRANIT hosts statewide parcels. 10 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "NJ": {
+      "name": "New Jersey",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "NJGIN",
+        "url": "https://njgin.nj.gov/njgin/edata/parcels/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Statewide composite with MOD-IV data. 21 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "NM": {
+      "name": "New Mexico",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "NM Resource Geographic Information System",
+        "url": "https://rgis.unm.edu/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "County-level only. 33 counties. UNM hosts clearinghouse."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "NY": {
+      "name": "New York",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "NYS GIS Clearinghouse",
+        "url": "https://gis.ny.gov/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Tax parcel data available. 62 counties including NYC boroughs."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "NC": {
+      "name": "North Carolina",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "NC OneMap",
+        "url": "https://www.nconemap.gov/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Contact for bulk download, county-level available online. 100 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "ND": {
+      "name": "North Dakota",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "ND GIS Hub",
+        "url": "https://www.nd.gov/gis/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "NDGIS Hub has statewide parcels. 53 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "OH": {
+      "name": "Ohio",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "OGRIP",
+        "url": "https://ohioparcels-geohio.hub.arcgis.com/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Statewide composite from counties. 88 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "OK": {
+      "name": "Oklahoma",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "OKMaps",
+        "url": "https://okmaps.org/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "County-level only. 77 counties. Some counties sell data."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "OR": {
+      "name": "Oregon",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "GEOHub",
+        "url": "https://geohub.oregon.gov/pages/parcel-viewer",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Statewide initiative since 2023. 36 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "PA": {
+      "name": "Pennsylvania",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "PASDA",
+        "url": "https://www.pasda.psu.edu/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "PA Spatial Data Access. 67 counties. Penn State hosts."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "RI": {
+      "name": "Rhode Island",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "RIGIS",
+        "url": "https://www.rigis.org/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Small state, 5 counties. Statewide parcel data available."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "SC": {
+      "name": "South Carolina",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "SC GIS",
+        "url": "https://www.scgs.state.sc.us/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "County-level only. 46 counties. Limited online availability."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "SD": {
+      "name": "South Dakota",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "SD GIS",
+        "url": "https://opendata2017-09-18t192802468z-sdbit.opendata.arcgis.com/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Statewide parcels via open data portal. 66 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "TN": {
+      "name": "Tennessee",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "TN Comptroller",
+        "url": "https://comptroller.tn.gov/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "County-level only. 95 counties. TNMAP has some data."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "TX": {
+      "name": "Texas",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "TxGIO StratMap Land Parcels",
+        "url": "https://tnris.org/stratmap/land-parcels",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "quarterly",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "All 254 counties, standardized schema, ~28M parcels"
+      },
+      "field_mapping": {
+        "apn": ["PROP_ID", "PARCEL_ID", "PID", "APN"],
+        "owner_name": ["OWNER_NAME", "OWNER", "OWNER1", "OWNERNAME"],
+        "situs_address": ["SITUS_ADDR", "SITUS_ADDRESS", "ADDRESS", "PROP_ADDR", "PHYSICAL_ADDR"],
+        "city": ["SITUS_CITY", "CITY", "PROP_CITY"],
+        "county": ["COUNTY", "CNTY_NAME", "COUNTY_NAME", "CO_NAME"],
+        "acres": ["ACRES", "ST_Area(geom)/4046.86"]
+      },
+      "layer_names": ["StratMap_Land_Parcels", "Land_Parcels", "Parcels"],
+      "crs": "EPSG:3857",
+      "scripts": {
+        "download": "scripts/download_texas.sh",
+        "load": "scripts/load_texas.sh"
+      },
+      "counties": {}
+    },
+    "UT": {
+      "name": "Utah",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "UGRC",
+        "url": "https://gis.utah.gov/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "monthly",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Utah Geospatial Resource Center. High quality, frequent updates. 29 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "VT": {
+      "name": "Vermont",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "VCGI",
+        "url": "https://geodata.vermont.gov/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Vermont Center for GIS. Small state, 14 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "VA": {
+      "name": "Virginia",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "VGIN",
+        "url": "https://vgin.vdem.virginia.gov/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Virginia Geographic Information Network. 95 counties + 38 independent cities."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "WA": {
+      "name": "Washington",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "WA Geospatial Open Data",
+        "url": "https://geo.wa.gov/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "Statewide parcel database. 39 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "WV": {
+      "name": "West Virginia",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "WV GIS Technical Center",
+        "url": "https://wvgis.wvu.edu/",
+        "format": "shp",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "WVU hosts statewide parcel data. 55 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "WI": {
+      "name": "Wisconsin",
+      "statewide_available": true,
+      "primary_source": {
+        "name": "Statewide Parcel Map",
+        "url": "https://www.sco.wisc.edu/parcels/data/",
+        "format": "gdb",
+        "cost": "free",
+        "update_frequency": "annual",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "3.56M parcels, V1-V11 versions available. 72 counties."
+      },
+      "field_mapping": {},
+      "counties": {}
+    },
+    "WY": {
+      "name": "Wyoming",
+      "statewide_available": false,
+      "primary_source": {
+        "name": "WyGISC",
+        "url": "https://www.wygiscgateway.org/",
+        "format": "varies",
+        "cost": "varies",
+        "update_frequency": "varies",
+        "last_checked": "2026-01-10",
+        "download_url": null,
+        "notes": "County-level only. 23 counties. Large federal land percentage."
+      },
+      "field_mapping": {},
+      "counties": {}
+    }
+  },
+  "acquisition_tiers": {
+    "tier1_free_statewide": [
+      "AK", "AR", "CO", "CT", "DE", "FL", "HI", "ID", "IN", "IA",
+      "KS", "KY", "ME", "MD", "MA", "MN", "MT", "NE", "NH", "NJ",
+      "NY", "NC", "ND", "OH", "OR", "PA", "RI", "SD", "TX", "UT",
+      "VT", "VA", "WA", "WV", "WI"
+    ],
+    "tier2_county_portals": [
+      "AZ", "CA", "GA", "IL", "LA", "MI", "MS", "MO", "NV", "NM",
+      "OK", "SC", "TN", "WY"
+    ],
+    "tier3_foia_required": [
+      "AL"
+    ],
+    "tier4_scrape_last_resort": []
+  },
+  "summary": {
+    "total_states": 50,
+    "tier1_count": 35,
+    "tier2_count": 14,
+    "tier3_count": 1,
+    "tier4_count": 0,
+    "notes": "35 states have confirmed free statewide parcel downloads. 14 states require county-by-county acquisition. Only Alabama likely requires FOIA requests for most counties."
+  },
+  "notes": {
+    "tier1": "States with confirmed free statewide parcel downloads",
+    "tier2": "States where counties provide free data but no state aggregation",
+    "tier3": "States where FOIA/public records request is needed",
+    "tier4": "States with no official source - polite scraping as last resort"
+  }
+}

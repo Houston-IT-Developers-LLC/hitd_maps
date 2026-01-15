@@ -4,6 +4,8 @@
 /// tile server URLs, API keys, and default settings.
 library;
 
+import 'package:flutter/foundation.dart';
+
 /// Global configuration for the HITD Maps package.
 ///
 /// Call [HitdMapConfig.initialize] before using any map features:
@@ -105,6 +107,12 @@ class HitdMapConfig {
   /// Check if the configuration has been initialized.
   static bool get isInitialized => _instance != null;
 
+  /// Reset configuration (for testing only).
+  @visibleForTesting
+  static void resetForTesting() {
+    _instance = null;
+  }
+
   /// Get PMTiles URL for a specific layer and state.
   String getPmtilesUrl(String layerName, {String? stateCode}) {
     final filename = stateCode != null
@@ -118,25 +126,70 @@ class HitdMapConfig {
   }
 }
 
-/// Predefined tile configurations for common setups
+/// Predefined tile configurations for common setups.
 class HitdMapPresets {
   HitdMapPresets._();
 
-  /// Configuration for GSpot Outdoors Cloudflare R2 setup
+  /// Configuration for GSpot Outdoors Cloudflare R2 setup.
+  ///
+  /// Uses the production GSpot Outdoors tile server with
+  /// the outdoor-focused basemap.
   static void useGSpotOutdoors({bool debugMode = false}) {
     HitdMapConfig.initialize(
       pmtilesBaseUrl: 'https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev/parcels',
-      basemapStyleUrl: 'assets/map/basemap_style.json',
+      basemapStyleUrl: HitdMapStyles.osmSimple,
       debugMode: debugMode,
     );
   }
 
-  /// Configuration for local development with test tiles
+  /// Configuration for local development with test tiles.
   static void useLocalDevelopment() {
     HitdMapConfig.initialize(
       pmtilesBaseUrl: 'http://localhost:8080/tiles',
-      basemapStyleUrl: 'assets/styles/osm_liberty.json',
+      basemapStyleUrl: HitdMapStyles.osmSimple,
       debugMode: true,
     );
   }
+
+  /// Configuration using free OSM tiles only (no API key required).
+  ///
+  /// Best for development and testing without a tile provider account.
+  static void useFreeOsm({bool debugMode = false}) {
+    HitdMapConfig.initialize(
+      pmtilesBaseUrl: '', // No PMTiles in this mode
+      basemapStyleUrl: HitdMapStyles.osmSimple,
+      debugMode: debugMode,
+    );
+  }
+
+  /// Configuration with MapTiler outdoor style.
+  ///
+  /// Requires a MapTiler API key. Get one at https://www.maptiler.com/
+  static void useMapTilerOutdoor({
+    required String apiKey,
+    String? pmtilesBaseUrl,
+    bool debugMode = false,
+  }) {
+    HitdMapConfig.initialize(
+      pmtilesBaseUrl: pmtilesBaseUrl ?? '',
+      basemapStyleUrl: 'https://api.maptiler.com/maps/outdoor/style.json?key=$apiKey',
+      debugMode: debugMode,
+    );
+  }
+}
+
+/// Built-in map style paths.
+///
+/// These are asset paths bundled with the hitd_maps package.
+class HitdMapStyles {
+  HitdMapStyles._();
+
+  /// Simple OSM raster basemap (free, no API key).
+  static const String osmSimple = 'packages/hitd_maps/assets/styles/osm_simple.json';
+
+  /// Outdoor-focused vector basemap (requires MapTiler key).
+  static const String outdoorBasemap = 'packages/hitd_maps/assets/styles/outdoor_basemap.json';
+
+  /// Demo tiles URL for testing (MapLibre demo).
+  static const String demotiles = 'https://demotiles.maplibre.org/style.json';
 }

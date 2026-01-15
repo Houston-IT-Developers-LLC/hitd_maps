@@ -1,0 +1,598 @@
+{
+  "schema_version": "1.0",
+  "description": "Registry of enrichment data sources for property/parcel data. Used to add context like public lands, wetlands, water features, soil data, and land cover to enhance the outdoor recreation app.",
+  "last_updated": "2026-01-13",
+  "sources": {
+    "pad_us": {
+      "priority": 1,
+      "name": "Protected Areas Database of the United States (PAD-US)",
+      "description": "Official national inventory of protected areas including public lands, parks, wilderness areas, national wildlife refuges, conservation easements, and marine protected areas.",
+      "provider": "USGS Gap Analysis Project",
+      "url": "https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-download",
+      "api_url": null,
+      "download_url": "https://www.sciencebase.gov/catalog/item/652ef930d34edd15305a9b03",
+      "format": "gdb,shp,gpkg,geojson",
+      "cost": "free",
+      "license": "public_domain",
+      "update_frequency": "annual",
+      "typical_release_month": "October",
+      "current_version": "4.0",
+      "last_checked": "2026-01-13",
+      "date_added_to_pipeline": "2026-01-13",
+      "coverage": "nationwide",
+      "coordinate_system": "EPSG:4326",
+      "estimated_size_gb": 2.5,
+      "key_fields": [
+        "Mang_Name (Managing Agency Name)",
+        "Mang_Type (Managing Agency Type: FED, STAT, LOC, etc.)",
+        "Des_Tp (Designation Type: NF, NP, NWR, SP, WA, etc.)",
+        "Pub_Access (Public Access: OA=Open, RA=Restricted, XA=Closed, UK=Unknown)",
+        "GAP_Sts (GAP Status Code 1-4, protection level)",
+        "GIS_Acres (Area in acres)",
+        "Unit_Nm (Unit Name)",
+        "State_Nm (State Name)"
+      ],
+      "enrichment_fields": {
+        "nearest_public_land_name": "Unit_Nm from nearest PAD-US polygon",
+        "nearest_public_land_type": "Des_Tp (NF=National Forest, BLM, NWR=Wildlife Refuge, etc.)",
+        "nearest_public_land_agency": "Mang_Name (managing agency)",
+        "distance_to_public_land_m": "Distance in meters to nearest public land",
+        "public_access_level": "Pub_Access (OA, RA, XA, UK)",
+        "adjacent_to_public_land": "Boolean if parcel touches public land"
+      },
+      "notes": "Most valuable enrichment for outdoor recreation. Includes federal lands (USFS, BLM, NPS, FWS), state lands, local parks, and private conservation easements. Version 4.0 released Oct 2023.",
+      "r2_path": "enrichment/pad_us/",
+      "pmtiles_layer_name": "public_lands"
+    },
+    "nwi": {
+      "priority": 2,
+      "name": "National Wetlands Inventory (NWI)",
+      "description": "Nation's official wetlands data depicting location and classification of wetlands, deepwater habitats, and related features.",
+      "provider": "US Fish & Wildlife Service",
+      "url": "https://www.fws.gov/program/national-wetlands-inventory",
+      "api_url": "https://fwspublicservices.wim.usgs.gov/wetlandsmapservice/rest/services/Wetlands/MapServer",
+      "download_url": "https://www.fws.gov/program/national-wetlands-inventory/download-state-wetlands-data",
+      "format": "gdb,shp,gpkg",
+      "cost": "free",
+      "license": "public_domain",
+      "update_frequency": "biannual",
+      "typical_release_month": "May,October",
+      "current_version": "2024",
+      "last_checked": "2026-01-13",
+      "date_added_to_pipeline": "2026-01-13",
+      "coverage": "nationwide",
+      "coordinate_system": "EPSG:4326",
+      "estimated_size_gb": 15,
+      "key_fields": [
+        "WETLAND_TYPE (Classification code)",
+        "ACRES (Area)",
+        "ATTRIBUTE (Cowardin classification)",
+        "SHAPE_Area (Geometry area)"
+      ],
+      "enrichment_fields": {
+        "has_wetlands": "Boolean if parcel intersects wetlands",
+        "wetland_acres": "Total wetland area within parcel",
+        "wetland_types": "Array of wetland classifications (PEM, PFO, PSS, etc.)",
+        "waterfowl_habitat": "Boolean based on wetland types suitable for waterfowl"
+      },
+      "cowardin_codes": {
+        "PEM": "Palustrine Emergent (marshes)",
+        "PFO": "Palustrine Forested (forested wetlands)",
+        "PSS": "Palustrine Scrub-Shrub",
+        "PUB": "Palustrine Unconsolidated Bottom (ponds)",
+        "PAB": "Palustrine Aquatic Bed",
+        "L1": "Lacustrine Limnetic (deep lakes)",
+        "L2": "Lacustrine Littoral (shallow lake edges)",
+        "R1": "Riverine Upper Perennial",
+        "R2": "Riverine Lower Perennial",
+        "E1": "Estuarine Subtidal",
+        "E2": "Estuarine Intertidal"
+      },
+      "notes": "37+ million wetland features. Critical for waterfowl hunting, fishing access identification. Updated biannually in May and October.",
+      "r2_path": "enrichment/nwi/",
+      "pmtiles_layer_name": "wetlands"
+    },
+    "nhd": {
+      "priority": 3,
+      "name": "National Hydrography Dataset (NHD)",
+      "description": "Comprehensive dataset of surface water features including rivers, streams, lakes, ponds, and related features.",
+      "provider": "USGS",
+      "url": "https://www.usgs.gov/national-hydrography",
+      "api_url": "https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer",
+      "download_url": "https://apps.nationalmap.gov/downloader/",
+      "format": "gdb,shp",
+      "cost": "free",
+      "license": "public_domain",
+      "update_frequency": "continuous",
+      "typical_release_month": null,
+      "current_version": "NHDPlus HR",
+      "last_checked": "2026-01-13",
+      "date_added_to_pipeline": "2026-01-13",
+      "coverage": "nationwide",
+      "coordinate_system": "EPSG:4326",
+      "estimated_size_gb": 25,
+      "key_fields": [
+        "GNIS_Name (Geographic name)",
+        "FType (Feature type code)",
+        "FCode (Feature code - detailed type)",
+        "LengthKM (Stream length)",
+        "AreaSqKm (Water body area)",
+        "ReachCode (Unique reach identifier)"
+      ],
+      "feature_types": {
+        "336": "Canal/Ditch",
+        "390": "Lake/Pond",
+        "431": "Dam/Weir",
+        "460": "Stream/River",
+        "537": "Spillway"
+      },
+      "enrichment_fields": {
+        "distance_to_water_m": "Distance to nearest water feature",
+        "nearest_water_name": "GNIS_Name of nearest water",
+        "nearest_water_type": "Stream, Lake, River, Pond, etc.",
+        "has_stream_frontage": "Boolean if parcel touches stream/river",
+        "has_lake_frontage": "Boolean if parcel touches lake/pond",
+        "watershed_huc8": "8-digit HUC watershed code",
+        "watershed_name": "Watershed name"
+      },
+      "notes": "Note: NHD was retired Oct 2023, replaced by 3DHP. Existing NHD data still available and valid. Consider transitioning to 3DHP when ready.",
+      "r2_path": "enrichment/nhd/",
+      "pmtiles_layer_name": "hydrography"
+    },
+    "state_wma": {
+      "priority": 4,
+      "name": "State Wildlife Management Areas",
+      "description": "Aggregated state-level wildlife management areas, game lands, and public hunting lands from state fish & game agencies.",
+      "provider": "Various State Agencies",
+      "url": null,
+      "api_url": null,
+      "download_url": null,
+      "format": "varies",
+      "cost": "free",
+      "license": "varies_by_state",
+      "update_frequency": "annual",
+      "typical_release_month": null,
+      "current_version": "2026",
+      "last_checked": "2026-01-13",
+      "date_added_to_pipeline": "2026-01-13",
+      "coverage": "state_by_state",
+      "coordinate_system": "varies",
+      "estimated_size_gb": 5,
+      "state_sources": {
+        "PA": {
+          "name": "Pennsylvania Game Commission",
+          "url": "https://www.pgcmaps.pa.gov/",
+          "api_url": "https://gis.pgc.pa.gov/arcgis/rest/services",
+          "format": "Feature Service"
+        },
+        "NC": {
+          "name": "NC Wildlife Resources Commission",
+          "url": "https://www.ncwildlife.gov/hunting/where-hunt-shoot/game-lands-maps",
+          "format": "Shapefile"
+        },
+        "MI": {
+          "name": "Michigan DNR",
+          "url": "https://gis-midnr.opendata.arcgis.com/",
+          "format": "GeoJSON"
+        },
+        "NE": {
+          "name": "Nebraska Game & Parks",
+          "url": "https://outdoornebraska.gov/guides-maps/maps/",
+          "format": "varies"
+        },
+        "TX": {
+          "name": "Texas Parks & Wildlife",
+          "url": "https://tpwd.texas.gov/gis/",
+          "format": "Shapefile"
+        },
+        "CO": {
+          "name": "Colorado Parks & Wildlife",
+          "url": "https://cpw.state.co.us/learn/Pages/Maps.aspx",
+          "format": "varies"
+        },
+        "MT": {
+          "name": "Montana FWP",
+          "url": "https://fwp.mt.gov/gis",
+          "format": "varies"
+        }
+      },
+      "enrichment_fields": {
+        "nearest_wma_name": "Name of nearest wildlife management area",
+        "nearest_wma_state": "State of nearest WMA",
+        "distance_to_wma_m": "Distance to nearest WMA",
+        "adjacent_to_wma": "Boolean if parcel touches WMA",
+        "hunting_allowed": "Boolean if hunting is allowed on adjacent public land"
+      },
+      "notes": "State data varies significantly in availability and format. PAD-US includes much of this data but state sources may be more current.",
+      "r2_path": "enrichment/state_wma/",
+      "pmtiles_layer_name": "wildlife_areas"
+    },
+    "nlcd": {
+      "priority": 5,
+      "name": "National Land Cover Database (NLCD)",
+      "description": "Nation's definitive land cover database at 30m resolution, classifying land into 16 categories.",
+      "provider": "USGS EROS / MRLC Consortium",
+      "url": "https://www.mrlc.gov/",
+      "api_url": "https://www.mrlc.gov/geoserver/mrlc_display/wms",
+      "download_url": "https://www.mrlc.gov/viewer/",
+      "format": "GeoTIFF (raster)",
+      "cost": "free",
+      "license": "public_domain",
+      "update_frequency": "annual",
+      "typical_release_month": null,
+      "current_version": "2021 (Annual NLCD 1985-2024)",
+      "last_checked": "2026-01-13",
+      "date_added_to_pipeline": "2026-01-13",
+      "coverage": "nationwide",
+      "coordinate_system": "EPSG:5070 (Albers Equal Area)",
+      "estimated_size_gb": 50,
+      "key_fields": [
+        "Land_Cover (Classification value 11-95)",
+        "Tree_Canopy (Percentage 0-100)",
+        "Impervious (Percentage 0-100)"
+      ],
+      "land_cover_classes": {
+        "11": "Open Water",
+        "12": "Perennial Ice/Snow",
+        "21": "Developed, Open Space",
+        "22": "Developed, Low Intensity",
+        "23": "Developed, Medium Intensity",
+        "24": "Developed, High Intensity",
+        "31": "Barren Land",
+        "41": "Deciduous Forest",
+        "42": "Evergreen Forest",
+        "43": "Mixed Forest",
+        "52": "Shrub/Scrub",
+        "71": "Grassland/Herbaceous",
+        "81": "Pasture/Hay",
+        "82": "Cultivated Crops",
+        "90": "Woody Wetlands",
+        "95": "Emergent Herbaceous Wetlands"
+      },
+      "enrichment_fields": {
+        "land_cover_class": "Dominant NLCD class (by area)",
+        "land_cover_name": "Human-readable class name",
+        "tree_canopy_pct": "Average tree canopy percentage",
+        "is_forested": "Boolean if >50% forested",
+        "is_agricultural": "Boolean if primarily agricultural",
+        "is_developed": "Boolean if developed land"
+      },
+      "notes": "Raster data requires zonal statistics to summarize per parcel. Annual NLCD now provides data from 1985-2024. Consider tree canopy layer for hunting habitat assessment.",
+      "r2_path": "enrichment/nlcd/",
+      "pmtiles_layer_name": null,
+      "processing_notes": "NLCD is raster - extract values per parcel using zonal statistics, do not convert to PMTiles directly."
+    },
+    "ssurgo": {
+      "priority": 6,
+      "name": "SSURGO Soil Survey",
+      "description": "Detailed soil survey data including soil types, drainage, and agricultural/timber productivity ratings.",
+      "provider": "USDA NRCS",
+      "url": "https://www.nrcs.usda.gov/resources/data-and-reports/soil-survey-geographic-database-ssurgo",
+      "api_url": "https://SDMDataAccess.sc.egov.usda.gov/Tabular/post.rest",
+      "download_url": "https://websoilsurvey.nrcs.usda.gov/app/",
+      "format": "API (JSON/XML) or Shapefile",
+      "cost": "free",
+      "license": "public_domain",
+      "update_frequency": "continuous",
+      "typical_release_month": null,
+      "current_version": "FY2024",
+      "last_checked": "2026-01-13",
+      "date_added_to_pipeline": "2026-01-13",
+      "coverage": "nationwide",
+      "coordinate_system": "EPSG:4326",
+      "estimated_size_gb": 100,
+      "key_fields": [
+        "mukey (Map unit key)",
+        "muname (Map unit name)",
+        "drclassdcd (Drainage class)",
+        "hydgrpdcd (Hydrologic group)",
+        "forpehrtdcp (Forest productivity)",
+        "niccdcd (Non-irrigated capability class)"
+      ],
+      "drainage_classes": {
+        "Excessively drained": "Water removed very rapidly",
+        "Somewhat excessively drained": "Water removed rapidly",
+        "Well drained": "Water removed readily",
+        "Moderately well drained": "Water removed somewhat slowly",
+        "Somewhat poorly drained": "Water removed slowly",
+        "Poorly drained": "Water removed so slowly soil remains wet",
+        "Very poorly drained": "Water at or near surface most of year"
+      },
+      "enrichment_fields": {
+        "soil_type": "Dominant soil map unit name",
+        "drainage_class": "Drainage classification",
+        "hydric_soil": "Boolean if hydric (wetland indicator)",
+        "forest_productivity": "Forest productivity rating",
+        "ag_capability_class": "Agricultural capability class (1-8)"
+      },
+      "notes": "Very large dataset. Consider using API for on-demand queries rather than bulk download. Useful for identifying wetland soils, timber land quality, and food plot suitability.",
+      "r2_path": "enrichment/ssurgo/",
+      "pmtiles_layer_name": "soils"
+    },
+    "blm_sma": {
+      "priority": 7,
+      "name": "BLM Surface Management Agency",
+      "description": "Federal land boundaries including BLM, Forest Service, and other federal agency managed lands.",
+      "provider": "Bureau of Land Management",
+      "url": "https://www.blm.gov/services/geospatial/GISData",
+      "api_url": "https://gis.blm.gov/arcgis/rest/services",
+      "download_url": "https://gbp-blm-egis.hub.arcgis.com/",
+      "format": "Feature Service, Shapefile",
+      "cost": "free",
+      "license": "public_domain",
+      "update_frequency": "quarterly",
+      "typical_release_month": null,
+      "current_version": "2024",
+      "last_checked": "2026-01-13",
+      "date_added_to_pipeline": "2026-01-13",
+      "coverage": "primarily_western_states",
+      "coordinate_system": "EPSG:4326",
+      "estimated_size_gb": 3,
+      "key_fields": [
+        "ADMIN_AGENCY_CODE (Managing agency)",
+        "ADMIN_UNIT_NAME (Unit name)",
+        "GIS_ACRES (Area)",
+        "SMA_CODE (Surface management code)"
+      ],
+      "agency_codes": {
+        "BLM": "Bureau of Land Management",
+        "FS": "Forest Service",
+        "FWS": "Fish and Wildlife Service",
+        "NPS": "National Park Service",
+        "DOD": "Department of Defense",
+        "BOR": "Bureau of Reclamation",
+        "TVA": "Tennessee Valley Authority"
+      },
+      "enrichment_fields": {
+        "federal_land_agency": "Managing federal agency",
+        "federal_land_name": "Unit name",
+        "blm_district": "BLM administrative district",
+        "grazing_allotment": "If within grazing allotment"
+      },
+      "notes": "Overlaps significantly with PAD-US but may have more current BLM-specific data. Most relevant for western states.",
+      "r2_path": "enrichment/blm/",
+      "pmtiles_layer_name": "federal_lands"
+    },
+    "usfs": {
+      "priority": 7,
+      "name": "USDA Forest Service Boundaries",
+      "description": "National Forest and Grassland boundaries, ranger districts, wilderness areas, and recreation sites.",
+      "provider": "USDA Forest Service",
+      "url": "https://data.fs.usda.gov/geodata/",
+      "api_url": "https://apps.fs.usda.gov/arcx/rest/services",
+      "download_url": "https://data.fs.usda.gov/geodata/edw/datasets.php",
+      "format": "Shapefile, GDB",
+      "cost": "free",
+      "license": "public_domain",
+      "update_frequency": "annual",
+      "typical_release_month": null,
+      "current_version": "2024",
+      "last_checked": "2026-01-13",
+      "date_added_to_pipeline": "2026-01-13",
+      "coverage": "nationwide",
+      "coordinate_system": "EPSG:4326",
+      "estimated_size_gb": 2,
+      "key_fields": [
+        "FORESTNAME (Forest name)",
+        "DISTRICTNAME (Ranger district)",
+        "OWNERCLASSIFICATION (Ownership type)",
+        "GIS_ACRES (Area)"
+      ],
+      "datasets": [
+        "Administrative Forest Boundaries",
+        "Ranger District Boundaries",
+        "Wilderness Areas",
+        "National Recreation Areas",
+        "Wild and Scenic Rivers",
+        "Trails",
+        "Roads"
+      ],
+      "enrichment_fields": {
+        "nearest_national_forest": "Name of nearest national forest",
+        "nearest_ranger_district": "Ranger district name",
+        "distance_to_usfs_m": "Distance to Forest Service land",
+        "in_wilderness": "Boolean if within designated wilderness"
+      },
+      "notes": "USFS data is also included in PAD-US but this source may have more detailed USFS-specific attributes like trails and recreation sites.",
+      "r2_path": "enrichment/usfs/",
+      "pmtiles_layer_name": "national_forests"
+    },
+    "fema_flood": {
+      "priority": 8,
+      "name": "FEMA Flood Zones (NFHL)",
+      "description": "National Flood Hazard Layer showing flood risk zones from FEMA flood maps.",
+      "provider": "FEMA",
+      "url": "https://www.fema.gov/flood-maps",
+      "api_url": "https://hazards.fema.gov/gis/nfhl/rest/services",
+      "download_url": "https://msc.fema.gov/portal/advanceSearch",
+      "format": "Feature Service, Shapefile",
+      "cost": "free",
+      "license": "public_domain",
+      "update_frequency": "continuous",
+      "typical_release_month": null,
+      "current_version": "2024",
+      "last_checked": "2026-01-13",
+      "date_added_to_pipeline": "2026-01-13",
+      "coverage": "nationwide",
+      "coordinate_system": "EPSG:4326",
+      "estimated_size_gb": 20,
+      "key_fields": [
+        "FLD_ZONE (Flood zone designation)",
+        "ZONE_SUBTY (Zone subtype)",
+        "SFHA_TF (Special Flood Hazard Area T/F)",
+        "STATIC_BFE (Base flood elevation)"
+      ],
+      "flood_zones": {
+        "A": "100-year flood, no BFE",
+        "AE": "100-year flood with BFE",
+        "AH": "100-year flood, ponding",
+        "AO": "100-year flood, sheet flow",
+        "V": "100-year coastal flood",
+        "VE": "100-year coastal flood with BFE",
+        "X": "Minimal flood risk (outside 500-year)",
+        "X500": "500-year flood zone (moderate risk)",
+        "D": "Undetermined risk"
+      },
+      "enrichment_fields": {
+        "flood_zone": "FEMA flood zone designation",
+        "in_100yr_floodplain": "Boolean if in 100-year floodplain",
+        "in_500yr_floodplain": "Boolean if in 500-year floodplain",
+        "base_flood_elevation": "BFE in feet if available"
+      },
+      "notes": "Useful for identifying areas prone to flooding. Hunters/campers may want to know about seasonal flooding risks.",
+      "r2_path": "enrichment/fema/",
+      "pmtiles_layer_name": "flood_zones"
+    },
+    "epa_brownfields": {
+      "priority": 9,
+      "name": "EPA Brownfields (ACRES)",
+      "description": "Locations of contaminated sites being cleaned up under EPA Brownfields program.",
+      "provider": "EPA",
+      "url": "https://www.epa.gov/brownfields",
+      "api_url": "https://enviro.epa.gov/enviro/efservice",
+      "download_url": "https://catalog.data.gov/dataset/acres-brownfields-properties",
+      "format": "CSV, API",
+      "cost": "free",
+      "license": "public_domain",
+      "update_frequency": "quarterly",
+      "typical_release_month": null,
+      "current_version": "2024",
+      "last_checked": "2026-01-13",
+      "date_added_to_pipeline": "2026-01-13",
+      "coverage": "nationwide",
+      "coordinate_system": "EPSG:4326",
+      "estimated_size_gb": 0.1,
+      "key_fields": [
+        "SITE_NAME",
+        "CITY",
+        "STATE",
+        "LATITUDE",
+        "LONGITUDE",
+        "ASSESSMENT_TYPE"
+      ],
+      "enrichment_fields": {
+        "near_brownfield": "Boolean if within 1km of brownfield site",
+        "brownfield_name": "Name of nearby brownfield",
+        "brownfield_distance_m": "Distance to nearest brownfield"
+      },
+      "notes": "Lower priority but useful for identifying potentially contaminated areas to avoid.",
+      "r2_path": "enrichment/epa/",
+      "pmtiles_layer_name": null
+    },
+    "tiger_roads": {
+      "priority": 10,
+      "name": "Census TIGER Roads",
+      "description": "Road network data from US Census Bureau for access point identification.",
+      "provider": "US Census Bureau",
+      "url": "https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html",
+      "api_url": "https://tigerweb.geo.census.gov/tigerwebmain/TIGERweb_restmapservice.html",
+      "download_url": "https://www.census.gov/cgi-bin/geo/shapefiles/index.php",
+      "format": "Shapefile",
+      "cost": "free",
+      "license": "public_domain",
+      "update_frequency": "annual",
+      "typical_release_month": "September",
+      "current_version": "2024",
+      "last_checked": "2026-01-13",
+      "date_added_to_pipeline": "2026-01-13",
+      "coverage": "nationwide",
+      "coordinate_system": "EPSG:4326",
+      "estimated_size_gb": 15,
+      "key_fields": [
+        "FULLNAME (Road name)",
+        "MTFCC (MAF/TIGER Feature Class Code)",
+        "RTTYP (Route type)"
+      ],
+      "enrichment_fields": {
+        "road_frontage": "Boolean if parcel has road frontage",
+        "nearest_road_name": "Name of nearest road",
+        "nearest_road_type": "Type (Interstate, US Highway, State, Local)",
+        "distance_to_road_m": "Distance to nearest road"
+      },
+      "notes": "Useful for access assessment. Lower priority since most parcels already have address info.",
+      "r2_path": "enrichment/tiger/",
+      "pmtiles_layer_name": "roads"
+    }
+  },
+  "processing_pipeline": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "download",
+        "description": "Download source data to output/enrichment/raw/"
+      },
+      {
+        "step": 2,
+        "name": "validate_crs",
+        "description": "Check coordinate system, reproject to WGS84 if needed"
+      },
+      {
+        "step": 3,
+        "name": "convert_format",
+        "description": "Convert to GeoJSON if not already"
+      },
+      {
+        "step": 4,
+        "name": "generate_pmtiles",
+        "description": "Generate PMTiles for map visualization (vector layers only)"
+      },
+      {
+        "step": 5,
+        "name": "upload_r2",
+        "description": "Upload GeoJSON and PMTiles to Cloudflare R2"
+      },
+      {
+        "step": 6,
+        "name": "cleanup_local",
+        "description": "Remove local files after successful upload"
+      }
+    ],
+    "directory_structure": {
+      "output/enrichment/raw/": "Original downloaded files",
+      "output/enrichment/geojson/": "WGS84 GeoJSON files",
+      "output/enrichment/pmtiles/": "Generated PMTiles",
+      "output/enrichment/raster/": "Raster data (NLCD)"
+    },
+    "r2_structure": {
+      "enrichment/pad_us/": "PAD-US files",
+      "enrichment/nwi/": "Wetlands files",
+      "enrichment/nhd/": "Hydrography files",
+      "enrichment/state_wma/": "State wildlife areas",
+      "enrichment/nlcd/": "Land cover (raster COGs)",
+      "enrichment/ssurgo/": "Soil data",
+      "enrichment/blm/": "BLM federal lands",
+      "enrichment/usfs/": "Forest Service lands",
+      "enrichment/fema/": "Flood zones",
+      "enrichment/epa/": "EPA brownfields",
+      "enrichment/tiger/": "Census roads"
+    }
+  },
+  "update_schedule": {
+    "description": "Recommended schedule for checking and updating enrichment data",
+    "annual": ["pad_us", "nlcd", "tiger_roads", "usfs"],
+    "biannual": ["nwi"],
+    "quarterly": ["blm_sma", "fema_flood", "epa_brownfields"],
+    "as_needed": ["nhd", "ssurgo", "state_wma"],
+    "next_check_dates": {
+      "pad_us": "2026-10-01",
+      "nwi": "2026-05-01",
+      "nhd": "2026-06-01",
+      "state_wma": "2026-06-01",
+      "nlcd": "2027-01-01",
+      "ssurgo": "2026-06-01",
+      "blm_sma": "2026-04-01",
+      "usfs": "2027-01-01",
+      "fema_flood": "2026-04-01",
+      "epa_brownfields": "2026-04-01",
+      "tiger_roads": "2026-09-01"
+    }
+  },
+  "summary": {
+    "total_sources": 11,
+    "priority_1_3_critical": ["pad_us", "nwi", "nhd"],
+    "priority_4_6_important": ["state_wma", "nlcd", "ssurgo"],
+    "priority_7_10_supplemental": ["blm_sma", "usfs", "fema_flood", "epa_brownfields", "tiger_roads"],
+    "estimated_total_size_gb": 237.6,
+    "notes": "Total size is raw download size. After processing and PMTiles conversion, storage will be significantly less. PAD-US, NWI, and NHD are the most valuable for outdoor recreation use case."
+  }
+}

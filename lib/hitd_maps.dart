@@ -58,3 +58,9 @@ export 'src/widgets/widgets.dart';
 
 // Utils
 export 'src/utils/utils.dart';
+
+// Offline support
+export 'src/offline/offline.dart';
+
+// Proprietary data layers (premium features)
+export 'src/proprietary/proprietary.dart';

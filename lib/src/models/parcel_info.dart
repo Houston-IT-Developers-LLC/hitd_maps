@@ -55,9 +55,25 @@ class ParcelInfo {
       acreage: _getDouble(props, ['acreage', 'ACRES', 'acres', 'ACREAGE', 'gis_acres']),
       marketValue: _getDouble(props, ['total_market_val', 'MARKET_VALUE', 'market_value', 'TOTAL_VALUE']),
       landUse: _getString(props, ['land_use', 'LAND_USE', 'use_code', 'USE_CODE']),
-      parcelId: _getString(props, ['parcel_id', 'PARCEL_ID', 'apn', 'APN', 'PIN']),
+      parcelId: _getString(props, ['parcel_id', 'PARCEL_ID', 'apn', 'APN', 'PIN', 'PARCEL_NO']),
       yearBuilt: _getInt(props, ['year_built', 'YEAR_BUILT', 'yearbuilt']),
       properties: props,
+    );
+  }
+
+  /// Create from JSON map.
+  factory ParcelInfo.fromJson(Map<String, dynamic> json) {
+    return ParcelInfo(
+      ownerName: json['ownerName'] as String?,
+      address: json['address'] as String?,
+      county: json['county'] as String?,
+      state: json['state'] as String?,
+      acreage: (json['acreage'] as num?)?.toDouble(),
+      marketValue: (json['marketValue'] as num?)?.toDouble(),
+      landUse: json['landUse'] as String?,
+      parcelId: json['parcelId'] as String?,
+      yearBuilt: json['yearBuilt'] as int?,
+      properties: json['properties'] as Map<String, dynamic>? ?? {},
     );
   }
 
@@ -111,7 +127,28 @@ class ParcelInfo {
     if (acreage == null) return null;
     if (acreage! < 1) {
       return '${(acreage! * 43560).toStringAsFixed(0)} sq ft';
+    } else if (acreage! >= 100) {
+      return '${acreage!.toStringAsFixed(1)} acres';
     }
     return '${acreage!.toStringAsFixed(2)} acres';
+  }
+
+  /// Convert to JSON map.
+  Map<String, dynamic> toJson() => {
+    'ownerName': ownerName,
+    'address': address,
+    'county': county,
+    'state': state,
+    'acreage': acreage,
+    'marketValue': marketValue,
+    'landUse': landUse,
+    'parcelId': parcelId,
+    'yearBuilt': yearBuilt,
+    'properties': properties,
+  };
+
+  @override
+  String toString() {
+    return 'ParcelInfo(owner: $ownerName, address: $address, acres: $acreage)';
   }
 }

@@ -1,0 +1,498 @@
+{
+  "version": "1.0.0",
+  "name": "GSpot Outdoors Layer Styles",
+  "description": "Professional layer styling for property and outdoor recreation data",
+  "colors": {
+    "brand": {
+      "primary": "#2D5F2E",
+      "secondary": "#4A7C4B",
+      "accent": "#8BC34A",
+      "dark": "#1B3D1C",
+      "light": "#E8F5E9"
+    },
+    "parcels": {
+      "fill": "#FFA726",
+      "stroke": "#E65100",
+      "selected": "#FF5722",
+      "hover": "#FFB74D"
+    },
+    "public_lands": {
+      "national_forest": "#228B22",
+      "blm": "#DEB887",
+      "national_park": "#2E7D32",
+      "wildlife_refuge": "#558B2F",
+      "wilderness": "#1B5E20",
+      "state_park": "#66BB6A",
+      "state_forest": "#43A047",
+      "local_park": "#81C784",
+      "conservation_easement": "#A5D6A7",
+      "default": "#4CAF50"
+    },
+    "wetlands": {
+      "emergent": "#4FC3F7",
+      "forested": "#0288D1",
+      "scrub_shrub": "#29B6F6",
+      "pond": "#03A9F4",
+      "lake": "#0277BD",
+      "riverine": "#01579B",
+      "default": "#29B6F6"
+    },
+    "water": {
+      "stream": "#1976D2",
+      "river": "#1565C0",
+      "lake": "#0D47A1",
+      "pond": "#42A5F5",
+      "default": "#2196F3"
+    },
+    "flood_zones": {
+      "high_risk": "#F44336",
+      "moderate_risk": "#FF9800",
+      "minimal_risk": "#4CAF50",
+      "default": "#9E9E9E"
+    },
+    "wildlife_areas": {
+      "state_wma": "#7B1FA2",
+      "walk_in": "#9C27B0",
+      "default": "#8E24AA"
+    }
+  },
+  "layers": {
+    "parcels": {
+      "id": "parcels-fill",
+      "type": "fill",
+      "source": "parcels",
+      "source-layer": "parcels",
+      "minzoom": 10,
+      "maxzoom": 24,
+      "paint": {
+        "fill-color": "#FFA726",
+        "fill-opacity": [
+          "interpolate", ["linear"], ["zoom"],
+          10, 0.1,
+          12, 0.2,
+          14, 0.3,
+          16, 0.4
+        ]
+      }
+    },
+    "parcels-outline": {
+      "id": "parcels-outline",
+      "type": "line",
+      "source": "parcels",
+      "source-layer": "parcels",
+      "minzoom": 12,
+      "maxzoom": 24,
+      "paint": {
+        "line-color": "#E65100",
+        "line-width": [
+          "interpolate", ["linear"], ["zoom"],
+          12, 0.5,
+          14, 1,
+          16, 1.5
+        ],
+        "line-opacity": [
+          "interpolate", ["linear"], ["zoom"],
+          12, 0.3,
+          14, 0.5,
+          16, 0.8
+        ]
+      }
+    },
+    "parcels-labels": {
+      "id": "parcels-labels",
+      "type": "symbol",
+      "source": "parcels",
+      "source-layer": "parcels",
+      "minzoom": 15,
+      "maxzoom": 24,
+      "layout": {
+        "text-field": ["coalesce", ["get", "owner_name"], ["get", "apn"]],
+        "text-size": 10,
+        "text-max-width": 8,
+        "text-anchor": "center",
+        "text-allow-overlap": false
+      },
+      "paint": {
+        "text-color": "#333333",
+        "text-halo-color": "#FFFFFF",
+        "text-halo-width": 1.5
+      }
+    },
+    "public-lands-fill": {
+      "id": "public-lands-fill",
+      "type": "fill",
+      "source": "public-lands",
+      "source-layer": "public_lands",
+      "minzoom": 4,
+      "maxzoom": 24,
+      "paint": {
+        "fill-color": [
+          "match", ["get", "Des_Tp"],
+          "NF", "#228B22",
+          "BLM", "#DEB887",
+          "NP", "#2E7D32",
+          "NWR", "#558B2F",
+          "WA", "#1B5E20",
+          "SP", "#66BB6A",
+          "SF", "#43A047",
+          "#4CAF50"
+        ],
+        "fill-opacity": [
+          "interpolate", ["linear"], ["zoom"],
+          4, 0.3,
+          8, 0.4,
+          12, 0.5
+        ]
+      }
+    },
+    "public-lands-outline": {
+      "id": "public-lands-outline",
+      "type": "line",
+      "source": "public-lands",
+      "source-layer": "public_lands",
+      "minzoom": 6,
+      "maxzoom": 24,
+      "paint": {
+        "line-color": "#1B5E20",
+        "line-width": [
+          "interpolate", ["linear"], ["zoom"],
+          6, 0.5,
+          10, 1,
+          14, 2
+        ],
+        "line-opacity": 0.8
+      }
+    },
+    "public-lands-labels": {
+      "id": "public-lands-labels",
+      "type": "symbol",
+      "source": "public-lands",
+      "source-layer": "public_lands",
+      "minzoom": 8,
+      "maxzoom": 24,
+      "layout": {
+        "text-field": ["get", "Unit_Nm"],
+        "text-size": [
+          "interpolate", ["linear"], ["zoom"],
+          8, 10,
+          12, 12,
+          14, 14
+        ],
+        "text-max-width": 10,
+        "text-allow-overlap": false,
+        "symbol-placement": "point"
+      },
+      "paint": {
+        "text-color": "#1B5E20",
+        "text-halo-color": "#FFFFFF",
+        "text-halo-width": 2
+      }
+    },
+    "wetlands-fill": {
+      "id": "wetlands-fill",
+      "type": "fill",
+      "source": "wetlands",
+      "source-layer": "wetlands",
+      "minzoom": 8,
+      "maxzoom": 24,
+      "paint": {
+        "fill-color": [
+          "match", ["slice", ["get", "WETLAND_TYPE"], 0, 3],
+          "PEM", "#4FC3F7",
+          "PFO", "#0288D1",
+          "PSS", "#29B6F6",
+          "PUB", "#03A9F4",
+          "L1", "#0277BD",
+          "L2", "#0288D1",
+          "R1", "#01579B",
+          "R2", "#0288D1",
+          "#29B6F6"
+        ],
+        "fill-opacity": [
+          "interpolate", ["linear"], ["zoom"],
+          8, 0.3,
+          12, 0.5,
+          14, 0.6
+        ]
+      }
+    },
+    "wetlands-outline": {
+      "id": "wetlands-outline",
+      "type": "line",
+      "source": "wetlands",
+      "source-layer": "wetlands",
+      "minzoom": 10,
+      "maxzoom": 24,
+      "paint": {
+        "line-color": "#01579B",
+        "line-width": 1,
+        "line-opacity": 0.6
+      }
+    },
+    "water-line": {
+      "id": "water-line",
+      "type": "line",
+      "source": "hydrography",
+      "source-layer": "hydrography",
+      "filter": ["==", ["geometry-type"], "LineString"],
+      "minzoom": 6,
+      "maxzoom": 24,
+      "paint": {
+        "line-color": "#1976D2",
+        "line-width": [
+          "interpolate", ["linear"], ["zoom"],
+          6, 0.5,
+          10, 1,
+          14, 2
+        ],
+        "line-opacity": 0.8
+      }
+    },
+    "water-fill": {
+      "id": "water-fill",
+      "type": "fill",
+      "source": "hydrography",
+      "source-layer": "hydrography",
+      "filter": ["==", ["geometry-type"], "Polygon"],
+      "minzoom": 6,
+      "maxzoom": 24,
+      "paint": {
+        "fill-color": "#2196F3",
+        "fill-opacity": 0.6
+      }
+    },
+    "water-labels": {
+      "id": "water-labels",
+      "type": "symbol",
+      "source": "hydrography",
+      "source-layer": "hydrography",
+      "filter": ["has", "GNIS_Name"],
+      "minzoom": 10,
+      "maxzoom": 24,
+      "layout": {
+        "text-field": ["get", "GNIS_Name"],
+        "text-size": 11,
+        "symbol-placement": "line",
+        "text-allow-overlap": false
+      },
+      "paint": {
+        "text-color": "#0D47A1",
+        "text-halo-color": "#FFFFFF",
+        "text-halo-width": 1.5
+      }
+    },
+    "flood-zones-fill": {
+      "id": "flood-zones-fill",
+      "type": "fill",
+      "source": "flood-zones",
+      "source-layer": "flood_zones",
+      "minzoom": 8,
+      "maxzoom": 24,
+      "paint": {
+        "fill-color": [
+          "match", ["get", "flood_risk"],
+          "high", "#F44336",
+          "moderate", "#FF9800",
+          "minimal", "#4CAF50",
+          "#9E9E9E"
+        ],
+        "fill-opacity": [
+          "interpolate", ["linear"], ["zoom"],
+          8, 0.2,
+          12, 0.3,
+          14, 0.4
+        ]
+      }
+    },
+    "flood-zones-outline": {
+      "id": "flood-zones-outline",
+      "type": "line",
+      "source": "flood-zones",
+      "source-layer": "flood_zones",
+      "minzoom": 10,
+      "maxzoom": 24,
+      "paint": {
+        "line-color": [
+          "match", ["get", "flood_risk"],
+          "high", "#C62828",
+          "moderate", "#EF6C00",
+          "#757575"
+        ],
+        "line-width": 1,
+        "line-opacity": 0.6
+      }
+    },
+    "wildlife-areas-fill": {
+      "id": "wildlife-areas-fill",
+      "type": "fill",
+      "source": "wildlife-areas",
+      "source-layer": "wildlife_areas",
+      "minzoom": 6,
+      "maxzoom": 24,
+      "paint": {
+        "fill-color": "#8E24AA",
+        "fill-opacity": [
+          "interpolate", ["linear"], ["zoom"],
+          6, 0.3,
+          10, 0.4,
+          14, 0.5
+        ]
+      }
+    },
+    "wildlife-areas-outline": {
+      "id": "wildlife-areas-outline",
+      "type": "line",
+      "source": "wildlife-areas",
+      "source-layer": "wildlife_areas",
+      "minzoom": 8,
+      "maxzoom": 24,
+      "paint": {
+        "line-color": "#6A1B9A",
+        "line-width": 2,
+        "line-opacity": 0.8
+      }
+    },
+    "wildlife-areas-labels": {
+      "id": "wildlife-areas-labels",
+      "type": "symbol",
+      "source": "wildlife-areas",
+      "source-layer": "wildlife_areas",
+      "minzoom": 9,
+      "maxzoom": 24,
+      "layout": {
+        "text-field": ["coalesce", ["get", "name"], ["get", "WMA_Name"], ["get", "PROPERTYNAME"]],
+        "text-size": 11,
+        "text-max-width": 8,
+        "text-allow-overlap": false
+      },
+      "paint": {
+        "text-color": "#6A1B9A",
+        "text-halo-color": "#FFFFFF",
+        "text-halo-width": 2
+      }
+    }
+  },
+  "legend": {
+    "parcels": {
+      "label": "Property Parcels",
+      "color": "#FFA726",
+      "type": "fill"
+    },
+    "public_lands": {
+      "label": "Public Lands",
+      "items": [
+        {"label": "National Forest", "color": "#228B22"},
+        {"label": "BLM", "color": "#DEB887"},
+        {"label": "National Park", "color": "#2E7D32"},
+        {"label": "Wildlife Refuge", "color": "#558B2F"},
+        {"label": "Wilderness", "color": "#1B5E20"},
+        {"label": "State Park", "color": "#66BB6A"},
+        {"label": "State Forest", "color": "#43A047"}
+      ]
+    },
+    "wetlands": {
+      "label": "Wetlands",
+      "items": [
+        {"label": "Emergent Marsh", "color": "#4FC3F7"},
+        {"label": "Forested Wetland", "color": "#0288D1"},
+        {"label": "Pond/Lake", "color": "#03A9F4"}
+      ]
+    },
+    "water": {
+      "label": "Water Features",
+      "color": "#2196F3",
+      "type": "line"
+    },
+    "flood_zones": {
+      "label": "Flood Zones",
+      "items": [
+        {"label": "High Risk (100-yr)", "color": "#F44336"},
+        {"label": "Moderate Risk (500-yr)", "color": "#FF9800"},
+        {"label": "Minimal Risk", "color": "#4CAF50"}
+      ]
+    },
+    "wildlife_areas": {
+      "label": "Wildlife Management Areas",
+      "color": "#8E24AA",
+      "type": "fill"
+    }
+  },
+  "interaction": {
+    "hover": {
+      "parcels": {
+        "paint": {
+          "fill-color": "#FFB74D",
+          "fill-opacity": 0.6
+        }
+      },
+      "public_lands": {
+        "paint": {
+          "fill-opacity": 0.7
+        }
+      }
+    },
+    "selected": {
+      "parcels": {
+        "paint": {
+          "fill-color": "#FF5722",
+          "fill-opacity": 0.8
+        },
+        "outline": {
+          "line-color": "#BF360C",
+          "line-width": 3
+        }
+      }
+    }
+  },
+  "popup_templates": {
+    "parcels": {
+      "title": "{{owner_name}}",
+      "subtitle": "{{situs_address}}",
+      "fields": [
+        {"label": "APN", "value": "{{apn}}"},
+        {"label": "Acres", "value": "{{acres}}", "format": "number"},
+        {"label": "County", "value": "{{county}}"},
+        {"label": "State", "value": "{{state}}"}
+      ]
+    },
+    "public_lands": {
+      "title": "{{Unit_Nm}}",
+      "subtitle": "{{Mang_Name}}",
+      "fields": [
+        {"label": "Type", "value": "{{Des_Tp}}"},
+        {"label": "Access", "value": "{{Pub_Access}}"},
+        {"label": "Acres", "value": "{{GIS_Acres}}", "format": "number"}
+      ]
+    },
+    "wetlands": {
+      "title": "Wetland",
+      "subtitle": "{{wetland_class}}",
+      "fields": [
+        {"label": "Type", "value": "{{WETLAND_TYPE}}"},
+        {"label": "Acres", "value": "{{ACRES}}", "format": "number"}
+      ]
+    },
+    "water": {
+      "title": "{{GNIS_Name}}",
+      "subtitle": "{{feature_type_name}}",
+      "fields": [
+        {"label": "Type", "value": "{{FType}}"}
+      ]
+    },
+    "flood_zones": {
+      "title": "Flood Zone {{FLD_ZONE}}",
+      "subtitle": "{{flood_description}}",
+      "fields": [
+        {"label": "Risk Level", "value": "{{flood_risk}}"}
+      ]
+    },
+    "wildlife_areas": {
+      "title": "{{name}}",
+      "subtitle": "{{source_agency}}",
+      "fields": [
+        {"label": "State", "value": "{{state}}"},
+        {"label": "Acres", "value": "{{acres}}", "format": "number"}
+      ]
+    }
+  }
+}

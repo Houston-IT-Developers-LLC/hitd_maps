@@ -1,0 +1,35 @@
+[Unit]
+Description=MyGSpot Data Agent - Autonomous scraping and monitoring
+Documentation=https://github.com/your-repo/data-pipeline
+After=network.target ollama.service
+Wants=ollama.service
+
+[Service]
+Type=simple
+User=exx
+Group=exx
+WorkingDirectory=/home/exx/Documents/C/hitd_maps/data-pipeline
+ExecStart=/usr/bin/python3 /home/exx/Documents/C/hitd_maps/data-pipeline/agent/data_agent.py --interval 360
+Restart=always
+RestartSec=30
+
+# Environment
+Environment="OLLAMA_BASE=http://10.8.0.1:11434"
+Environment="OLLAMA_MODEL=llama3.3:70b"
+Environment="PYTHONUNBUFFERED=1"
+
+# Resource limits (adjust based on your server)
+MemoryMax=8G
+CPUQuota=200%
+
+# Logging
+StandardOutput=append:/home/exx/Documents/C/hitd_maps/data-pipeline/agent/agent.log
+StandardError=append:/home/exx/Documents/C/hitd_maps/data-pipeline/agent/agent_error.log
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/home/exx/Documents/C/hitd_maps/data-pipeline
+
+[Install]
+WantedBy=multi-user.target
