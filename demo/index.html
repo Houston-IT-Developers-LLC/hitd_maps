@@ -82,7 +82,7 @@
 
     <div class="section">
         <div class="section-title">Public Lands & Wildlife</div>
-        <div class="layer"><input type="checkbox" id="lyrPADUS" checked><label for="lyrPADUS">Protected Areas (PAD-US)</label></div>
+        <div class="layer"><input type="checkbox" id="lyrPADUS"><label for="lyrPADUS">Protected Areas (PAD-US)</label></div>
         <div class="layer"><input type="checkbox" id="lyrBLM"><label for="lyrBLM">BLM Lands</label></div>
         <div class="layer"><input type="checkbox" id="lyrUSFS"><label for="lyrUSFS">National Forests</label></div>
         <div class="layer"><input type="checkbox" id="lyrGMU"><label for="lyrGMU">Game Management Units</label></div>
@@ -188,7 +188,6 @@ map.on('load', function() {
     if (document.getElementById('lyrBuildings').checked) document.getElementById('lyrBuildings').onchange();
     if (document.getElementById('lyrAddresses').checked) document.getElementById('lyrAddresses').onchange();
     if (document.getElementById('lyrPOIs').checked) document.getElementById('lyrPOIs').onchange();
-    if (document.getElementById('lyrPADUS').checked) document.getElementById('lyrPADUS').onchange();
     if (document.getElementById('lyrTrails').checked) document.getElementById('lyrTrails').onchange();
     if (document.getElementById('lyrRoads').checked) document.getElementById('lyrRoads').onchange();
     if (document.getElementById('lyrWater').checked) document.getElementById('lyrWater').onchange();
@@ -377,7 +376,7 @@ document.getElementById('lyrPOIs').onchange = function() {
 document.getElementById('lyrPADUS').onchange = function() {
     if (this.checked && !loaded.padus) {
         loadLayer('padus', 'public-lands/padus_fee.pmtiles', 'padus_fee',
-            { fill: '#22c55e', fillOpacity: 0.25, line: '#15803d', minzoom: 5 });
+            { fill: '#22c55e', fillOpacity: 0.15, line: '#15803d', lineWidth: 2, lineMinzoom: 5, minzoom: 6 });
     } else toggleLayer('padus', this.checked);
 };
 
