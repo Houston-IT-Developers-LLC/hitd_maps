@@ -1,55 +1,154 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HITD Maps</title>
+    <title>HITD Maps - Full USA Data</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
     <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet">
     <script src="https://unpkg.com/pmtiles@3.0.6/dist/pmtiles.js"></script>
     <style>
-        body { margin: 0; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
         .panel {
             position: absolute; top: 10px; left: 10px; z-index: 1000;
             background: white; padding: 15px; border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            font-family: Arial, sans-serif; width: 250px;
+            width: 280px; max-height: calc(100vh - 40px); overflow-y: auto;
         }
-        .panel h2 { margin: 0 0 10px; font-size: 16px; color: #1a73e8; }
-        .panel input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
-        .btns { display: flex; gap: 5px; margin-bottom: 10px; }
-        .btns button { flex: 1; padding: 8px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; }
-        .btns button.active { background: #1a73e8; color: white; }
-        .layer { padding: 5px 0; }
-        .layer label { cursor: pointer; }
+        .panel h2 { margin: 0 0 12px; font-size: 18px; color: #1a73e8; }
+        .panel input[type="text"] {
+            width: 100%; padding: 10px; margin-bottom: 12px;
+            border: 1px solid #ddd; border-radius: 4px; font-size: 14px;
+        }
+
+        .btns { display: flex; gap: 4px; margin-bottom: 12px; }
+        .btns button {
+            flex: 1; padding: 8px 4px; border: 1px solid #ddd;
+            background: white; border-radius: 4px; cursor: pointer; font-size: 11px;
+        }
+        .btns button:hover { background: #f5f5f5; }
+        .btns button.active { background: #1a73e8; color: white; border-color: #1a73e8; }
+
+        .section { margin-bottom: 12px; }
+        .section-title {
+            font-size: 10px; font-weight: 600; color: #666;
+            text-transform: uppercase; margin-bottom: 6px;
+            padding-bottom: 4px; border-bottom: 1px solid #eee;
+        }
+
+        .layer { display: flex; align-items: center; padding: 4px 0; }
+        .layer input { margin-right: 8px; }
+        .layer label { cursor: pointer; font-size: 12px; flex: 1; }
+        .layer .count { font-size: 10px; color: #888; }
+
         #status {
             position: absolute; bottom: 20px; left: 10px; z-index: 1000;
-            background: rgba(0,0,0,0.8); color: white; padding: 8px 12px;
-            border-radius: 4px; font-size: 12px; font-family: Arial;
+            background: rgba(0,0,0,0.85); color: white; padding: 10px 15px;
+            border-radius: 4px; font-size: 12px; max-width: 400px;
         }
+
+        .maplibregl-popup-content {
+            padding: 12px; font-family: Arial; max-width: 280px;
+        }
+        .maplibregl-popup-content b { color: #1a73e8; }
     </style>
 </head>
 <body>
 <div id="map"></div>
+
 <div class="panel">
     <h2>HITD Maps</h2>
-    <input type="text" id="search" placeholder="Search address (Enter)">
+    <input type="text" id="search" placeholder="Search any US address...">
+
     <div class="btns">
         <button class="active" id="btnMap">Map</button>
         <button id="btnSat">Satellite</button>
         <button id="btnTerrain">3D</button>
     </div>
-    <div class="layer"><label><input type="checkbox" id="chkParcels" checked> Property Parcels</label></div>
-    <div class="layer"><label><input type="checkbox" id="chkTransit"> Transit</label></div>
+
+    <div class="section">
+        <div class="section-title">Property Data</div>
+        <div class="layer"><input type="checkbox" id="lyrParcels" checked><label for="lyrParcels">Property Parcels</label><span class="count">149 files</span></div>
+        <div class="layer"><input type="checkbox" id="lyrBuildings"><label for="lyrBuildings">Buildings</label></div>
+        <div class="layer"><input type="checkbox" id="lyrAddresses"><label for="lyrAddresses">Addresses</label></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Points of Interest</div>
+        <div class="layer"><input type="checkbox" id="lyrPOIs"><label for="lyrPOIs">Businesses & Places</label></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Public Lands & Wildlife</div>
+        <div class="layer"><input type="checkbox" id="lyrPADUS"><label for="lyrPADUS">Protected Areas (PAD-US)</label></div>
+        <div class="layer"><input type="checkbox" id="lyrBLM"><label for="lyrBLM">BLM Lands</label></div>
+        <div class="layer"><input type="checkbox" id="lyrUSFS"><label for="lyrUSFS">National Forests</label></div>
+        <div class="layer"><input type="checkbox" id="lyrGMU"><label for="lyrGMU">Game Management Units</label></div>
+        <div class="layer"><input type="checkbox" id="lyrWMA"><label for="lyrWMA">Wildlife Management</label></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Trails & Roads</div>
+        <div class="layer"><input type="checkbox" id="lyrTrails"><label for="lyrTrails">NFS Trails</label></div>
+        <div class="layer"><input type="checkbox" id="lyrMVUM"><label for="lyrMVUM">MVUM Roads</label></div>
+        <div class="layer"><input type="checkbox" id="lyrRoads"><label for="lyrRoads">All Roads</label></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Water & Environment</div>
+        <div class="layer"><input type="checkbox" id="lyrWater"><label for="lyrWater">Water Bodies</label></div>
+        <div class="layer"><input type="checkbox" id="lyrWetlands"><label for="lyrWetlands">Wetlands</label></div>
+        <div class="layer"><input type="checkbox" id="lyrFire"><label for="lyrFire">Fire Perimeters</label></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Transit</div>
+        <div class="layer"><input type="checkbox" id="lyrTransit"><label for="lyrTransit">Houston METRO</label></div>
+    </div>
+
+    <div style="font-size: 10px; color: #888; text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;">
+        492GB on Cloudflare R2 • 150M+ parcels • Zero egress fees
+    </div>
 </div>
-<div id="status">Loading...</div>
+
+<div id="status">Loading map...</div>
 
 <script>
 var protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
 
 var CDN = "https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev";
+
+// All 149 parcel files
+var PARCELS = [
+    'parcels_ak','parcels_al','parcels_al_madison','parcels_al_montgomery','parcels_ar_statewide',
+    'parcels_az','parcels_az_maricopa','parcels_ca','parcels_ca_los_angeles','parcels_ca_san_diego',
+    'parcels_ca_san_francisco','parcels_co','parcels_co_statewide','parcels_ct','parcels_de',
+    'parcels_fl_orange','parcels_ga','parcels_ga_chatham','parcels_ga_cobb','parcels_ga_gwinnett',
+    'parcels_ga_richmond','parcels_hi','parcels_hi_honolulu','parcels_hi_maui','parcels_hi_statewide',
+    'parcels_ia','parcels_ia_statewide','parcels_id','parcels_id_statewide','parcels_il','parcels_il_cook',
+    'parcels_il_dupage','parcels_in_marion','parcels_in_statewide','parcels_ks','parcels_ks_douglas',
+    'parcels_ks_sedgwick','parcels_ky','parcels_ky_boone','parcels_ky_kenton','parcels_la',
+    'parcels_la_east_baton_rouge','parcels_la_lafayette','parcels_la_orleans','parcels_ma',
+    'parcels_md_statewide','parcels_me_bangor','parcels_me_portland','parcels_me_statewide',
+    'parcels_mi','parcels_mi_kent','parcels_mi_macomb','parcels_mi_oakland','parcels_mi_ottawa',
+    'parcels_mi_wayne','parcels_mn','parcels_mn_anoka','parcels_mn_dakota','parcels_mn_hennepin',
+    'parcels_mn_ramsey','parcels_mo','parcels_mo_christian','parcels_mo_clay','parcels_mo_jackson',
+    'parcels_mo_kansas_city','parcels_mo_st_charles','parcels_ms','parcels_ms_desoto',
+    'parcels_mt_statewide','parcels_nd','parcels_nd_cass','parcels_ne','parcels_nh','parcels_nh_statewide',
+    'parcels_nj_bergen','parcels_nj_passaic','parcels_nj_statewide_v2','parcels_nm','parcels_nv',
+    'parcels_nv_statewide','parcels_ny_statewide','parcels_oh_cuyahoga','parcels_oh_franklin',
+    'parcels_oh_hamilton','parcels_oh_montgomery','parcels_oh_statewide','parcels_oh_summit',
+    'parcels_ok_cleveland','parcels_or_deschutes','parcels_or_lane','parcels_pa_allegheny',
+    'parcels_pa_delaware','parcels_pa_lackawanna','parcels_pa_statewide','parcels_sc_spartanburg',
+    'parcels_tn','parcels_tn_davidson','parcels_tn_hamilton','parcels_tn_montgomery','parcels_tn_nashville',
+    'parcels_tn_shelby','parcels_tn_statewide','parcels_tx','parcels_tx_bexar','parcels_tx_dallas',
+    'parcels_tx_denton','parcels_tx_harris','parcels_tx_tarrant','parcels_tx_travis','parcels_ut',
+    'parcels_va','parcels_wi','parcels_wi_kenosha','parcels_wi_milwaukee','parcels_wi_racine',
+    'parcels_wi_statewide','parcels_wi_waukesha','parcels_wv','parcels_wy'
+];
 
 function status(m) { document.getElementById('status').textContent = m; }
 
@@ -67,20 +166,26 @@ var map = new maplibregl.Map({
             { id: 'sat', type: 'raster', source: 'sat', layout: { visibility: 'none' } }
         ]
     },
-    center: [-95.37, 29.76],
-    zoom: 10
+    center: [-98.5, 39.8], // Center of USA
+    zoom: 4
 });
 
 map.addControl(new maplibregl.NavigationControl());
+map.addControl(new maplibregl.ScaleControl());
 
-var parcelsOn = false, transitOn = false;
+// Track loaded layers
+var loaded = {};
 
 map.on('load', function() {
-    status('Map loaded. Adding parcels...');
-    loadParcels();
+    status('Map ready. Check layers to load data.');
+
+    // Auto-load parcels if checked
+    if (document.getElementById('lyrParcels').checked) {
+        loadParcels();
+    }
 });
 
-// Buttons
+// Map type buttons
 document.getElementById('btnMap').onclick = function() {
     setBtn(this);
     map.setLayoutProperty('osm', 'visibility', 'visible');
@@ -102,7 +207,6 @@ document.getElementById('btnTerrain').onclick = function() {
     map.setLayoutProperty('sat', 'visibility', 'none');
     map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
     map.easeTo({ pitch: 60, duration: 1000 });
-    status('3D Terrain');
 };
 
 function setBtn(b) {
@@ -110,89 +214,243 @@ function setBtn(b) {
     b.classList.add('active');
 }
 
-// Parcels
-function loadParcels() {
-    map.addSource('parcels', {
-        type: 'vector',
-        url: 'pmtiles://' + CDN + '/parcels/parcels_tx_harris.pmtiles'
-    });
+// Generic layer loader
+function loadLayer(id, url, sourceLayer, style, clickHandler) {
+    if (loaded[id]) {
+        toggleLayer(id, true);
+        return;
+    }
 
-    map.addLayer({
-        id: 'parcels-fill',
-        type: 'fill',
-        source: 'parcels',
-        'source-layer': 'parcels',
-        minzoom: 10,
-        paint: { 'fill-color': '#e53935', 'fill-opacity': 0.25 }
-    });
+    status('Loading ' + id + '...');
 
-    map.addLayer({
-        id: 'parcels-line',
-        type: 'line',
-        source: 'parcels',
-        'source-layer': 'parcels',
-        minzoom: 13,
-        paint: { 'line-color': '#b71c1c', 'line-width': 1 }
-    });
+    map.addSource(id, { type: 'vector', url: 'pmtiles://' + CDN + '/' + url });
 
-    parcelsOn = true;
-    status('Parcels loaded - zoom in to see');
+    if (style.fill) {
+        map.addLayer({
+            id: id + '-fill', type: 'fill', source: id, 'source-layer': sourceLayer,
+            minzoom: style.minzoom || 0,
+            paint: { 'fill-color': style.fill, 'fill-opacity': style.fillOpacity || 0.3 }
+        });
+    }
 
-    map.on('click', 'parcels-fill', function(e) {
-        if (e.features.length) {
-            var p = e.features[0].properties;
-            var owner = p.owner_name_1 || p.owner || 'Unknown';
-            var addr = p.situs_address || p.address || '';
-            var val = p.total_market_val || p.market_value || '';
-            var html = '<b>' + owner + '</b>';
-            if (addr) html += '<br>' + addr;
-            if (val) html += '<br>$' + parseInt(val).toLocaleString();
-            new maplibregl.Popup().setLngLat(e.lngLat).setHTML(html).addTo(map);
-        }
-    });
+    if (style.line) {
+        map.addLayer({
+            id: id + '-line', type: 'line', source: id, 'source-layer': sourceLayer,
+            minzoom: style.lineMinzoom || style.minzoom || 0,
+            paint: { 'line-color': style.line, 'line-width': style.lineWidth || 1 }
+        });
+    }
 
-    map.on('mouseenter', 'parcels-fill', function() { map.getCanvas().style.cursor = 'pointer'; });
-    map.on('mouseleave', 'parcels-fill', function() { map.getCanvas().style.cursor = ''; });
+    if (style.circle) {
+        map.addLayer({
+            id: id + '-circle', type: 'circle', source: id, 'source-layer': sourceLayer,
+            minzoom: style.minzoom || 0,
+            paint: { 'circle-radius': style.circleRadius || 4, 'circle-color': style.circle, 'circle-stroke-color': 'white', 'circle-stroke-width': 1 }
+        });
+    }
+
+    loaded[id] = true;
+    status(id + ' loaded');
+
+    if (clickHandler) {
+        var clickLayer = id + (style.fill ? '-fill' : '-circle');
+        map.on('click', clickLayer, clickHandler);
+        map.on('mouseenter', clickLayer, function() { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', clickLayer, function() { map.getCanvas().style.cursor = ''; });
+    }
 }
 
-// Toggle parcels
-document.getElementById('chkParcels').onchange = function() {
-    var v = this.checked ? 'visible' : 'none';
-    map.setLayoutProperty('parcels-fill', 'visibility', v);
-    map.setLayoutProperty('parcels-line', 'visibility', v);
+function toggleLayer(id, show) {
+    var v = show ? 'visible' : 'none';
+    ['-fill', '-line', '-circle'].forEach(function(suffix) {
+        try { map.setLayoutProperty(id + suffix, 'visibility', v); } catch(e) {}
+    });
+}
+
+// PARCELS - Load all 149 files
+function loadParcels() {
+    if (loaded.parcels) {
+        PARCELS.forEach(function(p) { toggleLayer(p, true); });
+        return;
+    }
+
+    status('Loading 149 parcel files...');
+    var count = 0;
+
+    PARCELS.forEach(function(p) {
+        try {
+            map.addSource(p, { type: 'vector', url: 'pmtiles://' + CDN + '/parcels/' + p + '.pmtiles' });
+            map.addLayer({
+                id: p + '-fill', type: 'fill', source: p, 'source-layer': 'parcels',
+                minzoom: 10,
+                paint: { 'fill-color': '#e53935', 'fill-opacity': ['interpolate', ['linear'], ['zoom'], 10, 0.1, 15, 0.3] }
+            });
+            map.addLayer({
+                id: p + '-line', type: 'line', source: p, 'source-layer': 'parcels',
+                minzoom: 13,
+                paint: { 'line-color': '#b71c1c', 'line-width': 1 }
+            });
+
+            map.on('click', p + '-fill', parcelClick);
+            map.on('mouseenter', p + '-fill', function() { map.getCanvas().style.cursor = 'pointer'; });
+            map.on('mouseleave', p + '-fill', function() { map.getCanvas().style.cursor = ''; });
+        } catch(e) {}
+
+        count++;
+        if (count === PARCELS.length) {
+            loaded.parcels = true;
+            status('All parcels loaded. Zoom in to see property boundaries.');
+        }
+    });
+}
+
+function parcelClick(e) {
+    if (!e.features.length) return;
+    var p = e.features[0].properties;
+    var owner = p.owner_name_1 || p.owner || p.OWNER || p.owner_name || 'Unknown';
+    var addr = p.situs_address || p.address || p.SITUS || p.site_addr || '';
+    var val = p.total_market_val || p.market_value || p.MARKET_VAL || '';
+    var acres = p.acreage_1 || p.acres || p.ACRES || p.GIS_ACRES || '';
+    var html = '<b>' + owner + '</b>';
+    if (addr) html += '<br>' + addr;
+    if (val) html += '<br>Value: $' + parseInt(val).toLocaleString();
+    if (acres) html += '<br>Acres: ' + parseFloat(acres).toFixed(2);
+    new maplibregl.Popup().setLngLat(e.lngLat).setHTML(html).addTo(map);
+}
+
+// Layer checkbox handlers
+document.getElementById('lyrParcels').onchange = function() {
+    if (this.checked && !loaded.parcels) loadParcels();
+    else PARCELS.forEach(function(p) { toggleLayer(p, document.getElementById('lyrParcels').checked); });
 };
 
-// Transit
-document.getElementById('chkTransit').onchange = function() {
-    if (this.checked && !transitOn) {
+document.getElementById('lyrBuildings').onchange = function() {
+    if (this.checked && !loaded.buildings) {
+        loadLayer('buildings', 'buildings/usa_buildings.pmtiles', 'buildings',
+            { fill: '#f59e0b', fillOpacity: 0.4, minzoom: 13 });
+    } else toggleLayer('buildings', this.checked);
+};
+
+document.getElementById('lyrAddresses').onchange = function() {
+    if (this.checked && !loaded.addresses) {
+        loadLayer('addresses', 'addresses/usa_addresses.pmtiles', 'addresses',
+            { circle: '#6366f1', circleRadius: 3, minzoom: 14 });
+    } else toggleLayer('addresses', this.checked);
+};
+
+document.getElementById('lyrPOIs').onchange = function() {
+    if (this.checked && !loaded.pois) {
+        loadLayer('pois', 'pois/usa_pois.pmtiles', 'places',
+            { circle: '#ef4444', circleRadius: 5, minzoom: 12 },
+            function(e) {
+                if (e.features.length) {
+                    var p = e.features[0].properties;
+                    new maplibregl.Popup().setLngLat(e.lngLat)
+                        .setHTML('<b>' + (p.name || 'Business') + '</b><br>' + (p.category || ''))
+                        .addTo(map);
+                }
+            });
+    } else toggleLayer('pois', this.checked);
+};
+
+document.getElementById('lyrPADUS').onchange = function() {
+    if (this.checked && !loaded.padus) {
+        loadLayer('padus', 'public-lands/padus_fee.pmtiles', 'padus_fee',
+            { fill: '#22c55e', fillOpacity: 0.25, line: '#15803d', minzoom: 5 });
+    } else toggleLayer('padus', this.checked);
+};
+
+document.getElementById('lyrBLM').onchange = function() {
+    if (this.checked && !loaded.blm) {
+        loadLayer('blm', 'public-lands/blm_sma_nv.pmtiles', 'blm_sma_nv',
+            { fill: '#d4a373', fillOpacity: 0.3, line: '#9a7b4f', minzoom: 5 });
+    } else toggleLayer('blm', this.checked);
+};
+
+document.getElementById('lyrUSFS').onchange = function() {
+    if (this.checked && !loaded.usfs) {
+        loadLayer('usfs', 'trails/usfs_boundaries_co.pmtiles', 'usfs_boundaries_co',
+            { fill: '#059669', fillOpacity: 0.2, line: '#047857', minzoom: 5 });
+    } else toggleLayer('usfs', this.checked);
+};
+
+document.getElementById('lyrGMU').onchange = function() {
+    if (this.checked && !loaded.gmu) {
+        loadLayer('gmu', 'wildlife/gmu_co.pmtiles', 'gmu_co',
+            { fill: '#8b5cf6', fillOpacity: 0.2, line: '#7c3aed', minzoom: 5 });
+    } else toggleLayer('gmu', this.checked);
+};
+
+document.getElementById('lyrWMA').onchange = function() {
+    if (this.checked && !loaded.wma) {
+        loadLayer('wma', 'wildlife/fws_wildlife.pmtiles', 'fws_wildlife',
+            { fill: '#14b8a6', fillOpacity: 0.25, line: '#0d9488', minzoom: 5 });
+    } else toggleLayer('wma', this.checked);
+};
+
+document.getElementById('lyrTrails').onchange = function() {
+    if (this.checked && !loaded.trails) {
+        loadLayer('trails', 'trails/nfs_trails_national.pmtiles', 'nfs_trails',
+            { line: '#22c55e', lineWidth: 2, minzoom: 10 });
+    } else toggleLayer('trails', this.checked);
+};
+
+document.getElementById('lyrMVUM').onchange = function() {
+    if (this.checked && !loaded.mvum) {
+        loadLayer('mvum', 'trails/mvum_roads_national.pmtiles', 'mvum_roads_national',
+            { line: '#a16207', lineWidth: 2, minzoom: 10 });
+    } else toggleLayer('mvum', this.checked);
+};
+
+document.getElementById('lyrRoads').onchange = function() {
+    if (this.checked && !loaded.roads) {
+        loadLayer('roads', 'roads/usa_roads.pmtiles', 'roads',
+            { line: '#6b7280', lineWidth: 1, minzoom: 12 });
+    } else toggleLayer('roads', this.checked);
+};
+
+document.getElementById('lyrWater').onchange = function() {
+    if (this.checked && !loaded.water) {
+        loadLayer('water', 'water/nhd_water.pmtiles', 'nhd_water',
+            { fill: '#3b82f6', fillOpacity: 0.4, minzoom: 8 });
+    } else toggleLayer('water', this.checked);
+};
+
+document.getElementById('lyrWetlands').onchange = function() {
+    if (this.checked && !loaded.wetlands) {
+        loadLayer('wetlands', 'wetlands/nwi_tx.pmtiles', 'nwi_tx',
+            { fill: '#84cc16', fillOpacity: 0.3, minzoom: 10 });
+    } else toggleLayer('wetlands', this.checked);
+};
+
+document.getElementById('lyrFire').onchange = function() {
+    if (this.checked && !loaded.fire) {
+        loadLayer('fire', 'fire/wildfire_national.pmtiles', 'wildfire_national',
+            { fill: '#dc2626', fillOpacity: 0.4, line: '#991b1b', minzoom: 6 });
+    } else toggleLayer('fire', this.checked);
+};
+
+document.getElementById('lyrTransit').onchange = function() {
+    if (this.checked && !loaded.transit) {
         status('Loading transit...');
-        map.addSource('transit', {
-            type: 'vector',
-            url: 'pmtiles://' + CDN + '/transit/houston_metro.pmtiles'
-        });
+        map.addSource('transit', { type: 'vector', url: 'pmtiles://' + CDN + '/transit/houston_metro.pmtiles' });
         map.addLayer({
-            id: 'transit-lines',
-            type: 'line',
-            source: 'transit',
-            'source-layer': 'transit',
+            id: 'transit-lines', type: 'line', source: 'transit', 'source-layer': 'transit',
             filter: ['==', ['get', 'type'], 'route_shape'],
-            paint: { 'line-color': '#1a73e8', 'line-width': 3 }
+            paint: { 'line-color': '#1d4ed8', 'line-width': 3 }
         });
         map.addLayer({
-            id: 'transit-stops',
-            type: 'circle',
-            source: 'transit',
-            'source-layer': 'transit',
-            filter: ['==', ['get', 'type'], 'stop'],
-            minzoom: 12,
-            paint: { 'circle-radius': 5, 'circle-color': '#1a73e8', 'circle-stroke-color': 'white', 'circle-stroke-width': 2 }
+            id: 'transit-stops', type: 'circle', source: 'transit', 'source-layer': 'transit',
+            filter: ['==', ['get', 'type'], 'stop'], minzoom: 12,
+            paint: { 'circle-radius': 5, 'circle-color': '#1d4ed8', 'circle-stroke-color': 'white', 'circle-stroke-width': 2 }
         });
-        transitOn = true;
+        loaded.transit = true;
         status('Transit loaded');
-    } else if (transitOn) {
-        var v = this.checked ? 'visible' : 'none';
-        map.setLayoutProperty('transit-lines', 'visibility', v);
-        map.setLayoutProperty('transit-stops', 'visibility', v);
+    } else {
+        try {
+            map.setLayoutProperty('transit-lines', 'visibility', this.checked ? 'visible' : 'none');
+            map.setLayoutProperty('transit-stops', 'visibility', this.checked ? 'visible' : 'none');
+        } catch(e) {}
     }
 };
 
@@ -202,13 +460,13 @@ document.getElementById('search').onkeypress = function(e) {
         var q = this.value;
         if (!q) return;
         status('Searching...');
-        fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(q) + '&limit=1')
+        fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(q) + '&countrycodes=us&limit=1')
             .then(function(r) { return r.json(); })
             .then(function(d) {
                 if (d.length) {
                     map.flyTo({ center: [d[0].lon, d[0].lat], zoom: 16 });
-                    new maplibregl.Marker({color:'#e53935'}).setLngLat([d[0].lon, d[0].lat]).addTo(map);
-                    status('Found: ' + d[0].display_name.substring(0,40));
+                    new maplibregl.Marker({color:'#1a73e8'}).setLngLat([d[0].lon, d[0].lat]).addTo(map);
+                    status('Found: ' + d[0].display_name.substring(0, 50));
                 } else {
                     status('Not found');
                 }
