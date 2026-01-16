@@ -71,18 +71,18 @@
     <div class="section">
         <div class="section-title">Property Data</div>
         <div class="layer"><input type="checkbox" id="lyrParcels" checked><label for="lyrParcels">Property Parcels</label><span class="count">149 files</span></div>
-        <div class="layer"><input type="checkbox" id="lyrBuildings"><label for="lyrBuildings">Buildings</label></div>
-        <div class="layer"><input type="checkbox" id="lyrAddresses"><label for="lyrAddresses">Addresses</label></div>
+        <div class="layer"><input type="checkbox" id="lyrBuildings" checked><label for="lyrBuildings">Buildings</label></div>
+        <div class="layer"><input type="checkbox" id="lyrAddresses" checked><label for="lyrAddresses">Addresses</label></div>
     </div>
 
     <div class="section">
         <div class="section-title">Points of Interest</div>
-        <div class="layer"><input type="checkbox" id="lyrPOIs"><label for="lyrPOIs">Businesses & Places</label></div>
+        <div class="layer"><input type="checkbox" id="lyrPOIs" checked><label for="lyrPOIs">Businesses & Places</label></div>
     </div>
 
     <div class="section">
         <div class="section-title">Public Lands & Wildlife</div>
-        <div class="layer"><input type="checkbox" id="lyrPADUS"><label for="lyrPADUS">Protected Areas (PAD-US)</label></div>
+        <div class="layer"><input type="checkbox" id="lyrPADUS" checked><label for="lyrPADUS">Protected Areas (PAD-US)</label></div>
         <div class="layer"><input type="checkbox" id="lyrBLM"><label for="lyrBLM">BLM Lands</label></div>
         <div class="layer"><input type="checkbox" id="lyrUSFS"><label for="lyrUSFS">National Forests</label></div>
         <div class="layer"><input type="checkbox" id="lyrGMU"><label for="lyrGMU">Game Management Units</label></div>
@@ -91,14 +91,14 @@
 
     <div class="section">
         <div class="section-title">Trails & Roads</div>
-        <div class="layer"><input type="checkbox" id="lyrTrails"><label for="lyrTrails">NFS Trails</label></div>
+        <div class="layer"><input type="checkbox" id="lyrTrails" checked><label for="lyrTrails">NFS Trails</label></div>
         <div class="layer"><input type="checkbox" id="lyrMVUM"><label for="lyrMVUM">MVUM Roads</label></div>
-        <div class="layer"><input type="checkbox" id="lyrRoads"><label for="lyrRoads">All Roads</label></div>
+        <div class="layer"><input type="checkbox" id="lyrRoads" checked><label for="lyrRoads">All Roads</label></div>
     </div>
 
     <div class="section">
         <div class="section-title">Water & Environment</div>
-        <div class="layer"><input type="checkbox" id="lyrWater"><label for="lyrWater">Water Bodies</label></div>
+        <div class="layer"><input type="checkbox" id="lyrWater" checked><label for="lyrWater">Water Bodies</label></div>
         <div class="layer"><input type="checkbox" id="lyrWetlands"><label for="lyrWetlands">Wetlands</label></div>
         <div class="layer"><input type="checkbox" id="lyrFire"><label for="lyrFire">Fire Perimeters</label></div>
     </div>
@@ -157,14 +157,16 @@ var map = new maplibregl.Map({
     style: {
         version: 8,
         sources: {
-            osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256 },
-            sat: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256 },
-            terrain: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], tileSize: 256, encoding: 'terrarium' }
+            osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, maxzoom: 19 },
+            sat: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, maxzoom: 18 },
+            terrain: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], tileSize: 256, maxzoom: 15, encoding: 'terrarium' }
         },
         layers: [
             { id: 'osm', type: 'raster', source: 'osm' },
-            { id: 'sat', type: 'raster', source: 'sat', layout: { visibility: 'none' } }
-        ]
+            { id: 'sat', type: 'raster', source: 'sat', layout: { visibility: 'none' } },
+            { id: 'hillshade', type: 'hillshade', source: 'terrain', layout: { visibility: 'none' }, paint: { 'hillshade-exaggeration': 0.5 } }
+        ],
+        terrain: { source: 'terrain', exaggeration: 0 }
     },
     center: [-98.5, 39.8], // Center of USA
     zoom: 4
@@ -176,13 +178,24 @@ map.addControl(new maplibregl.ScaleControl());
 // Track loaded layers
 var loaded = {};
 
-map.on('load', function() {
-    status('Map ready. Check layers to load data.');
+var terrainReady = false;
 
-    // Auto-load parcels if checked
-    if (document.getElementById('lyrParcels').checked) {
-        loadParcels();
-    }
+map.on('load', function() {
+    status('Loading default layers...');
+
+    // Auto-load all checked layers
+    if (document.getElementById('lyrParcels').checked) loadParcels();
+    if (document.getElementById('lyrBuildings').checked) document.getElementById('lyrBuildings').onchange();
+    if (document.getElementById('lyrAddresses').checked) document.getElementById('lyrAddresses').onchange();
+    if (document.getElementById('lyrPOIs').checked) document.getElementById('lyrPOIs').onchange();
+    if (document.getElementById('lyrPADUS').checked) document.getElementById('lyrPADUS').onchange();
+    if (document.getElementById('lyrTrails').checked) document.getElementById('lyrTrails').onchange();
+    if (document.getElementById('lyrRoads').checked) document.getElementById('lyrRoads').onchange();
+    if (document.getElementById('lyrWater').checked) document.getElementById('lyrWater').onchange();
+
+    // Mark terrain source as ready for 3D button
+    terrainReady = true;
+    status('Map ready with default layers.');
 });
 
 // Map type buttons
@@ -190,23 +203,31 @@ document.getElementById('btnMap').onclick = function() {
     setBtn(this);
     map.setLayoutProperty('osm', 'visibility', 'visible');
     map.setLayoutProperty('sat', 'visibility', 'none');
+    map.setLayoutProperty('hillshade', 'visibility', 'none');
     map.setTerrain(null);
-    map.easeTo({pitch: 0});
+    map.easeTo({pitch: 0, bearing: 0});
+    status('2D map view');
 };
 
 document.getElementById('btnSat').onclick = function() {
     setBtn(this);
     map.setLayoutProperty('osm', 'visibility', 'none');
     map.setLayoutProperty('sat', 'visibility', 'visible');
+    map.setLayoutProperty('hillshade', 'visibility', 'none');
     map.setTerrain(null);
+    status('Satellite view');
 };
 
 document.getElementById('btnTerrain').onclick = function() {
     setBtn(this);
     map.setLayoutProperty('osm', 'visibility', 'visible');
     map.setLayoutProperty('sat', 'visibility', 'none');
+    map.setLayoutProperty('hillshade', 'visibility', 'visible');
+
+    // Enable 3D terrain with hill shading
     map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
-    map.easeTo({ pitch: 60, duration: 1000 });
+    map.easeTo({ pitch: 60, bearing: -17, duration: 1000 });
+    status('3D terrain enabled. Tilt & rotate to explore.');
 };
 
 function setBtn(b) {
