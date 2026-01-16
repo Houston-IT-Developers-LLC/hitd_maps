@@ -1,1107 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <title>HITD Maps</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HITD Maps - Production Demo</title>
-    <script src="https://unpkg.com/maplibre-gl@4.1.0/dist/maplibre-gl.js"></script>
-    <link href="https://unpkg.com/maplibre-gl@4.1.0/dist/maplibre-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1a1a2e;
-            color: #eee;
-        }
-        .container { display: flex; height: 100vh; }
-        .sidebar {
-            width: 320px;
-            background: #16213e;
-            padding: 20px;
-            overflow-y: auto;
-            flex-shrink: 0;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #0f3460;
-        }
-        .logo svg { width: 40px; height: 40px; }
-        .logo h1 { font-size: 1.4rem; color: #e94560; }
-        .logo span { font-size: 0.8rem; color: #888; }
-        .section { margin-bottom: 24px; }
-        .section h3 {
-            font-size: 0.9rem;
-            color: #e94560;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-        }
-        .basemap-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        .basemap-btn {
-            padding: 12px 8px;
-            background: #0f3460;
-            border: 2px solid transparent;
-            border-radius: 8px;
-            color: #eee;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-        }
-        .basemap-btn:hover { background: #1a4a7a; }
-        .basemap-btn.active { border-color: #e94560; background: #1a4a7a; }
-        .basemap-btn .icon { font-size: 1.5rem; display: block; margin-bottom: 4px; }
-        .basemap-btn .label { font-size: 0.75rem; }
-        .layer-toggle {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            background: #0f3460;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .layer-toggle:hover { background: #1a4a7a; }
-        .layer-toggle.active { background: #1a4a7a; border-left: 3px solid #e94560; }
-        .layer-toggle input { width: 18px; height: 18px; accent-color: #e94560; cursor: pointer; }
-        .layer-toggle label { flex: 1; cursor: pointer; }
-        .layer-toggle .badge { font-size: 0.7rem; padding: 2px 6px; background: #e94560; border-radius: 4px; }
-        .layer-toggle .badge.green { background: #4CAF50; }
-        .solunar-card {
-            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
-            border-radius: 12px;
-            padding: 16px;
-            border: 1px solid #0f3460;
-        }
-        .solunar-rating { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-        .rating-circle {
-            width: 60px; height: 60px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; font-weight: bold; color: white;
-        }
-        .rating-excellent { background: linear-gradient(135deg, #4CAF50, #8BC34A); }
-        .rating-good { background: linear-gradient(135deg, #8BC34A, #CDDC39); }
-        .solunar-times { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .time-block {
-            background: rgba(255,255,255,0.05);
-            padding: 8px 10px;
-            border-radius: 6px;
-            text-align: center;
-        }
-        .time-block .label { font-size: 0.7rem; color: #888; text-transform: uppercase; }
-        .time-block .time { font-size: 1rem; font-weight: 500; }
-        .time-block.major { border-left: 3px solid #4CAF50; }
-        .time-block.minor { border-left: 3px solid #FFC107; }
-        .time-block.active { background: rgba(76, 175, 80, 0.2); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        .pressure-legend { display: flex; gap: 4px; margin-top: 8px; }
-        .pressure-legend span { flex: 1; height: 8px; border-radius: 4px; }
-        .pressure-legend .low { background: #4CAF50; }
-        .pressure-legend .med { background: #FFEB3B; }
-        .pressure-legend .high { background: #F44336; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .stat-card {
-            background: #0f3460;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            transition: transform 0.2s;
-        }
-        .stat-card:hover { transform: scale(1.05); }
-        .stat-card .value { font-size: 1.5rem; font-weight: bold; color: #e94560; }
-        .stat-card .label { font-size: 0.75rem; color: #888; }
-        .map-container { flex: 1; position: relative; min-width: 0; }
-        #map { width: 100%; height: 100%; }
-        .maplibregl-popup-content {
-            background: #16213e !important;
-            color: #eee !important;
-            border-radius: 8px !important;
-            padding: 12px !important;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
-            min-width: 220px;
-        }
-        .maplibregl-popup-tip { border-top-color: #16213e !important; }
-        .maplibregl-popup-close-button { color: #888 !important; font-size: 18px !important; }
-        .popup-title { font-weight: bold; color: #e94560; margin-bottom: 8px; font-size: 1.1rem; }
-        .popup-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            padding: 4px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .popup-row:last-of-type { border-bottom: none; }
-        .popup-row .label { color: #888; }
-        .popup-btn {
-            width: 100%;
-            margin-top: 12px;
-            padding: 10px;
-            background: #e94560;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background 0.2s;
-        }
-        .popup-btn:hover { background: #d63850; }
-        .popup-btn.secondary { background: #0f3460; margin-top: 8px; }
-        .popup-btn.secondary:hover { background: #1a4a7a; }
-        .wind-indicator {
+        html, body { height: 100%; }
+        #map { height: 100%; width: 100%; }
+        .panel {
             position: absolute;
-            top: 20px;
-            right: 60px;
-            background: rgba(22, 33, 62, 0.95);
-            padding: 16px;
-            border-radius: 12px;
-            z-index: 100;
-            min-width: 140px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .wind-indicator h4 { font-size: 0.8rem; color: #888; margin-bottom: 8px; }
-        .wind-speed { font-size: 2rem; font-weight: bold; }
-        .wind-direction { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
-        .wind-arrow { width: 24px; height: 24px; transition: transform 0.5s ease-out; }
-        .scent-indicator {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.75rem;
-            color: #888;
-        }
-        .coords-display {
-            position: absolute;
-            bottom: 30px;
-            right: 20px;
-            background: rgba(22, 33, 62, 0.9);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            color: #888;
-            z-index: 100;
-        }
-        .notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #4CAF50;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
+            top: 10px;
+            left: 50px;
             z-index: 1000;
-            display: none;
-            animation: slideIn 0.3s ease-out;
-        }
-        @keyframes slideIn {
-            from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
-            to { transform: translateX(-50%) translateY(0); opacity: 1; }
-        }
-        .moon-phase {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        .moon-icon { font-size: 1.5rem; }
-        .parcel-info {
-            position: absolute;
-            top: 20px;
-            left: 340px;
-            background: rgba(22, 33, 62, 0.95);
-            padding: 16px;
-            border-radius: 12px;
-            z-index: 100;
-            min-width: 250px;
-            display: none;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .parcel-info.show { display: block; }
-        .parcel-info h4 { color: #e94560; margin-bottom: 12px; }
-        .parcel-info .close-btn {
-            position: absolute;
-            top: 8px;
-            right: 12px;
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-        .feature-badge {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #e94560, #0f3460);
-            padding: 12px 24px;
-            border-radius: 30px;
-            z-index: 100;
-            font-weight: 500;
-            white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
-        }
-        .map-legend {
-            position: absolute;
-            bottom: 80px;
-            left: 20px;
-            background: rgba(22, 33, 62, 0.95);
-            padding: 12px 16px;
+            background: white;
+            padding: 15px;
             border-radius: 8px;
-            z-index: 100;
-            font-size: 0.8rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            font-family: Arial, sans-serif;
+            max-width: 280px;
         }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 6px;
+        .panel h2 { margin: 0 0 10px; font-size: 18px; }
+        .panel input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
-        .legend-item:last-child { margin-bottom: 0; }
-        .legend-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 3px;
-            border: 1px solid rgba(255,255,255,0.3);
+        .btn-group { display: flex; gap: 5px; margin-bottom: 10px; }
+        .btn-group button {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .btn-group button:hover { background: #f5f5f5; }
+        .btn-group button.active { background: #1a73e8; color: white; border-color: #1a73e8; }
+        .status {
+            position: absolute;
+            bottom: 25px;
+            left: 10px;
+            z-index: 1000;
+            background: rgba(0,0,0,0.75);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: Arial;
         }
     </style>
 </head>
 <body>
-    <div class="notification" id="notification">Layer updated!</div>
+    <div id="map"></div>
 
-    <div class="container">
-        <div class="sidebar">
-            <div class="logo">
-                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" stroke="#e94560" stroke-width="4"/>
-                    <path d="M50 20 L60 50 L50 80 L40 50 Z" fill="#e94560"/>
-                    <circle cx="50" cy="50" r="8" fill="#e94560"/>
-                </svg>
-                <div>
-                    <h1>GSpot Outdoors</h1>
-                    <span>Powered by HITD Maps</span>
-                </div>
-            </div>
-
-            <div class="section">
-                <h3>Basemap Style</h3>
-                <div class="basemap-selector">
-                    <button class="basemap-btn" onclick="setBasemap('satellite')" id="btn-satellite">
-                        <span class="icon">🛰️</span>
-                        <span class="label">Satellite</span>
-                    </button>
-                    <button class="basemap-btn active" onclick="setBasemap('outdoor')" id="btn-outdoor">
-                        <span class="icon">🏔️</span>
-                        <span class="label">Outdoor</span>
-                    </button>
-                    <button class="basemap-btn" onclick="setBasemap('topo')" id="btn-topo">
-                        <span class="icon">📍</span>
-                        <span class="label">Topo</span>
-                    </button>
-                    <button class="basemap-btn" onclick="setBasemap('hybrid')" id="btn-hybrid">
-                        <span class="icon">🗺️</span>
-                        <span class="label">Hybrid</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="section">
-                <h3>Data Layers</h3>
-                <div class="layer-toggle active" onclick="toggleLayer('parcels', this)">
-                    <input type="checkbox" id="layer-parcels" checked>
-                    <label for="layer-parcels">Property Parcels</label>
-                </div>
-                <div class="layer-toggle" onclick="toggleLayer('public', this)">
-                    <input type="checkbox" id="layer-public">
-                    <label for="layer-public">Public Lands</label>
-                    <span class="badge green">FREE</span>
-                </div>
-                <div class="layer-toggle" onclick="toggleLayer('pressure', this)">
-                    <input type="checkbox" id="layer-pressure">
-                    <label for="layer-pressure">Hunting Pressure</label>
-                    <span class="badge">PRO</span>
-                </div>
-                <div class="layer-toggle active" onclick="toggleLayer('leases', this)">
-                    <input type="checkbox" id="layer-leases" checked>
-                    <label for="layer-leases">Available Leases</label>
-                </div>
-            </div>
-
-            <div class="section">
-                <h3>Today's Solunar</h3>
-                <div class="solunar-card">
-                    <div class="solunar-rating">
-                        <div class="rating-circle rating-good" id="solunar-score">8.2</div>
-                        <div>
-                            <div style="font-size: 1.1rem; font-weight: 500;" id="day-rating">Good Day</div>
-                            <div style="font-size: 0.8rem; color: #888;" id="moon-phase-text">Waxing Gibbous 78%</div>
-                        </div>
-                    </div>
-                    <div class="solunar-times">
-                        <div class="time-block major" id="major1-block">
-                            <div class="label">Major 1</div>
-                            <div class="time" id="major1">6:42 AM</div>
-                        </div>
-                        <div class="time-block major" id="major2-block">
-                            <div class="label">Major 2</div>
-                            <div class="time" id="major2">7:18 PM</div>
-                        </div>
-                        <div class="time-block minor" id="minor1-block">
-                            <div class="label">Minor 1</div>
-                            <div class="time" id="minor1">12:30 PM</div>
-                        </div>
-                        <div class="time-block minor" id="minor2-block">
-                            <div class="label">Minor 2</div>
-                            <div class="time" id="minor2">1:02 AM</div>
-                        </div>
-                    </div>
-                    <div class="moon-phase">
-                        <span class="moon-icon" id="moon-icon">🌔</span>
-                        <span style="font-size: 0.85rem;">Best times for deer activity</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h3>Hunting Pressure</h3>
-                <p style="font-size: 0.85rem; color: #888; margin-bottom: 8px;">
-                    Crowdsourced from <span id="hunter-count">1,247</span> hunters
-                </p>
-                <div class="pressure-legend">
-                    <span class="low"></span>
-                    <span class="med"></span>
-                    <span class="high"></span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #666; margin-top: 4px;">
-                    <span>Low</span>
-                    <span>Moderate</span>
-                    <span>High</span>
-                </div>
-            </div>
-
-            <div class="section">
-                <h3>Area Statistics</h3>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="value" id="parcel-count">2,847</div>
-                        <div class="label">Parcels</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="value" id="lease-count">156</div>
-                        <div class="label">Leases</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="value">$12</div>
-                        <div class="label">Avg $/Acre</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="value">847K</div>
-                        <div class="label">Total Acres</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h3>Quick Actions</h3>
-                <button class="popup-btn" onclick="flyToRandom()">🎯 Random Lease</button>
-                <button class="popup-btn secondary" onclick="resetView()">🗺️ Reset View</button>
-            </div>
+    <div class="panel">
+        <h2>HITD Maps</h2>
+        <input type="text" id="search" placeholder="Search address... (press Enter)">
+        <div class="btn-group">
+            <button class="active" id="btnMap">Map</button>
+            <button id="btnSat">Satellite</button>
+            <button id="btnTopo">Topo</button>
         </div>
-
-        <div class="map-container">
-            <div id="map"></div>
-
-            <div class="wind-indicator">
-                <h4>WIND CONDITIONS</h4>
-                <div class="wind-speed"><span id="wind-speed">8</span> <span style="font-size: 0.8rem;">mph</span></div>
-                <div class="wind-direction">
-                    <svg class="wind-arrow" id="wind-arrow" viewBox="0 0 24 24" fill="#e94560">
-                        <path d="M12 2L6 12h4v10h4V12h4L12 2z"/>
-                    </svg>
-                    <span id="wind-dir">NNW</span>
-                </div>
-                <div class="scent-indicator">
-                    <span>🦌 Approach from: <strong id="approach-dir">SSE</strong></span>
-                </div>
-            </div>
-
-            <div class="map-legend" id="map-legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background: rgba(233, 69, 96, 0.3); border-color: #e94560;"></div>
-                    <span>Private Parcels</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: rgba(76, 175, 80, 0.3); border-color: #4CAF50;"></div>
-                    <span>Public Lands</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background: #e94560; border-radius: 50%;"></div>
-                    <span>Available Lease</span>
-                </div>
-            </div>
-
-            <div class="parcel-info" id="parcel-info">
-                <button class="close-btn" onclick="closeParcelInfo()">×</button>
-                <h4>Parcel Details</h4>
-                <div class="popup-row"><span class="label">Owner:</span> <span id="parcel-owner">-</span></div>
-                <div class="popup-row"><span class="label">Acres:</span> <span id="parcel-acres">-</span></div>
-                <div class="popup-row"><span class="label">County:</span> <span id="parcel-county">-</span></div>
-                <div class="popup-row"><span class="label">Value:</span> <span id="parcel-value">-</span></div>
-                <button class="popup-btn" onclick="showNotification('Contact info requires premium')">Contact Owner</button>
-            </div>
-
-            <div class="coords-display">
-                <span id="coords">30.0000, -98.5000</span> | Zoom: <span id="zoom-level">9</span>
-            </div>
-
-            <div class="feature-badge">
-                🦌 <strong>GSpot Outdoors</strong> - Find Your Next Hunt
-            </div>
+        <div style="font-size: 12px; color: #666;">
+            492GB of map data on Cloudflare R2
         </div>
     </div>
 
+    <div class="status" id="status">Loading map...</div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // State
-        let map;
-        let markers = [];
-        let windDeg = 340;
-        let currentBasemap = 'outdoor';
+        // Status helper
+        function setStatus(msg) {
+            document.getElementById('status').textContent = msg;
+        }
 
-        const leases = [
-            { lng: -98.7, lat: 30.1, name: 'Hill Country Ranch', acres: 450, price: 5200, game: ['Whitetail', 'Hog', 'Turkey'], amenities: ['Cabin', 'Blinds', 'Feeders'], rating: 4.8 },
-            { lng: -98.3, lat: 29.9, name: 'Oak Valley Estate', acres: 280, price: 3400, game: ['Whitetail', 'Dove'], amenities: ['RV Hookup', 'Blinds'], rating: 4.5 },
-            { lng: -98.5, lat: 30.2, name: 'Cedar Creek Ranch', acres: 620, price: 7100, game: ['Whitetail', 'Hog', 'Axis'], amenities: ['Lodge', 'Blinds', 'Feeders', 'Processing'], rating: 4.9 },
-            { lng: -98.9, lat: 29.8, name: 'Whitetail Haven', acres: 340, price: 4500, game: ['Whitetail', 'Turkey'], amenities: ['Camping', 'Blinds'], rating: 4.6 },
-            { lng: -98.2, lat: 30.3, name: 'Brushy Creek', acres: 520, price: 6200, game: ['Whitetail', 'Hog', 'Exotics'], amenities: ['Cabin', 'Blinds', 'ATV Trails'], rating: 4.7 },
-            { lng: -98.8, lat: 30.0, name: 'Lone Star Outfitters', acres: 890, price: 9800, game: ['Whitetail', 'Elk', 'Axis', 'Hog'], amenities: ['Lodge', 'Guided', 'Processing', 'Cooler'], rating: 5.0 },
-        ];
+        // Create map
+        var map = L.map('map', {
+            center: [29.76, -95.37],
+            zoom: 10
+        });
 
-        // Basemap styles
-        const basemapStyles = {
-            satellite: {
-                version: 8,
-                sources: {
-                    'satellite': {
-                        type: 'raster',
-                        tiles: [
-                            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                        ],
-                        tileSize: 256,
-                        attribution: 'Esri, Maxar, Earthstar Geographics'
-                    }
-                },
-                layers: [{ id: 'satellite', type: 'raster', source: 'satellite' }]
-            },
-            outdoor: {
-                version: 8,
-                sources: {
-                    'osm': {
-                        type: 'raster',
-                        tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-                        tileSize: 256,
-                        attribution: '© OpenStreetMap'
-                    },
-                    'hillshade': {
-                        type: 'raster',
-                        tiles: ['https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}.png'],
-                        tileSize: 256
-                    }
-                },
-                layers: [
-                    { id: 'osm', type: 'raster', source: 'osm' }
-                ]
-            },
-            topo: {
-                version: 8,
-                sources: {
-                    'usgs': {
-                        type: 'raster',
-                        tiles: [
-                            'https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}'
-                        ],
-                        tileSize: 256,
-                        maxzoom: 16,
-                        attribution: 'USGS'
-                    }
-                },
-                layers: [{ id: 'usgs', type: 'raster', source: 'usgs' }]
-            },
-            hybrid: {
-                version: 8,
-                sources: {
-                    'satellite': {
-                        type: 'raster',
-                        tiles: [
-                            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                        ],
-                        tileSize: 256
-                    },
-                    'labels': {
-                        type: 'raster',
-                        tiles: [
-                            'https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}'
-                        ],
-                        tileSize: 256
-                    }
-                },
-                layers: [
-                    { id: 'satellite', type: 'raster', source: 'satellite' },
-                    { id: 'labels', type: 'raster', source: 'labels' }
-                ]
-            }
+        // Tile layers
+        var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        });
+
+        var satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 19,
+            attribution: '© Esri'
+        });
+
+        var topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            maxZoom: 17,
+            attribution: '© OpenTopoMap'
+        });
+
+        // Add default layer
+        osmLayer.addTo(map);
+        setStatus('Map ready - Houston, TX');
+
+        // Layer switching
+        var currentLayer = osmLayer;
+
+        document.getElementById('btnMap').onclick = function() {
+            map.removeLayer(currentLayer);
+            osmLayer.addTo(map);
+            currentLayer = osmLayer;
+            document.querySelectorAll('.btn-group button').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            setStatus('Street map view');
         };
 
-        function initMap() {
-            map = new maplibregl.Map({
-                container: 'map',
-                style: basemapStyles.outdoor,
-                center: [-98.5, 30.0],
-                zoom: 10,
-                pitch: 0,
-                maxZoom: 18,
-                minZoom: 5
-            });
+        document.getElementById('btnSat').onclick = function() {
+            map.removeLayer(currentLayer);
+            satLayer.addTo(map);
+            currentLayer = satLayer;
+            document.querySelectorAll('.btn-group button').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            setStatus('Satellite view');
+        };
 
-            map.addControl(new maplibregl.NavigationControl(), 'top-left');
-            map.addControl(new maplibregl.ScaleControl({ maxWidth: 150 }), 'bottom-left');
-            map.addControl(new maplibregl.FullscreenControl(), 'top-left');
+        document.getElementById('btnTopo').onclick = function() {
+            map.removeLayer(currentLayer);
+            topoLayer.addTo(map);
+            currentLayer = topoLayer;
+            document.querySelectorAll('.btn-group button').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            setStatus('Topographic view');
+        };
 
-            // Add geolocate control
-            map.addControl(new maplibregl.GeolocateControl({
-                positionOptions: { enableHighAccuracy: true },
-                trackUserLocation: true
-            }), 'top-left');
+        // Search
+        document.getElementById('search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                var query = this.value.trim();
+                if (!query) return;
 
-            map.on('load', onMapLoad);
-            map.on('move', updateCoords);
-            map.on('zoom', updateCoords);
-            map.on('click', onMapClick);
-        }
+                setStatus('Searching...');
 
-        function onMapLoad() {
-            addDataLayers();
-            addLeaseMarkers();
-            updateCoords();
-        }
+                fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query) + '&limit=1')
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        if (data && data.length > 0) {
+                            var result = data[0];
+                            var lat = parseFloat(result.lat);
+                            var lon = parseFloat(result.lon);
 
-        function addDataLayers() {
-            // Add parcel boundaries
-            map.addSource('parcels', {
-                type: 'geojson',
-                data: generateParcelGeoJSON()
-            });
+                            map.setView([lat, lon], 16);
 
-            map.addLayer({
-                id: 'parcels-fill',
-                type: 'fill',
-                source: 'parcels',
-                paint: {
-                    'fill-color': '#e94560',
-                    'fill-opacity': 0.15
-                }
-            });
+                            L.marker([lat, lon])
+                                .addTo(map)
+                                .bindPopup('<b>' + result.display_name + '</b>')
+                                .openPopup();
 
-            map.addLayer({
-                id: 'parcels-line',
-                type: 'line',
-                source: 'parcels',
-                paint: {
-                    'line-color': '#e94560',
-                    'line-width': 2,
-                    'line-opacity': 0.9
-                }
-            });
-
-            // Add public lands
-            map.addSource('public-lands', {
-                type: 'geojson',
-                data: generatePublicLandsGeoJSON()
-            });
-
-            map.addLayer({
-                id: 'public-lands-fill',
-                type: 'fill',
-                source: 'public-lands',
-                paint: {
-                    'fill-color': '#4CAF50',
-                    'fill-opacity': 0.25
-                },
-                layout: { visibility: 'none' }
-            });
-
-            map.addLayer({
-                id: 'public-lands-line',
-                type: 'line',
-                source: 'public-lands',
-                paint: {
-                    'line-color': '#4CAF50',
-                    'line-width': 3
-                },
-                layout: { visibility: 'none' }
-            });
-
-            map.addLayer({
-                id: 'public-lands-label',
-                type: 'symbol',
-                source: 'public-lands',
-                layout: {
-                    'text-field': ['get', 'name'],
-                    'text-size': 12,
-                    'text-anchor': 'center',
-                    visibility: 'none'
-                },
-                paint: {
-                    'text-color': '#2E7D32',
-                    'text-halo-color': '#ffffff',
-                    'text-halo-width': 2
-                }
-            });
-
-            // Add hunting pressure heatmap
-            map.addSource('pressure', {
-                type: 'geojson',
-                data: { type: 'FeatureCollection', features: generatePressurePoints() }
-            });
-
-            map.addLayer({
-                id: 'pressure-heat',
-                type: 'heatmap',
-                source: 'pressure',
-                paint: {
-                    'heatmap-weight': ['get', 'pressure'],
-                    'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 5, 0.5, 12, 1.5],
-                    'heatmap-color': [
-                        'interpolate', ['linear'], ['heatmap-density'],
-                        0, 'rgba(0,0,0,0)',
-                        0.1, 'rgba(76, 175, 80, 0.4)',
-                        0.3, 'rgba(139, 195, 74, 0.5)',
-                        0.5, 'rgba(255, 235, 59, 0.6)',
-                        0.7, 'rgba(255, 152, 0, 0.7)',
-                        1, 'rgba(244, 67, 54, 0.85)'
-                    ],
-                    'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 5, 20, 12, 50],
-                    'heatmap-opacity': 0.8
-                },
-                layout: { visibility: 'none' }
-            });
-        }
-
-        function setBasemap(type) {
-            // Update button states
-            document.querySelectorAll('.basemap-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`btn-${type}`).classList.add('active');
-
-            // Store current layers data
-            const parcelsData = map.getSource('parcels') ? map.getSource('parcels')._data : null;
-            const publicLandsData = map.getSource('public-lands') ? map.getSource('public-lands')._data : null;
-            const pressureData = map.getSource('pressure') ? map.getSource('pressure')._data : null;
-
-            // Get current visibility states
-            const parcelsVisible = map.getLayoutProperty('parcels-fill', 'visibility') !== 'none';
-            const publicVisible = map.getLayoutProperty('public-lands-fill', 'visibility') !== 'none';
-            const pressureVisible = map.getLayoutProperty('pressure-heat', 'visibility') !== 'none';
-
-            // Remove markers temporarily
-            markers.forEach(m => m.marker.remove());
-
-            // Change basemap
-            map.setStyle(basemapStyles[type]);
-            currentBasemap = type;
-
-            map.once('style.load', () => {
-                // Re-add data layers
-                if (parcelsData) {
-                    map.addSource('parcels', { type: 'geojson', data: parcelsData });
-                    map.addLayer({
-                        id: 'parcels-fill',
-                        type: 'fill',
-                        source: 'parcels',
-                        paint: { 'fill-color': '#e94560', 'fill-opacity': 0.15 },
-                        layout: { visibility: parcelsVisible ? 'visible' : 'none' }
+                            setStatus('Found: ' + result.display_name.substring(0, 40) + '...');
+                        } else {
+                            setStatus('No results found');
+                        }
+                    })
+                    .catch(function(err) {
+                        setStatus('Search error');
+                        console.error(err);
                     });
-                    map.addLayer({
-                        id: 'parcels-line',
-                        type: 'line',
-                        source: 'parcels',
-                        paint: { 'line-color': '#e94560', 'line-width': 2, 'line-opacity': 0.9 },
-                        layout: { visibility: parcelsVisible ? 'visible' : 'none' }
-                    });
-                }
-
-                if (publicLandsData) {
-                    map.addSource('public-lands', { type: 'geojson', data: publicLandsData });
-                    map.addLayer({
-                        id: 'public-lands-fill',
-                        type: 'fill',
-                        source: 'public-lands',
-                        paint: { 'fill-color': '#4CAF50', 'fill-opacity': 0.25 },
-                        layout: { visibility: publicVisible ? 'visible' : 'none' }
-                    });
-                    map.addLayer({
-                        id: 'public-lands-line',
-                        type: 'line',
-                        source: 'public-lands',
-                        paint: { 'line-color': '#4CAF50', 'line-width': 3 },
-                        layout: { visibility: publicVisible ? 'visible' : 'none' }
-                    });
-                }
-
-                if (pressureData) {
-                    map.addSource('pressure', { type: 'geojson', data: pressureData });
-                    map.addLayer({
-                        id: 'pressure-heat',
-                        type: 'heatmap',
-                        source: 'pressure',
-                        paint: {
-                            'heatmap-weight': ['get', 'pressure'],
-                            'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 5, 0.5, 12, 1.5],
-                            'heatmap-color': [
-                                'interpolate', ['linear'], ['heatmap-density'],
-                                0, 'rgba(0,0,0,0)',
-                                0.1, 'rgba(76, 175, 80, 0.4)',
-                                0.3, 'rgba(139, 195, 74, 0.5)',
-                                0.5, 'rgba(255, 235, 59, 0.6)',
-                                0.7, 'rgba(255, 152, 0, 0.7)',
-                                1, 'rgba(244, 67, 54, 0.85)'
-                            ],
-                            'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 5, 20, 12, 50],
-                            'heatmap-opacity': 0.8
-                        },
-                        layout: { visibility: pressureVisible ? 'visible' : 'none' }
-                    });
-                }
-
-                // Re-add markers
-                markers.forEach(m => m.marker.addTo(map));
-            });
-
-            showNotification(`Basemap: ${type.charAt(0).toUpperCase() + type.slice(1)}`);
-        }
-
-        function generateParcelGeoJSON() {
-            const features = [];
-            for (let i = 0; i < 80; i++) {
-                const centerLng = -98.5 + (Math.random() - 0.5) * 1.0;
-                const centerLat = 30.0 + (Math.random() - 0.5) * 0.6;
-                const size = 0.008 + Math.random() * 0.025;
-                const irregularity = 0.002;
-
-                features.push({
-                    type: 'Feature',
-                    properties: {
-                        id: i,
-                        owner: ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Davis', 'Miller', 'Wilson'][Math.floor(Math.random() * 8)] + ' ' +
-                               ['Family Trust', 'Ranch LLC', 'Land Co', 'Estate', 'Holdings'][Math.floor(Math.random() * 5)],
-                        acres: Math.floor(50 + Math.random() * 500),
-                        county: ['Gillespie', 'Kerr', 'Blanco', 'Kendall', 'Bandera'][Math.floor(Math.random() * 5)],
-                        value: '$' + (Math.floor(100 + Math.random() * 900)) + ',000'
-                    },
-                    geometry: {
-                        type: 'Polygon',
-                        coordinates: [[
-                            [centerLng - size + (Math.random() - 0.5) * irregularity, centerLat - size + (Math.random() - 0.5) * irregularity],
-                            [centerLng + size + (Math.random() - 0.5) * irregularity, centerLat - size + (Math.random() - 0.5) * irregularity],
-                            [centerLng + size + (Math.random() - 0.5) * irregularity, centerLat + size + (Math.random() - 0.5) * irregularity],
-                            [centerLng - size + (Math.random() - 0.5) * irregularity, centerLat + size + (Math.random() - 0.5) * irregularity],
-                            [centerLng - size + (Math.random() - 0.5) * irregularity, centerLat - size + (Math.random() - 0.5) * irregularity]
-                        ]]
-                    }
-                });
             }
-            return { type: 'FeatureCollection', features };
-        }
-
-        function generatePublicLandsGeoJSON() {
-            return {
-                type: 'FeatureCollection',
-                features: [
-                    {
-                        type: 'Feature',
-                        properties: { name: 'Pedernales Falls State Park', type: 'State Park' },
-                        geometry: {
-                            type: 'Polygon',
-                            coordinates: [[[-98.28, 30.28], [-98.22, 30.28], [-98.22, 30.34], [-98.28, 30.34], [-98.28, 30.28]]]
-                        }
-                    },
-                    {
-                        type: 'Feature',
-                        properties: { name: 'Guadalupe River State Park', type: 'State Park' },
-                        geometry: {
-                            type: 'Polygon',
-                            coordinates: [[[-98.52, 29.88], [-98.46, 29.88], [-98.46, 29.94], [-98.52, 29.94], [-98.52, 29.88]]]
-                        }
-                    },
-                    {
-                        type: 'Feature',
-                        properties: { name: 'Hill Country SNA', type: 'State Natural Area' },
-                        geometry: {
-                            type: 'Polygon',
-                            coordinates: [[[-98.38, 29.98], [-98.30, 29.98], [-98.30, 30.06], [-98.38, 30.06], [-98.38, 29.98]]]
-                        }
-                    },
-                    {
-                        type: 'Feature',
-                        properties: { name: 'Enchanted Rock SNA', type: 'State Natural Area' },
-                        geometry: {
-                            type: 'Polygon',
-                            coordinates: [[[-98.84, 30.48], [-98.78, 30.48], [-98.78, 30.54], [-98.84, 30.54], [-98.84, 30.48]]]
-                        }
-                    }
-                ]
-            };
-        }
-
-        function generatePressurePoints() {
-            const features = [];
-            // Create clusters of pressure
-            const clusters = [
-                { center: [-98.5, 30.0], radius: 0.3, intensity: 0.8 },
-                { center: [-98.3, 29.9], radius: 0.2, intensity: 0.6 },
-                { center: [-98.7, 30.1], radius: 0.25, intensity: 0.4 },
-                { center: [-98.6, 29.85], radius: 0.15, intensity: 0.9 }
-            ];
-
-            for (let i = 0; i < 200; i++) {
-                let lng, lat, pressure;
-
-                // 70% chance of being near a cluster
-                if (Math.random() < 0.7) {
-                    const cluster = clusters[Math.floor(Math.random() * clusters.length)];
-                    const angle = Math.random() * Math.PI * 2;
-                    const dist = Math.random() * cluster.radius;
-                    lng = cluster.center[0] + Math.cos(angle) * dist;
-                    lat = cluster.center[1] + Math.sin(angle) * dist;
-                    pressure = cluster.intensity * (0.5 + Math.random() * 0.5);
-                } else {
-                    lng = -98.5 + (Math.random() - 0.5) * 1.2;
-                    lat = 30.0 + (Math.random() - 0.5) * 0.8;
-                    pressure = Math.random() * 0.4;
-                }
-
-                features.push({
-                    type: 'Feature',
-                    geometry: { type: 'Point', coordinates: [lng, lat] },
-                    properties: { pressure }
-                });
-            }
-            return features;
-        }
-
-        function addLeaseMarkers() {
-            leases.forEach((lease, index) => {
-                const el = document.createElement('div');
-                el.className = 'lease-marker';
-                el.style.cssText = `
-                    width: 40px;
-                    height: 40px;
-                    background: linear-gradient(135deg, #e94560, #c73e54);
-                    border-radius: 50%;
-                    border: 3px solid white;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 18px;
-                    box-shadow: 0 3px 12px rgba(0,0,0,0.4);
-                    transition: transform 0.2s, box-shadow 0.2s;
-                `;
-                el.innerHTML = '🦌';
-                el.onmouseenter = () => {
-                    el.style.transform = 'scale(1.15)';
-                    el.style.boxShadow = '0 5px 20px rgba(233, 69, 96, 0.5)';
-                };
-                el.onmouseleave = () => {
-                    el.style.transform = 'scale(1)';
-                    el.style.boxShadow = '0 3px 12px rgba(0,0,0,0.4)';
-                };
-
-                const stars = '★'.repeat(Math.floor(lease.rating)) + (lease.rating % 1 >= 0.5 ? '½' : '');
-
-                const popup = new maplibregl.Popup({ offset: 25, closeButton: true })
-                    .setHTML(`
-                        <div class="popup-title">${lease.name}</div>
-                        <div style="color: #FFD700; margin-bottom: 8px;">${stars} <span style="color: #888; font-size: 0.8rem;">(${lease.rating})</span></div>
-                        <div class="popup-row"><span class="label">Acreage:</span> ${lease.acres.toLocaleString()} ac</div>
-                        <div class="popup-row"><span class="label">Price:</span> $${lease.price.toLocaleString()}/season</div>
-                        <div class="popup-row"><span class="label">$/Acre:</span> $${(lease.price / lease.acres).toFixed(2)}</div>
-                        <div class="popup-row"><span class="label">Game:</span> ${lease.game.join(', ')}</div>
-                        <div class="popup-row"><span class="label">Amenities:</span> ${lease.amenities.join(', ')}</div>
-                        <button class="popup-btn" onclick="showNotification('Contact request sent!')">📞 Contact Owner</button>
-                        <button class="popup-btn secondary" onclick="showNotification('Saved to favorites!')">⭐ Save Listing</button>
-                    `);
-
-                const marker = new maplibregl.Marker(el)
-                    .setLngLat([lease.lng, lease.lat])
-                    .setPopup(popup)
-                    .addTo(map);
-
-                markers.push({ marker, lease });
-            });
-        }
-
-        function toggleLayer(layerId, element) {
-            const checkbox = element.querySelector('input');
-            checkbox.checked = !checkbox.checked;
-            element.classList.toggle('active', checkbox.checked);
-
-            const visibility = checkbox.checked ? 'visible' : 'none';
-
-            try {
-                switch(layerId) {
-                    case 'parcels':
-                        map.setLayoutProperty('parcels-fill', 'visibility', visibility);
-                        map.setLayoutProperty('parcels-line', 'visibility', visibility);
-                        break;
-                    case 'public':
-                        map.setLayoutProperty('public-lands-fill', 'visibility', visibility);
-                        map.setLayoutProperty('public-lands-line', 'visibility', visibility);
-                        break;
-                    case 'pressure':
-                        map.setLayoutProperty('pressure-heat', 'visibility', visibility);
-                        break;
-                    case 'leases':
-                        markers.forEach(m => {
-                            if (checkbox.checked) {
-                                m.marker.addTo(map);
-                            } else {
-                                m.marker.remove();
-                            }
-                        });
-                        break;
-                }
-            } catch (e) {
-                console.log('Layer toggle error:', e);
-            }
-
-            showNotification(`${layerId.charAt(0).toUpperCase() + layerId.slice(1)} layer ${checkbox.checked ? 'enabled' : 'disabled'}`);
-        }
-
-        function onMapClick(e) {
-            try {
-                const features = map.queryRenderedFeatures(e.point, { layers: ['parcels-fill'] });
-                if (features.length > 0) {
-                    const props = features[0].properties;
-                    document.getElementById('parcel-owner').textContent = props.owner;
-                    document.getElementById('parcel-acres').textContent = props.acres + ' ac';
-                    document.getElementById('parcel-county').textContent = props.county + ' County';
-                    document.getElementById('parcel-value').textContent = props.value;
-                    document.getElementById('parcel-info').classList.add('show');
-                }
-            } catch (e) {}
-        }
-
-        function closeParcelInfo() {
-            document.getElementById('parcel-info').classList.remove('show');
-        }
-
-        function updateCoords() {
-            const center = map.getCenter();
-            document.getElementById('coords').textContent = `${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`;
-            document.getElementById('zoom-level').textContent = map.getZoom().toFixed(1);
-        }
-
-        function updateWind() {
-            windDeg = (windDeg + (Math.random() * 10 - 5) + 360) % 360;
-            document.getElementById('wind-arrow').style.transform = `rotate(${windDeg}deg)`;
-
-            const speed = 5 + Math.floor(Math.random() * 8);
-            document.getElementById('wind-speed').textContent = speed;
-
-            const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
-            const dirIndex = Math.round(windDeg / 22.5) % 16;
-            document.getElementById('wind-dir').textContent = directions[dirIndex];
-
-            const approachIndex = (dirIndex + 8) % 16;
-            document.getElementById('approach-dir').textContent = directions[approachIndex];
-        }
-
-        function updateSolunar() {
-            const now = new Date();
-            const hour = now.getHours();
-
-            const times = {
-                major1: { hour: 6, minute: 42 },
-                major2: { hour: 19, minute: 18 },
-                minor1: { hour: 12, minute: 30 },
-                minor2: { hour: 1, minute: 2 }
-            };
-
-            Object.keys(times).forEach(key => {
-                const t = times[key];
-                const d = new Date();
-                d.setHours(t.hour, t.minute, 0);
-                document.getElementById(key).textContent = d.toLocaleTimeString('en-US', {
-                    hour: 'numeric', minute: '2-digit', hour12: true
-                });
-
-                const block = document.getElementById(`${key}-block`);
-                const isActive = Math.abs(hour - t.hour) <= 1;
-                block.classList.toggle('active', isActive);
-            });
-
-            const dayOfMonth = now.getDate();
-            const moonPhases = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
-            const phaseIndex = Math.floor((dayOfMonth % 29.5) / 3.7);
-            document.getElementById('moon-icon').textContent = moonPhases[phaseIndex];
-
-            const phaseNames = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous',
-                              'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
-            const illumination = Math.abs(Math.sin(dayOfMonth / 29.5 * Math.PI)) * 100;
-            document.getElementById('moon-phase-text').textContent = `${phaseNames[phaseIndex]} ${illumination.toFixed(0)}%`;
-        }
-
-        function flyToRandom() {
-            const randomLease = leases[Math.floor(Math.random() * leases.length)];
-            map.flyTo({
-                center: [randomLease.lng, randomLease.lat],
-                zoom: 13,
-                pitch: 50,
-                bearing: Math.random() * 60 - 30,
-                duration: 2500
-            });
-            showNotification(`Flying to ${randomLease.name}`);
-        }
-
-        function resetView() {
-            map.flyTo({
-                center: [-98.5, 30.0],
-                zoom: 10,
-                pitch: 0,
-                bearing: 0,
-                duration: 1500
-            });
-            closeParcelInfo();
-        }
-
-        function showNotification(message) {
-            const notif = document.getElementById('notification');
-            notif.textContent = message;
-            notif.style.display = 'block';
-            setTimeout(() => { notif.style.display = 'none'; }, 2000);
-        }
-
-        // Initialize
-        initMap();
-        updateWind();
-        updateSolunar();
-
-        setInterval(updateWind, 3000);
-        setInterval(updateSolunar, 60000);
+        });
     </script>
 </body>
 </html>

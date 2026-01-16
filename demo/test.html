@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test</title></head>
+<body>
+<h1>Network Test</h1>
+<div id="results"></div>
+<script>
+const tests = [
+    ['Leaflet CSS', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'],
+    ['Leaflet JS', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'],
+    ['OSM Tiles', 'https://tile.openstreetmap.org/10/234/422.png'],
+    ['R2 Basemap', 'https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev/basemap/planet.pmtiles'],
+];
+
+async function runTests() {
+    const div = document.getElementById('results');
+    for (const [name, url] of tests) {
+        try {
+            const start = Date.now();
+            const res = await fetch(url, {method: 'HEAD', mode: 'cors'});
+            const time = Date.now() - start;
+            div.innerHTML += `<p style="color:green">✓ ${name}: ${res.status} (${time}ms)</p>`;
+        } catch (e) {
+            div.innerHTML += `<p style="color:red">✗ ${name}: ${e.message}</p>`;
+        }
+    }
+}
+runTests();
+</script>
+</body>
+</html>
