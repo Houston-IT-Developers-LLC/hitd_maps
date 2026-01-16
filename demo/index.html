@@ -1,452 +1,220 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HITD Maps - USA Property Data</title>
+    <title>HITD Maps</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
     <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet">
     <script src="https://unpkg.com/pmtiles@3.0.6/dist/pmtiles.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body, #map { height: 100%; width: 100%; }
-
+        body { margin: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
         .panel {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 1000;
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
+            position: absolute; top: 10px; left: 10px; z-index: 1000;
+            background: white; padding: 15px; border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            width: 260px;
-            max-height: calc(100vh - 40px);
-            overflow-y: auto;
+            font-family: Arial, sans-serif; width: 250px;
         }
-
-        .panel h2 { margin: 0 0 12px; font-size: 18px; color: #1a73e8; }
-
-        .panel input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 12px;
-            font-size: 14px;
+        .panel h2 { margin: 0 0 10px; font-size: 16px; color: #1a73e8; }
+        .panel input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        .btns { display: flex; gap: 5px; margin-bottom: 10px; }
+        .btns button { flex: 1; padding: 8px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; }
+        .btns button.active { background: #1a73e8; color: white; }
+        .layer { padding: 5px 0; }
+        .layer label { cursor: pointer; }
+        #status {
+            position: absolute; bottom: 20px; left: 10px; z-index: 1000;
+            background: rgba(0,0,0,0.8); color: white; padding: 8px 12px;
+            border-radius: 4px; font-size: 12px; font-family: Arial;
         }
-
-        .btn-group { display: flex; gap: 4px; margin-bottom: 15px; }
-        .btn-group button {
-            flex: 1;
-            padding: 8px 4px;
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-        .btn-group button:hover { background: #f5f5f5; }
-        .btn-group button.active { background: #1a73e8; color: white; border-color: #1a73e8; }
-
-        .section { margin-bottom: 15px; }
-        .section-title {
-            font-size: 11px;
-            font-weight: 600;
-            color: #666;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .layer-item {
-            display: flex;
-            align-items: center;
-            padding: 6px 0;
-        }
-        .layer-item input { margin-right: 10px; }
-        .layer-item label { cursor: pointer; font-size: 13px; flex: 1; }
-
-        .status {
-            position: absolute;
-            bottom: 25px;
-            left: 10px;
-            z-index: 1000;
-            background: rgba(0,0,0,0.85);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            max-width: 400px;
-        }
-
-        .maplibregl-popup-content { padding: 12px 15px; font-family: Arial; max-width: 300px; }
-        .maplibregl-popup-content h3 { margin: 0 0 8px; font-size: 14px; color: #1a73e8; }
-        .maplibregl-popup-content p { margin: 4px 0; font-size: 12px; color: #333; }
-        .maplibregl-popup-content .label { color: #666; }
     </style>
 </head>
 <body>
-    <div id="map"></div>
-
-    <div class="panel">
-        <h2>HITD Maps</h2>
-        <input type="text" id="search" placeholder="Search address... (Enter)">
-
-        <div class="btn-group">
-            <button class="active" id="btnMap">Map</button>
-            <button id="btnSat">Satellite</button>
-            <button id="btnTerrain">Terrain</button>
-        </div>
-
-        <div class="section">
-            <div class="section-title">Data Layers</div>
-            <div class="layer-item">
-                <input type="checkbox" id="chkParcels" checked>
-                <label for="chkParcels">Property Parcels (USA)</label>
-            </div>
-            <div class="layer-item">
-                <input type="checkbox" id="chkTransit">
-                <label for="chkTransit">Transit (Houston)</label>
-            </div>
-        </div>
-
-        <div style="font-size: 10px; color: #888; text-align: center; margin-top: 10px;">
-            492GB data • 150M+ parcels • Zero egress
-        </div>
+<div id="map"></div>
+<div class="panel">
+    <h2>HITD Maps</h2>
+    <input type="text" id="search" placeholder="Search address (Enter)">
+    <div class="btns">
+        <button class="active" id="btnMap">Map</button>
+        <button id="btnSat">Satellite</button>
+        <button id="btnTerrain">3D</button>
     </div>
-
-    <div class="status" id="status">Initializing map...</div>
+    <div class="layer"><label><input type="checkbox" id="chkParcels" checked> Property Parcels</label></div>
+    <div class="layer"><label><input type="checkbox" id="chkTransit"> Transit</label></div>
+</div>
+<div id="status">Loading...</div>
 
 <script>
-// PMTiles protocol
 var protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
 
 var CDN = "https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev";
 
-// All parcel files available on R2
-var PARCEL_FILES = [
-    'parcels_tx_harris', 'parcels_tx_dallas', 'parcels_tx_travis', 'parcels_tx_bexar',
-    'parcels_ca_los_angeles', 'parcels_ca_san_diego', 'parcels_ca_orange',
-    'parcels_fl_statewide', 'parcels_ny_statewide', 'parcels_il_cook',
-    'parcels_pa_statewide', 'parcels_oh_statewide', 'parcels_ga_statewide',
-    'parcels_nc_statewide', 'parcels_mi_statewide', 'parcels_nj_statewide',
-    'parcels_va_statewide', 'parcels_wa_king', 'parcels_az_maricopa',
-    'parcels_ma_statewide', 'parcels_co_statewide', 'parcels_md_statewide',
-    'parcels_wi_statewide', 'parcels_mn_statewide', 'parcels_mo_statewide',
-    'parcels_in_statewide', 'parcels_tn_statewide', 'parcels_or_statewide',
-    'parcels_ky_statewide', 'parcels_la_statewide', 'parcels_ok_statewide',
-    'parcels_ct_statewide', 'parcels_ut_statewide', 'parcels_ia_statewide',
-    'parcels_nv_statewide', 'parcels_ar_statewide', 'parcels_ms_statewide',
-    'parcels_ks_statewide', 'parcels_nm_statewide', 'parcels_ne_statewide',
-    'parcels_id_statewide', 'parcels_wv_statewide', 'parcels_hi_statewide',
-    'parcels_nh_statewide', 'parcels_me_statewide', 'parcels_mt_statewide',
-    'parcels_ri_statewide', 'parcels_de_statewide', 'parcels_sd_statewide',
-    'parcels_nd_statewide', 'parcels_ak', 'parcels_vt_statewide', 'parcels_wy_statewide'
-];
+function status(m) { document.getElementById('status').textContent = m; }
 
-function setStatus(msg) {
-    document.getElementById('status').textContent = msg;
-}
-
-setStatus('Loading map...');
-
-// Create map
 var map = new maplibregl.Map({
     container: 'map',
     style: {
         version: 8,
         sources: {
-            'osm': {
-                type: 'raster',
-                tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-                tileSize: 256,
-                attribution: '© OpenStreetMap'
-            },
-            'satellite': {
-                type: 'raster',
-                tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
-                tileSize: 256,
-                maxzoom: 19
-            },
-            'terrain-source': {
-                type: 'raster-dem',
-                tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
-                tileSize: 256,
-                maxzoom: 15,
-                encoding: 'terrarium'
-            }
+            osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256 },
+            sat: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256 },
+            terrain: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], tileSize: 256, encoding: 'terrarium' }
         },
         layers: [
-            { id: 'osm-tiles', type: 'raster', source: 'osm' },
-            { id: 'satellite-tiles', type: 'raster', source: 'satellite', layout: { visibility: 'none' } }
-        ],
-        terrain: null
+            { id: 'osm', type: 'raster', source: 'osm' },
+            { id: 'sat', type: 'raster', source: 'sat', layout: { visibility: 'none' } }
+        ]
     },
     center: [-95.37, 29.76],
-    zoom: 10,
-    maxZoom: 18
+    zoom: 10
 });
 
-map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
-map.addControl(new maplibregl.ScaleControl(), 'bottom-right');
+map.addControl(new maplibregl.NavigationControl());
 
-var parcelsLoaded = false;
-var transitLoaded = false;
-var loadedParcelSources = {};
+var parcelsOn = false, transitOn = false;
 
 map.on('load', function() {
-    setStatus('Map ready. Loading parcels...');
-
-    if (document.getElementById('chkParcels').checked) {
-        loadParcels();
-    }
+    status('Map loaded. Adding parcels...');
+    loadParcels();
 });
 
-map.on('error', function(e) {
-    console.error('Map error:', e);
-});
-
-// Button handlers
+// Buttons
 document.getElementById('btnMap').onclick = function() {
-    setButtons(this);
-    map.setLayoutProperty('osm-tiles', 'visibility', 'visible');
-    map.setLayoutProperty('satellite-tiles', 'visibility', 'none');
+    setBtn(this);
+    map.setLayoutProperty('osm', 'visibility', 'visible');
+    map.setLayoutProperty('sat', 'visibility', 'none');
     map.setTerrain(null);
-    map.easeTo({ pitch: 0 });
-    setStatus('Street map');
+    map.easeTo({pitch: 0});
 };
 
 document.getElementById('btnSat').onclick = function() {
-    setButtons(this);
-    map.setLayoutProperty('osm-tiles', 'visibility', 'none');
-    map.setLayoutProperty('satellite-tiles', 'visibility', 'visible');
+    setBtn(this);
+    map.setLayoutProperty('osm', 'visibility', 'none');
+    map.setLayoutProperty('sat', 'visibility', 'visible');
     map.setTerrain(null);
-    setStatus('Satellite imagery');
 };
 
 document.getElementById('btnTerrain').onclick = function() {
-    setButtons(this);
-    map.setLayoutProperty('osm-tiles', 'visibility', 'visible');
-    map.setLayoutProperty('satellite-tiles', 'visibility', 'none');
-    map.setTerrain({ source: 'terrain-source', exaggeration: 1.5 });
-    map.easeTo({ pitch: 60, bearing: -20, duration: 1000 });
-    setStatus('3D Terrain view');
+    setBtn(this);
+    map.setLayoutProperty('osm', 'visibility', 'visible');
+    map.setLayoutProperty('sat', 'visibility', 'none');
+    map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
+    map.easeTo({ pitch: 60, duration: 1000 });
+    status('3D Terrain');
 };
 
-function setButtons(active) {
-    document.querySelectorAll('.btn-group button').forEach(function(b) { b.classList.remove('active'); });
-    active.classList.add('active');
+function setBtn(b) {
+    document.querySelectorAll('.btns button').forEach(function(x) { x.classList.remove('active'); });
+    b.classList.add('active');
 }
 
-// Load parcels from multiple states
+// Parcels
 function loadParcels() {
-    if (parcelsLoaded) {
-        toggleParcelsVisibility(document.getElementById('chkParcels').checked);
-        return;
-    }
+    map.addSource('parcels', {
+        type: 'vector',
+        url: 'pmtiles://' + CDN + '/parcels/parcels_tx_harris.pmtiles'
+    });
 
-    setStatus('Loading property parcels...');
-    var loaded = 0;
-    var total = PARCEL_FILES.length;
+    map.addLayer({
+        id: 'parcels-fill',
+        type: 'fill',
+        source: 'parcels',
+        'source-layer': 'parcels',
+        minzoom: 10,
+        paint: { 'fill-color': '#e53935', 'fill-opacity': 0.25 }
+    });
 
-    PARCEL_FILES.forEach(function(file) {
-        var sourceId = 'src-' + file;
-        var fillId = 'fill-' + file;
-        var lineId = 'line-' + file;
+    map.addLayer({
+        id: 'parcels-line',
+        type: 'line',
+        source: 'parcels',
+        'source-layer': 'parcels',
+        minzoom: 13,
+        paint: { 'line-color': '#b71c1c', 'line-width': 1 }
+    });
 
-        // Try to add source - some may not exist
-        try {
-            map.addSource(sourceId, {
-                type: 'vector',
-                url: 'pmtiles://' + CDN + '/parcels/' + file + '.pmtiles'
-            });
+    parcelsOn = true;
+    status('Parcels loaded - zoom in to see');
 
-            map.addLayer({
-                id: fillId,
-                type: 'fill',
-                source: sourceId,
-                'source-layer': 'parcels',
-                minzoom: 10,
-                paint: {
-                    'fill-color': '#e53935',
-                    'fill-opacity': ['interpolate', ['linear'], ['zoom'], 10, 0.1, 14, 0.3]
-                }
-            });
-
-            map.addLayer({
-                id: lineId,
-                type: 'line',
-                source: sourceId,
-                'source-layer': 'parcels',
-                minzoom: 13,
-                paint: {
-                    'line-color': '#b71c1c',
-                    'line-width': ['interpolate', ['linear'], ['zoom'], 13, 0.5, 16, 1.5]
-                }
-            });
-
-            loadedParcelSources[file] = { fill: fillId, line: lineId };
-
-            // Click handler
-            map.on('click', fillId, handleParcelClick);
-            map.on('mouseenter', fillId, function() { map.getCanvas().style.cursor = 'pointer'; });
-            map.on('mouseleave', fillId, function() { map.getCanvas().style.cursor = ''; });
-
-        } catch(e) {
-            // Source may not exist, skip silently
-        }
-
-        loaded++;
-        if (loaded === total) {
-            parcelsLoaded = true;
-            setStatus('Parcels loaded (' + Object.keys(loadedParcelSources).length + ' regions). Zoom in to see property boundaries.');
+    map.on('click', 'parcels-fill', function(e) {
+        if (e.features.length) {
+            var p = e.features[0].properties;
+            var owner = p.owner_name_1 || p.owner || 'Unknown';
+            var addr = p.situs_address || p.address || '';
+            var val = p.total_market_val || p.market_value || '';
+            var html = '<b>' + owner + '</b>';
+            if (addr) html += '<br>' + addr;
+            if (val) html += '<br>$' + parseInt(val).toLocaleString();
+            new maplibregl.Popup().setLngLat(e.lngLat).setHTML(html).addTo(map);
         }
     });
+
+    map.on('mouseenter', 'parcels-fill', function() { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'parcels-fill', function() { map.getCanvas().style.cursor = ''; });
 }
 
-function handleParcelClick(e) {
-    if (!e.features || e.features.length === 0) return;
-
-    var p = e.features[0].properties;
-
-    // Try different property name variations
-    var owner = p.owner_name_1 || p.owner || p.OWNER || p.owner_name || p.NAME || 'Unknown Owner';
-    var addr = p.situs_address || p.address || p.SITUS || p.site_addr || p.SITE_ADDR || '';
-    var value = p.total_market_val || p.market_value || p.MARKET_VAL || p.appraised_value || p.APPRAISED || '';
-    var acres = p.acreage_1 || p.acres || p.ACRES || p.GIS_ACRES || '';
-    var parcelId = p.acct_num || p.APN || p.parcel_id || p.PARCEL_ID || p.pin || '';
-
-    var html = '<h3>' + owner + '</h3>';
-    if (addr) html += '<p>' + addr + '</p>';
-    if (parcelId) html += '<p><span class="label">Parcel:</span> ' + parcelId + '</p>';
-    if (value) html += '<p><span class="label">Value:</span> $' + parseInt(value).toLocaleString() + '</p>';
-    if (acres) html += '<p><span class="label">Acres:</span> ' + parseFloat(acres).toFixed(2) + '</p>';
-
-    new maplibregl.Popup()
-        .setLngLat(e.lngLat)
-        .setHTML(html)
-        .addTo(map);
-}
-
-function toggleParcelsVisibility(show) {
-    var vis = show ? 'visible' : 'none';
-    Object.keys(loadedParcelSources).forEach(function(key) {
-        try {
-            map.setLayoutProperty(loadedParcelSources[key].fill, 'visibility', vis);
-            map.setLayoutProperty(loadedParcelSources[key].line, 'visibility', vis);
-        } catch(e) {}
-    });
-    setStatus(show ? 'Parcels visible' : 'Parcels hidden');
-}
+// Toggle parcels
+document.getElementById('chkParcels').onchange = function() {
+    var v = this.checked ? 'visible' : 'none';
+    map.setLayoutProperty('parcels-fill', 'visibility', v);
+    map.setLayoutProperty('parcels-line', 'visibility', v);
+};
 
 // Transit
-function loadTransit() {
-    if (transitLoaded) {
-        var show = document.getElementById('chkTransit').checked;
-        try {
-            map.setLayoutProperty('transit-routes', 'visibility', show ? 'visible' : 'none');
-            map.setLayoutProperty('transit-stops', 'visibility', show ? 'visible' : 'none');
-        } catch(e) {}
-        return;
-    }
-
-    setStatus('Loading Houston METRO...');
-
-    map.addSource('transit', {
-        type: 'vector',
-        url: 'pmtiles://' + CDN + '/transit/houston_metro.pmtiles'
-    });
-
-    map.addLayer({
-        id: 'transit-routes',
-        type: 'line',
-        source: 'transit',
-        'source-layer': 'transit',
-        filter: ['==', ['get', 'type'], 'route_shape'],
-        paint: {
-            'line-color': '#1a73e8',
-            'line-width': 3
-        }
-    });
-
-    map.addLayer({
-        id: 'transit-stops',
-        type: 'circle',
-        source: 'transit',
-        'source-layer': 'transit',
-        filter: ['==', ['get', 'type'], 'stop'],
-        minzoom: 12,
-        paint: {
-            'circle-radius': 5,
-            'circle-color': '#1a73e8',
-            'circle-stroke-color': 'white',
-            'circle-stroke-width': 2
-        }
-    });
-
-    transitLoaded = true;
-    setStatus('Transit loaded');
-}
-
-// Checkbox handlers
-document.getElementById('chkParcels').onchange = function() {
-    if (this.checked && !parcelsLoaded) {
-        loadParcels();
-    } else {
-        toggleParcelsVisibility(this.checked);
-    }
-};
-
 document.getElementById('chkTransit').onchange = function() {
-    if (this.checked && !transitLoaded) {
-        loadTransit();
-    } else {
-        var show = this.checked;
-        try {
-            map.setLayoutProperty('transit-routes', 'visibility', show ? 'visible' : 'none');
-            map.setLayoutProperty('transit-stops', 'visibility', show ? 'visible' : 'none');
-        } catch(e) {}
-        setStatus(show ? 'Transit visible' : 'Transit hidden');
+    if (this.checked && !transitOn) {
+        status('Loading transit...');
+        map.addSource('transit', {
+            type: 'vector',
+            url: 'pmtiles://' + CDN + '/transit/houston_metro.pmtiles'
+        });
+        map.addLayer({
+            id: 'transit-lines',
+            type: 'line',
+            source: 'transit',
+            'source-layer': 'transit',
+            filter: ['==', ['get', 'type'], 'route_shape'],
+            paint: { 'line-color': '#1a73e8', 'line-width': 3 }
+        });
+        map.addLayer({
+            id: 'transit-stops',
+            type: 'circle',
+            source: 'transit',
+            'source-layer': 'transit',
+            filter: ['==', ['get', 'type'], 'stop'],
+            minzoom: 12,
+            paint: { 'circle-radius': 5, 'circle-color': '#1a73e8', 'circle-stroke-color': 'white', 'circle-stroke-width': 2 }
+        });
+        transitOn = true;
+        status('Transit loaded');
+    } else if (transitOn) {
+        var v = this.checked ? 'visible' : 'none';
+        map.setLayoutProperty('transit-lines', 'visibility', v);
+        map.setLayoutProperty('transit-stops', 'visibility', v);
     }
 };
 
 // Search
-document.getElementById('search').addEventListener('keypress', function(e) {
+document.getElementById('search').onkeypress = function(e) {
     if (e.key === 'Enter') {
-        var query = this.value.trim();
-        if (!query) return;
-
-        setStatus('Searching...');
-
-        fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query) + '&countrycodes=us&limit=1')
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                if (data && data.length > 0) {
-                    var result = data[0];
-                    var lat = parseFloat(result.lat);
-                    var lon = parseFloat(result.lon);
-
-                    map.flyTo({ center: [lon, lat], zoom: 16 });
-
-                    new maplibregl.Marker({ color: '#1a73e8' })
-                        .setLngLat([lon, lat])
-                        .setPopup(new maplibregl.Popup().setHTML('<h3>' + result.display_name + '</h3>'))
-                        .addTo(map)
-                        .togglePopup();
-
-                    setStatus('Found: ' + result.display_name.substring(0, 50) + '...');
+        var q = this.value;
+        if (!q) return;
+        status('Searching...');
+        fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(q) + '&limit=1')
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                if (d.length) {
+                    map.flyTo({ center: [d[0].lon, d[0].lat], zoom: 16 });
+                    new maplibregl.Marker({color:'#e53935'}).setLngLat([d[0].lon, d[0].lat]).addTo(map);
+                    status('Found: ' + d[0].display_name.substring(0,40));
                 } else {
-                    setStatus('No results found');
+                    status('Not found');
                 }
-            })
-            .catch(function(err) {
-                setStatus('Search error');
             });
     }
-});
+};
 </script>
 </body>
 </html>
