@@ -4,56 +4,96 @@
     <title>HITD Maps</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet">
+    <script src="https://unpkg.com/pmtiles@3.0.6/dist/pmtiles.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { height: 100%; }
-        #map { height: 100%; width: 100%; }
+        html, body, #map { height: 100%; width: 100%; }
+
         .panel {
             position: absolute;
             top: 10px;
-            left: 50px;
+            left: 10px;
             z-index: 1000;
             background: white;
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            font-family: Arial, sans-serif;
-            max-width: 280px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            width: 280px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
         }
-        .panel h2 { margin: 0 0 10px; font-size: 18px; }
+
+        .panel h2 { margin: 0 0 12px; font-size: 18px; color: #1a73e8; }
+
         .panel input[type="text"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 14px;
         }
-        .btn-group { display: flex; gap: 5px; margin-bottom: 10px; }
+
+        .btn-group { display: flex; gap: 5px; margin-bottom: 15px; }
         .btn-group button {
             flex: 1;
-            padding: 8px;
+            padding: 8px 4px;
             border: 1px solid #ddd;
             background: white;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
         }
         .btn-group button:hover { background: #f5f5f5; }
         .btn-group button.active { background: #1a73e8; color: white; border-color: #1a73e8; }
+
+        .section { margin-bottom: 15px; }
+        .section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .layer-item {
+            display: flex;
+            align-items: center;
+            padding: 6px 0;
+            cursor: pointer;
+        }
+        .layer-item:hover { background: #f8f9fa; margin: 0 -15px; padding: 6px 15px; }
+        .layer-item input { margin-right: 10px; }
+        .layer-item label { cursor: pointer; font-size: 13px; flex: 1; }
+        .layer-item .badge {
+            font-size: 10px;
+            background: #e8f0fe;
+            color: #1a73e8;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
         .status {
             position: absolute;
             bottom: 25px;
             left: 10px;
             z-index: 1000;
-            background: rgba(0,0,0,0.75);
+            background: rgba(0,0,0,0.8);
             color: white;
             padding: 8px 15px;
             border-radius: 4px;
-            font-size: 13px;
-            font-family: Arial;
+            font-size: 12px;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
         }
+
+        .maplibregl-popup-content { padding: 10px 15px; font-family: Arial; }
+        .maplibregl-popup-content h3 { margin: 0 0 5px; font-size: 14px; }
+        .maplibregl-popup-content p { margin: 0; font-size: 12px; color: #666; }
     </style>
 </head>
 <body>
@@ -61,116 +101,372 @@
 
     <div class="panel">
         <h2>HITD Maps</h2>
-        <input type="text" id="search" placeholder="Search address... (press Enter)">
+        <input type="text" id="search" placeholder="Search address... (Enter)">
+
         <div class="btn-group">
             <button class="active" id="btnMap">Map</button>
             <button id="btnSat">Satellite</button>
-            <button id="btnTopo">Topo</button>
+            <button id="btnTerrain">Terrain</button>
         </div>
-        <div style="font-size: 12px; color: #666;">
-            492GB of map data on Cloudflare R2
+
+        <div class="section">
+            <div class="section-title">Data Layers</div>
+            <div class="layer-item">
+                <input type="checkbox" id="chkParcels" checked>
+                <label for="chkParcels">Property Parcels</label>
+                <span class="badge">515 files</span>
+            </div>
+            <div class="layer-item">
+                <input type="checkbox" id="chkTransit">
+                <label for="chkTransit">Transit Routes</label>
+                <span class="badge">Houston</span>
+            </div>
+            <div class="layer-item">
+                <input type="checkbox" id="chkPOIs">
+                <label for="chkPOIs">Points of Interest</label>
+            </div>
+        </div>
+
+        <div style="font-size: 11px; color: #888; text-align: center;">
+            492GB on Cloudflare R2 • Zero egress fees
         </div>
     </div>
 
-    <div class="status" id="status">Loading map...</div>
+    <div class="status" id="status">Initializing...</div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // Status helper
-        function setStatus(msg) {
-            document.getElementById('status').textContent = msg;
-        }
+<script>
+// PMTiles protocol
+var protocol = new pmtiles.Protocol();
+maplibregl.addProtocol("pmtiles", protocol.tile);
 
-        // Create map
-        var map = L.map('map', {
-            center: [29.76, -95.37],
-            zoom: 10
-        });
+var CDN = "https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev";
 
-        // Tile layers
-        var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap'
-        });
+function setStatus(msg) {
+    document.getElementById('status').textContent = msg;
+}
 
-        var satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            maxZoom: 19,
-            attribution: '© Esri'
-        });
+setStatus('Loading basemap...');
 
-        var topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-            maxZoom: 17,
-            attribution: '© OpenTopoMap'
-        });
-
-        // Add default layer
-        osmLayer.addTo(map);
-        setStatus('Map ready - Houston, TX');
-
-        // Layer switching
-        var currentLayer = osmLayer;
-
-        document.getElementById('btnMap').onclick = function() {
-            map.removeLayer(currentLayer);
-            osmLayer.addTo(map);
-            currentLayer = osmLayer;
-            document.querySelectorAll('.btn-group button').forEach(function(b) { b.classList.remove('active'); });
-            this.classList.add('active');
-            setStatus('Street map view');
-        };
-
-        document.getElementById('btnSat').onclick = function() {
-            map.removeLayer(currentLayer);
-            satLayer.addTo(map);
-            currentLayer = satLayer;
-            document.querySelectorAll('.btn-group button').forEach(function(b) { b.classList.remove('active'); });
-            this.classList.add('active');
-            setStatus('Satellite view');
-        };
-
-        document.getElementById('btnTopo').onclick = function() {
-            map.removeLayer(currentLayer);
-            topoLayer.addTo(map);
-            currentLayer = topoLayer;
-            document.querySelectorAll('.btn-group button').forEach(function(b) { b.classList.remove('active'); });
-            this.classList.add('active');
-            setStatus('Topographic view');
-        };
-
-        // Search
-        document.getElementById('search').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                var query = this.value.trim();
-                if (!query) return;
-
-                setStatus('Searching...');
-
-                fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query) + '&limit=1')
-                    .then(function(res) { return res.json(); })
-                    .then(function(data) {
-                        if (data && data.length > 0) {
-                            var result = data[0];
-                            var lat = parseFloat(result.lat);
-                            var lon = parseFloat(result.lon);
-
-                            map.setView([lat, lon], 16);
-
-                            L.marker([lat, lon])
-                                .addTo(map)
-                                .bindPopup('<b>' + result.display_name + '</b>')
-                                .openPopup();
-
-                            setStatus('Found: ' + result.display_name.substring(0, 40) + '...');
-                        } else {
-                            setStatus('No results found');
-                        }
-                    })
-                    .catch(function(err) {
-                        setStatus('Search error');
-                        console.error(err);
-                    });
+// Create map with simple style
+var map = new maplibregl.Map({
+    container: 'map',
+    style: {
+        version: 8,
+        sources: {
+            'osm': {
+                type: 'raster',
+                tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                tileSize: 256,
+                attribution: '© OpenStreetMap'
+            },
+            'satellite': {
+                type: 'raster',
+                tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+                tileSize: 256
             }
+        },
+        layers: [
+            { id: 'osm-tiles', type: 'raster', source: 'osm' },
+            { id: 'satellite-tiles', type: 'raster', source: 'satellite', layout: { visibility: 'none' } }
+        ]
+    },
+    center: [-95.37, 29.76],
+    zoom: 10
+});
+
+map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
+
+// Track state
+var parcelsLoaded = false;
+var transitLoaded = false;
+var poisLoaded = false;
+var terrainLoaded = false;
+
+map.on('load', function() {
+    setStatus('Map ready - loading parcels...');
+
+    // Auto-load parcels
+    if (document.getElementById('chkParcels').checked) {
+        loadParcels();
+    }
+});
+
+map.on('error', function(e) {
+    console.error('Map error:', e);
+});
+
+// Layer switching
+document.getElementById('btnMap').onclick = function() {
+    setButtons(this);
+    map.setLayoutProperty('osm-tiles', 'visibility', 'visible');
+    map.setLayoutProperty('satellite-tiles', 'visibility', 'none');
+    if (terrainLoaded) map.setTerrain(null);
+    map.easeTo({ pitch: 0 });
+    setStatus('Street map view');
+};
+
+document.getElementById('btnSat').onclick = function() {
+    setButtons(this);
+    map.setLayoutProperty('osm-tiles', 'visibility', 'none');
+    map.setLayoutProperty('satellite-tiles', 'visibility', 'visible');
+    if (terrainLoaded) map.setTerrain(null);
+    setStatus('Satellite view');
+};
+
+document.getElementById('btnTerrain').onclick = function() {
+    setButtons(this);
+    map.setLayoutProperty('osm-tiles', 'visibility', 'visible');
+    map.setLayoutProperty('satellite-tiles', 'visibility', 'none');
+
+    if (!terrainLoaded) {
+        setStatus('Loading terrain...');
+        map.addSource('terrain-dem', {
+            type: 'raster-dem',
+            url: 'pmtiles://' + CDN + '/terrain/terrain-rgb-texas.pmtiles',
+            encoding: 'terrarium',
+            tileSize: 256
         });
-    </script>
+        terrainLoaded = true;
+    }
+
+    map.setTerrain({ source: 'terrain-dem', exaggeration: 1.5 });
+    map.easeTo({ pitch: 50, duration: 1000 });
+    setStatus('Terrain view (Texas)');
+};
+
+function setButtons(active) {
+    document.querySelectorAll('.btn-group button').forEach(function(b) { b.classList.remove('active'); });
+    active.classList.add('active');
+}
+
+// Load parcels
+function loadParcels() {
+    if (parcelsLoaded) {
+        toggleLayer('parcels-fill', document.getElementById('chkParcels').checked);
+        toggleLayer('parcels-line', document.getElementById('chkParcels').checked);
+        return;
+    }
+
+    setStatus('Loading Harris County parcels...');
+
+    map.addSource('parcels', {
+        type: 'vector',
+        url: 'pmtiles://' + CDN + '/parcels/parcels_tx_harris.pmtiles'
+    });
+
+    map.addLayer({
+        id: 'parcels-fill',
+        type: 'fill',
+        source: 'parcels',
+        'source-layer': 'parcels_tx_harris',
+        minzoom: 12,
+        paint: {
+            'fill-color': '#e53935',
+            'fill-opacity': 0.25
+        }
+    });
+
+    map.addLayer({
+        id: 'parcels-line',
+        type: 'line',
+        source: 'parcels',
+        'source-layer': 'parcels_tx_harris',
+        minzoom: 14,
+        paint: {
+            'line-color': '#b71c1c',
+            'line-width': 1
+        }
+    });
+
+    parcelsLoaded = true;
+    setStatus('Parcels loaded - zoom in to see boundaries');
+
+    // Click handler for parcels
+    map.on('click', 'parcels-fill', function(e) {
+        if (e.features.length > 0) {
+            var p = e.features[0].properties;
+            var owner = p.owner_name_1 || p.owner || p.OWNER || 'Unknown Owner';
+            var addr = p.situs_address || p.address || p.SITUS || '';
+            var value = p.total_market_val || p.market_value || p.MARKET_VAL;
+            var acres = p.acreage_1 || p.acres || p.ACRES;
+
+            var html = '<h3>' + owner + '</h3>';
+            if (addr) html += '<p>' + addr + '</p>';
+            if (value) html += '<p>Value: $' + parseInt(value).toLocaleString() + '</p>';
+            if (acres) html += '<p>Acres: ' + parseFloat(acres).toFixed(2) + '</p>';
+
+            new maplibregl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(html)
+                .addTo(map);
+        }
+    });
+
+    map.on('mouseenter', 'parcels-fill', function() { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'parcels-fill', function() { map.getCanvas().style.cursor = ''; });
+}
+
+// Load transit
+function loadTransit() {
+    if (transitLoaded) {
+        var show = document.getElementById('chkTransit').checked;
+        toggleLayer('transit-routes', show);
+        toggleLayer('transit-stops', show);
+        return;
+    }
+
+    setStatus('Loading Houston METRO transit...');
+
+    map.addSource('transit', {
+        type: 'vector',
+        url: 'pmtiles://' + CDN + '/transit/houston_metro.pmtiles'
+    });
+
+    map.addLayer({
+        id: 'transit-routes',
+        type: 'line',
+        source: 'transit',
+        'source-layer': 'transit',
+        filter: ['==', ['get', 'type'], 'route_shape'],
+        paint: {
+            'line-color': '#1a73e8',
+            'line-width': 3,
+            'line-opacity': 0.8
+        }
+    });
+
+    map.addLayer({
+        id: 'transit-stops',
+        type: 'circle',
+        source: 'transit',
+        'source-layer': 'transit',
+        filter: ['==', ['get', 'type'], 'stop'],
+        minzoom: 12,
+        paint: {
+            'circle-radius': 5,
+            'circle-color': '#1a73e8',
+            'circle-stroke-color': 'white',
+            'circle-stroke-width': 2
+        }
+    });
+
+    transitLoaded = true;
+    setStatus('Transit loaded - 347 routes, 8859 stops');
+}
+
+// Load POIs
+function loadPOIs() {
+    if (poisLoaded) {
+        toggleLayer('pois-circles', document.getElementById('chkPOIs').checked);
+        return;
+    }
+
+    setStatus('Loading points of interest...');
+
+    map.addSource('pois', {
+        type: 'vector',
+        url: 'pmtiles://' + CDN + '/pois/usa_pois.pmtiles'
+    });
+
+    map.addLayer({
+        id: 'pois-circles',
+        type: 'circle',
+        source: 'pois',
+        'source-layer': 'places',
+        minzoom: 13,
+        paint: {
+            'circle-radius': 6,
+            'circle-color': '#ff9800',
+            'circle-stroke-color': 'white',
+            'circle-stroke-width': 2
+        }
+    });
+
+    poisLoaded = true;
+    setStatus('POIs loaded');
+
+    map.on('click', 'pois-circles', function(e) {
+        if (e.features.length > 0) {
+            var p = e.features[0].properties;
+            new maplibregl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML('<h3>' + (p.name || 'Business') + '</h3><p>' + (p.category || '') + '</p>')
+                .addTo(map);
+        }
+    });
+}
+
+function toggleLayer(layerId, show) {
+    try {
+        map.setLayoutProperty(layerId, 'visibility', show ? 'visible' : 'none');
+    } catch(e) {}
+}
+
+// Checkbox handlers
+document.getElementById('chkParcels').onchange = function() {
+    if (this.checked && !parcelsLoaded) {
+        loadParcels();
+    } else {
+        toggleLayer('parcels-fill', this.checked);
+        toggleLayer('parcels-line', this.checked);
+        setStatus(this.checked ? 'Parcels visible' : 'Parcels hidden');
+    }
+};
+
+document.getElementById('chkTransit').onchange = function() {
+    if (this.checked && !transitLoaded) {
+        loadTransit();
+    } else {
+        toggleLayer('transit-routes', this.checked);
+        toggleLayer('transit-stops', this.checked);
+        setStatus(this.checked ? 'Transit visible' : 'Transit hidden');
+    }
+};
+
+document.getElementById('chkPOIs').onchange = function() {
+    if (this.checked && !poisLoaded) {
+        loadPOIs();
+    } else {
+        toggleLayer('pois-circles', this.checked);
+        setStatus(this.checked ? 'POIs visible' : 'POIs hidden');
+    }
+};
+
+// Search
+document.getElementById('search').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        var query = this.value.trim();
+        if (!query) return;
+
+        setStatus('Searching...');
+
+        fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query) + '&limit=1')
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data && data.length > 0) {
+                    var result = data[0];
+                    var lat = parseFloat(result.lat);
+                    var lon = parseFloat(result.lon);
+
+                    map.flyTo({ center: [lon, lat], zoom: 16 });
+
+                    new maplibregl.Marker({ color: '#e53935' })
+                        .setLngLat([lon, lat])
+                        .setPopup(new maplibregl.Popup().setHTML('<h3>Search Result</h3><p>' + result.display_name + '</p>'))
+                        .addTo(map)
+                        .togglePopup();
+
+                    setStatus('Found: ' + result.display_name.substring(0, 40) + '...');
+                } else {
+                    setStatus('No results found');
+                }
+            })
+            .catch(function(err) {
+                setStatus('Search error');
+                console.error(err);
+            });
+    }
+});
+</script>
 </body>
 </html>
