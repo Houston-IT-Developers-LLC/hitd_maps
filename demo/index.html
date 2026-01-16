@@ -375,8 +375,9 @@ document.getElementById('lyrPOIs').onchange = function() {
 
 document.getElementById('lyrPADUS').onchange = function() {
     if (this.checked && !loaded.padus) {
+        // Only use outline - no fill to avoid green shade on everything
         loadLayer('padus', 'public-lands/padus_fee.pmtiles', 'padus_fee',
-            { fill: '#22c55e', fillOpacity: 0.15, line: '#15803d', lineWidth: 2, lineMinzoom: 5, minzoom: 6 });
+            { line: '#15803d', lineWidth: 2, minzoom: 6 });
     } else toggleLayer('padus', this.checked);
 };
 
