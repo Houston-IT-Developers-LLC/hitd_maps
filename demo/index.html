@@ -417,15 +417,75 @@ function loadParcels() {
 function parcelClick(e) {
     if (!e.features.length) return;
     var p = e.features[0].properties;
-    var owner = p.owner_name_1 || p.owner || p.OWNER || p.owner_name || 'Unknown';
-    var addr = p.situs_address || p.address || p.SITUS || p.site_addr || '';
-    var val = p.total_market_val || p.market_value || p.MARKET_VAL || '';
-    var acres = p.acreage_1 || p.acres || p.ACRES || p.GIS_ACRES || '';
-    var html = '<b>' + owner + '</b>';
-    if (addr) html += '<br>' + addr;
-    if (val) html += '<br>Value: $' + parseInt(val).toLocaleString();
-    if (acres) html += '<br>Acres: ' + parseFloat(acres).toFixed(2);
-    new maplibregl.Popup().setLngLat(e.lngLat).setHTML(html).addTo(map);
+
+    // Build HTML showing ALL property data fields
+    var html = '<div style="max-height:400px;overflow-y:auto;font-size:12px;">';
+    html += '<b style="font-size:14px;color:#1a73e8;">Property Details</b><hr style="margin:5px 0;">';
+
+    // Priority fields to show first (common parcel field names)
+    var priorityFields = [
+        'owner', 'owner_name', 'owner_name_1', 'OWNER', 'OWNERNAME',
+        'situs_address', 'address', 'SITUS', 'site_addr', 'SITEADDRESS', 'prop_addr',
+        'apn', 'APN', 'parcel_id', 'PARCEL_ID', 'pin', 'PIN', 'parcel_num',
+        'total_market_val', 'market_value', 'MARKET_VAL', 'value', 'total_value', 'TOTALVALUE',
+        'land_value', 'LAND_VALUE', 'improvement_value', 'IMPROVEMENT',
+        'acreage', 'acreage_1', 'acres', 'ACRES', 'GIS_ACRES', 'calc_acres',
+        'land_use', 'LAND_USE', 'use_code', 'zoning', 'ZONING',
+        'year_built', 'YEAR_BUILT', 'year', 'built',
+        'sqft', 'sq_ft', 'SQFT', 'building_sqft', 'living_area',
+        'bedrooms', 'bathrooms', 'stories'
+    ];
+
+    // Show priority fields first if they exist
+    var shownFields = {};
+    priorityFields.forEach(function(key) {
+        if (p[key] !== undefined && p[key] !== null && p[key] !== '') {
+            var val = p[key];
+            var displayKey = key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim();
+
+            // Format values
+            if (typeof val === 'number') {
+                if (key.toLowerCase().includes('val') || key.toLowerCase().includes('value')) {
+                    val = '$' + val.toLocaleString();
+                } else if (key.toLowerCase().includes('acre')) {
+                    val = parseFloat(val).toFixed(2) + ' ac';
+                } else if (key.toLowerCase().includes('sqft') || key.toLowerCase().includes('sq_ft')) {
+                    val = val.toLocaleString() + ' sqft';
+                }
+            }
+
+            html += '<div style="margin:3px 0;"><span style="color:#666;text-transform:capitalize;">' + displayKey + ':</span> <strong>' + val + '</strong></div>';
+            shownFields[key] = true;
+        }
+    });
+
+    // Show ALL remaining fields that weren't in priority list
+    var otherFields = Object.keys(p).filter(function(k) { return !shownFields[k]; });
+    if (otherFields.length > 0) {
+        html += '<hr style="margin:8px 0;"><b style="font-size:11px;color:#888;">Additional Data</b>';
+        otherFields.forEach(function(key) {
+            var val = p[key];
+            if (val !== undefined && val !== null && val !== '') {
+                var displayKey = key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim();
+
+                // Format numbers
+                if (typeof val === 'number') {
+                    val = val.toLocaleString();
+                }
+
+                // Truncate very long values
+                if (typeof val === 'string' && val.length > 100) {
+                    val = val.substring(0, 100) + '...';
+                }
+
+                html += '<div style="margin:2px 0;font-size:11px;"><span style="color:#888;text-transform:capitalize;">' + displayKey + ':</span> ' + val + '</div>';
+            }
+        });
+    }
+
+    html += '</div>';
+
+    new maplibregl.Popup({maxWidth: '350px'}).setLngLat(e.lngLat).setHTML(html).addTo(map);
 }
 
 // Layer checkbox handlers
