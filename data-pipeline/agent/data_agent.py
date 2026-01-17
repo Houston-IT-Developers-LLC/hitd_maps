@@ -34,6 +34,16 @@ import sqlite3
 import aiohttp
 import requests
 
+# Import issue tracker
+try:
+    from issue_tracker import IssueTracker, analyze_error
+    from auto_fixer import AutoFixer
+    ISSUE_TRACKING_ENABLED = True
+except ImportError:
+    ISSUE_TRACKING_ENABLED = False
+    IssueTracker = None
+    AutoFixer = None
+
 # Configuration
 OLLAMA_BASE = os.environ.get("OLLAMA_BASE", "http://10.8.0.1:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3.3:70b")
@@ -192,41 +202,81 @@ Respond in JSON format:
 
 
 class APIMonitor:
-    """Monitor ArcGIS APIs for data updates."""
+    """Monitor ArcGIS APIs for data updates.
 
-    # Key APIs to monitor (subset from your COUNTY_CONFIGS)
-    MONITORED_APIS = {
-        "tx_statewide": {
-            "url": "https://feature.stratmap.tnris.org/arcgis/rest/services/Land_Parcels/Statewide_Land_Parcels/MapServer/0",
-            "state": "TX",
-            "expected_records": 28000000
-        },
-        "fl_statewide": {
-            "url": "https://ca.dep.state.fl.us/arcgis/rest/services/OpenData/PARCELS/MapServer/0",
-            "state": "FL",
-            "expected_records": 10000000
-        },
-        "ny_statewide": {
-            "url": "https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/NYS_Tax_Parcels_Public/FeatureServer/0",
-            "state": "NY",
-            "expected_records": 9000000
-        },
-        "ca_la_county": {
-            "url": "https://public.gis.lacounty.gov/public/rest/services/LACounty_Cache/LACounty_Parcel/MapServer/0",
-            "state": "CA",
-            "county": "los_angeles",
-            "expected_records": 2500000
-        },
-        "oh_statewide": {
-            "url": "https://gis.ohiosos.gov/arcgis/rest/services/OpenData/OpenData/MapServer/0",
-            "state": "OH",
-            "expected_records": 5500000
-        }
-    }
+    Loads ALL APIs dynamically from:
+    - COUNTY_CONFIGS in export_county_parcels.py (516+ parcel APIs)
+    - enrichment_sources.json (11 enrichment layers)
+    """
 
     def __init__(self, state: AgentState, ollama: OllamaClient):
         self.state = state
         self.ollama = ollama
+        self.MONITORED_APIS = self._load_all_apis()
+        logger.info(f"Loaded {len(self.MONITORED_APIS)} APIs to monitor")
+
+    def _load_all_apis(self) -> dict:
+        """Load all APIs from COUNTY_CONFIGS and enrichment sources."""
+        apis = {}
+
+        # 1. Load parcel APIs from export_county_parcels.py
+        try:
+            import importlib.util
+            spec = importlib.util.spec_from_file_location(
+                "export_county_parcels",
+                SCRIPTS_DIR / "export_county_parcels.py"
+            )
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+
+            for config_id, config in module.COUNTY_CONFIGS.items():
+                # Convert service_url to base URL (remove /query suffix if present)
+                service_url = config.get("service_url", "")
+                if service_url.endswith("/query"):
+                    base_url = service_url[:-6]  # Remove /query
+                else:
+                    base_url = service_url
+
+                # Parse state and county from config_id (e.g., "TX_HARRIS" -> TX, Harris)
+                parts = config_id.split("_", 1)
+                state_code = parts[0]
+                county_or_type = parts[1].lower() if len(parts) > 1 else None
+
+                apis[config_id.lower()] = {
+                    "url": base_url,
+                    "state": state_code,
+                    "county": county_or_type if county_or_type and county_or_type not in ["statewide", "statewide_v2", "statewide_recent"] else None,
+                    "name": config.get("name", config_id),
+                    "type": "parcel",
+                    "expected_records": config.get("expected_records", 0)
+                }
+            logger.info(f"Loaded {len(apis)} parcel APIs from COUNTY_CONFIGS")
+        except Exception as e:
+            logger.error(f"Failed to load COUNTY_CONFIGS: {e}")
+
+        # 2. Load enrichment layer APIs
+        try:
+            enrichment_path = DATA_PIPELINE_DIR / "config" / "enrichment_sources.json"
+            if enrichment_path.exists():
+                with open(enrichment_path) as f:
+                    enrichment_data = json.load(f)
+
+                for source_id, source in enrichment_data.get("sources", {}).items():
+                    api_url = source.get("api_url")
+                    if api_url:
+                        apis[f"enrichment_{source_id}"] = {
+                            "url": api_url,
+                            "name": source.get("name", source_id),
+                            "type": "enrichment",
+                            "priority": source.get("priority", 10),
+                            "update_frequency": source.get("update_frequency", "annual"),
+                            "expected_records": 0  # Enrichment layers don't have simple counts
+                        }
+                logger.info(f"Loaded enrichment APIs: {[k for k in apis if k.startswith('enrichment_')]}")
+        except Exception as e:
+            logger.error(f"Failed to load enrichment sources: {e}")
+
+        return apis
 
     async def check_api(self, source_id: str, config: dict) -> dict:
         """Check an API for record count and last edit date."""
@@ -269,11 +319,76 @@ class APIMonitor:
                 "error": str(e)
             }
 
-    async def check_all_apis(self) -> list:
-        """Check all monitored APIs concurrently."""
+    async def check_all_apis(self, batch_size: int = 50, delay_between_batches: float = 2.0) -> list:
+        """Check all monitored APIs with batching to avoid overwhelming servers.
+
+        Args:
+            batch_size: Number of APIs to check concurrently per batch
+            delay_between_batches: Seconds to wait between batches
+        """
+        all_results = []
+        api_items = list(self.MONITORED_APIS.items())
+        total_batches = (len(api_items) + batch_size - 1) // batch_size
+
+        logger.info(f"Checking {len(api_items)} APIs in {total_batches} batches of {batch_size}")
+
+        for i in range(0, len(api_items), batch_size):
+            batch = api_items[i:i + batch_size]
+            batch_num = (i // batch_size) + 1
+
+            logger.info(f"Checking batch {batch_num}/{total_batches} ({len(batch)} APIs)")
+
+            tasks = [
+                self.check_api(source_id, config)
+                for source_id, config in batch
+            ]
+            batch_results = await asyncio.gather(*tasks, return_exceptions=True)
+
+            # Process results, handling any exceptions
+            for result in batch_results:
+                if isinstance(result, Exception):
+                    all_results.append({
+                        "source_id": "unknown",
+                        "status": "error",
+                        "error": str(result)
+                    })
+                else:
+                    all_results.append(result)
+
+            # Rate limit between batches (except for last batch)
+            if i + batch_size < len(api_items):
+                await asyncio.sleep(delay_between_batches)
+
+        # Log summary
+        healthy = sum(1 for r in all_results if r.get("status") == "healthy")
+        errors = sum(1 for r in all_results if r.get("status") == "error")
+        logger.info(f"API check complete: {healthy} healthy, {errors} errors")
+
+        return all_results
+
+    async def check_priority_apis(self, max_apis: int = 100) -> list:
+        """Check only priority APIs (statewide + high-value counties).
+
+        Use this for quick status checks instead of checking all 500+ APIs.
+        """
+        priority_apis = {}
+
+        for source_id, config in self.MONITORED_APIS.items():
+            # Include all statewide APIs
+            if "statewide" in source_id:
+                priority_apis[source_id] = config
+            # Include all enrichment APIs
+            elif config.get("type") == "enrichment":
+                priority_apis[source_id] = config
+            # Stop when we have enough
+            if len(priority_apis) >= max_apis:
+                break
+
+        logger.info(f"Checking {len(priority_apis)} priority APIs")
+
         tasks = [
             self.check_api(source_id, config)
-            for source_id, config in self.MONITORED_APIS.items()
+            for source_id, config in priority_apis.items()
         ]
         return await asyncio.gather(*tasks)
 
@@ -503,19 +618,62 @@ class DataAgent:
         self.scraper = ScraperManager(self.state)
         self.docs = DocumentationUpdater(self.state, self.ollama)
 
+        # Issue tracking
+        if ISSUE_TRACKING_ENABLED:
+            self.issue_tracker = IssueTracker()
+            self.auto_fixer = AutoFixer(self.issue_tracker)
+            logger.info("Issue tracking enabled")
+        else:
+            self.issue_tracker = None
+            self.auto_fixer = None
+            logger.warning("Issue tracking not available")
+
         # Check intervals
         self.api_check_interval = timedelta(hours=6)
         self.scrape_check_interval = timedelta(hours=12)
 
-    async def run_monitoring_cycle(self):
-        """Run one monitoring cycle."""
+    async def run_monitoring_cycle(self, check_all: bool = False):
+        """Run one monitoring cycle.
+
+        Args:
+            check_all: If True, check all 500+ APIs. If False, check only priority APIs.
+        """
         logger.info("Starting monitoring cycle")
 
-        # 1. Check all APIs
-        api_results = await self.api_monitor.check_all_apis()
+        # 1. Check APIs (all or just priority)
+        if check_all:
+            logger.info("Checking ALL APIs (this may take several minutes)...")
+            api_results = await self.api_monitor.check_all_apis()
+        else:
+            logger.info("Checking priority APIs (statewide + enrichment)...")
+            api_results = await self.api_monitor.check_priority_apis()
         logger.info(f"Checked {len(api_results)} APIs")
 
-        # 2. Analyze changes and decide on scraping
+        # 2. Log any API errors as issues
+        error_count = 0
+        for result in api_results:
+            if result.get("status") == "error" and self.issue_tracker:
+                error_count += 1
+                config = self.api_monitor.MONITORED_APIS.get(result.get("source_id", ""), {})
+                analysis = analyze_error(result.get("error", "")) if ISSUE_TRACKING_ENABLED else {}
+
+                self.issue_tracker.log_issue(
+                    title=f"API check failed: {result.get('source_id', 'unknown')}",
+                    issue_type="api_error",
+                    severity="warning",
+                    source_id=result.get("source_id"),
+                    state=config.get("state"),
+                    county=config.get("county"),
+                    error_message=result.get("error"),
+                    context={"url": config.get("url"), "result": result},
+                    suggested_fix=analysis.get("suggested_fix"),
+                    auto_fixable=analysis.get("auto_fixable", False)
+                )
+
+        if error_count > 0:
+            logger.warning(f"Logged {error_count} API errors to issue tracker")
+
+        # 3. Analyze changes and decide on scraping
         scrape_queue = []
         for result in api_results:
             if result.get("status") != "healthy":
@@ -581,23 +739,38 @@ class DataAgent:
 
         return results
 
-    async def run_forever(self, check_interval_minutes: int = 360):
+    async def run_forever(self, check_interval_minutes: int = 360, full_check_every: int = 4):
         """Run the agent continuously with full pipeline.
 
         Each cycle:
-        1. Check all APIs for data changes
+        1. Check APIs for data changes (priority by default, full every N cycles)
         2. Queue and run scrapes for changed data
         3. Run full pipeline (reproject → tile → upload → cleanup)
         4. Clean up any orphaned local files
         5. Update documentation
+
+        Args:
+            check_interval_minutes: Minutes between cycles (default 360 = 6 hours)
+            full_check_every: Run full API check every N cycles (default 4 = once daily)
         """
         logger.info("Data Agent starting continuous operation")
         logger.info(f"Interval: {check_interval_minutes} minutes")
+        logger.info(f"Full API check: every {full_check_every} cycles ({full_check_every * check_interval_minutes / 60:.0f} hours)")
+        logger.info(f"Total APIs monitored: {len(self.api_monitor.MONITORED_APIS)}")
 
+        cycle_count = 0
         while True:
             try:
+                cycle_count += 1
+                check_all = (cycle_count % full_check_every == 0)
+
+                if check_all:
+                    logger.info(f"Cycle {cycle_count}: FULL API CHECK (all {len(self.api_monitor.MONITORED_APIS)} APIs)")
+                else:
+                    logger.info(f"Cycle {cycle_count}: Priority API check")
+
                 # Run monitoring cycle
-                cycle_result = await self.run_monitoring_cycle()
+                cycle_result = await self.run_monitoring_cycle(check_all=check_all)
 
                 # Process any queued scrapes
                 if cycle_result["scrape_queue"]:
@@ -616,11 +789,28 @@ class DataAgent:
                 if cleanup_result.get("cleaned", 0) > 0:
                     logger.info(f"Cleaned {cleanup_result['cleaned']} orphaned files")
 
+                # Run auto-fixes for any logged issues
+                if self.auto_fixer:
+                    logger.info("Running auto-fixes for logged issues...")
+                    fix_results = await self.auto_fixer.fix_all_auto_fixable()
+                    if fix_results["attempted"] > 0:
+                        logger.info(f"Auto-fix: {fix_results['fixed']}/{fix_results['attempted']} issues fixed")
+
                 logger.info(f"Cycle complete. Sleeping {check_interval_minutes} minutes")
                 await asyncio.sleep(check_interval_minutes * 60)
 
             except Exception as e:
                 logger.error(f"Error in monitoring cycle: {e}")
+                # Log the error as an issue
+                if self.issue_tracker:
+                    self.issue_tracker.log_issue(
+                        title=f"Monitoring cycle error",
+                        issue_type="unknown",
+                        severity="error",
+                        error_message=str(e),
+                        exception=e,
+                        auto_fixable=False
+                    )
                 await asyncio.sleep(60)  # Short sleep on error
 
 
@@ -744,8 +934,14 @@ Examples:
     )
     parser.add_argument("--once", action="store_true",
                         help="Run one monitoring cycle and exit")
+    parser.add_argument("--check-all", action="store_true",
+                        help="Check ALL APIs (500+) instead of just priority APIs")
+    parser.add_argument("--list-apis", action="store_true",
+                        help="List all monitored APIs and exit")
     parser.add_argument("--interval", type=int, default=360,
                         help="Check interval in minutes (default: 360)")
+    parser.add_argument("--full-check-every", type=int, default=4,
+                        help="Run full API check every N cycles (default: 4)")
     parser.add_argument("--check-api", type=str,
                         help="Check a specific API")
     parser.add_argument("--pipeline", action="store_true",
@@ -760,6 +956,12 @@ Examples:
                         help="Scrape a specific county (use with --scrape)")
     parser.add_argument("--update-docs", action="store_true",
                         help="Update documentation files only")
+    parser.add_argument("--issues", action="store_true",
+                        help="Show open issues summary")
+    parser.add_argument("--issues-export", action="store_true",
+                        help="Export issues for Claude to analyze")
+    parser.add_argument("--auto-fix", action="store_true",
+                        help="Run auto-fixes for logged issues")
     parser.add_argument("--verbose", "-v", action="store_true",
                         help="Verbose logging output")
     args = parser.parse_args()
@@ -769,7 +971,85 @@ Examples:
 
     agent = DataAgent()
 
-    if args.update_docs:
+    if args.list_apis:
+        # List all monitored APIs
+        print(f"\nTotal APIs monitored: {len(agent.api_monitor.MONITORED_APIS)}")
+        print("\n=== PARCEL APIs ===")
+        parcel_apis = [(k, v) for k, v in agent.api_monitor.MONITORED_APIS.items() if v.get("type") == "parcel"]
+        statewide = [k for k, v in parcel_apis if "statewide" in k]
+        county = [k for k, v in parcel_apis if "statewide" not in k]
+
+        print(f"\nStatewide APIs ({len(statewide)}):")
+        for api_id in sorted(statewide):
+            config = agent.api_monitor.MONITORED_APIS[api_id]
+            print(f"  {api_id}: {config.get('name', api_id)}")
+
+        print(f"\nCounty APIs ({len(county)}):")
+        # Group by state
+        by_state = {}
+        for api_id in county:
+            config = agent.api_monitor.MONITORED_APIS[api_id]
+            state = config.get("state", "??")
+            if state not in by_state:
+                by_state[state] = []
+            by_state[state].append(api_id)
+
+        for state in sorted(by_state.keys()):
+            print(f"  {state}: {len(by_state[state])} counties")
+
+        print("\n=== ENRICHMENT APIs ===")
+        enrichment_apis = [(k, v) for k, v in agent.api_monitor.MONITORED_APIS.items() if v.get("type") == "enrichment"]
+        for api_id, config in sorted(enrichment_apis):
+            print(f"  {api_id}: {config.get('name', api_id)}")
+
+        return
+
+    if args.issues:
+        # Show issues summary
+        if agent.issue_tracker:
+            summary = agent.issue_tracker.get_issues_summary()
+            print("\n=== HITD Maps Pipeline Issues ===")
+            print(f"Total: {summary['total']} | Open: {summary['open']} | Resolved: {summary['resolved']}")
+            if summary['by_severity']:
+                print("\nBy Severity:")
+                for sev, count in sorted(summary['by_severity'].items()):
+                    print(f"  {sev}: {count}")
+            if summary['by_type']:
+                print("\nBy Type:")
+                for typ, count in sorted(summary['by_type'].items()):
+                    print(f"  {typ}: {count}")
+            if summary['by_state']:
+                print("\nBy State:")
+                for state, count in sorted(summary['by_state'].items()):
+                    print(f"  {state}: {count}")
+        else:
+            print("Issue tracking not available")
+        return
+
+    elif args.issues_export:
+        # Export issues for Claude
+        if agent.issue_tracker:
+            report = agent.issue_tracker.export_for_claude()
+            print(report)
+        else:
+            print("Issue tracking not available")
+        return
+
+    elif args.auto_fix:
+        # Run auto-fixes
+        if agent.auto_fixer:
+            results = await agent.auto_fixer.fix_all_auto_fixable()
+            print(f"\n=== Auto-Fix Results ===")
+            print(f"Attempted: {results['attempted']}")
+            print(f"Fixed: {results['fixed']}")
+            print(f"Failed: {results['failed']}")
+            for detail in results['details']:
+                print(f"  Issue #{detail['id']}: {detail['status']}")
+        else:
+            print("Auto-fixer not available")
+        return
+
+    elif args.update_docs:
         # Update documentation only
         result = await update_all_docs(agent)
         print(json.dumps(result, indent=2, default=str))
@@ -811,12 +1091,15 @@ Examples:
             print(json.dumps(pipeline_result, indent=2, default=str))
 
     elif args.once:
-        result = await agent.run_monitoring_cycle()
+        result = await agent.run_monitoring_cycle(check_all=args.check_all)
         print(json.dumps(result, indent=2, default=str))
 
     else:
         # Run forever
-        await agent.run_forever(args.interval)
+        await agent.run_forever(
+            check_interval_minutes=args.interval,
+            full_check_every=args.full_check_every
+        )
 
 
 if __name__ == "__main__":

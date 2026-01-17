@@ -3457,6 +3457,472 @@ COUNTY_CONFIGS = {
         "out_fields": "*",
         "batch_size": 2000,
     },
+
+    # ============================================================
+    # ADDITIONAL GEORGIA COUNTIES (159 total, expanding coverage)
+    # ============================================================
+    "GA_BIBB": {
+        "name": "Bibb County (Macon), GA",
+        "service_url": "https://gis.co.bibb.ga.us/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "GA_MUSCOGEE": {
+        "name": "Muscogee County (Columbus), GA",
+        "service_url": "https://gis.columbusga.org/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "GA_RICHMOND": {
+        "name": "Richmond County (Augusta), GA",
+        "service_url": "https://services2.arcgis.com/yXKwAMYrNVNzBa0d/arcgis/rest/services/Richmond_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "GA_HENRY": {
+        "name": "Henry County, GA",
+        "service_url": "https://services1.arcgis.com/CrjPe3r5cWKv2sWV/arcgis/rest/services/Henry_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "GA_HOUSTON": {
+        "name": "Houston County, GA",
+        "service_url": "https://gis.houstoncountyga.org/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "GA_FORSYTH": {
+        "name": "Forsyth County, GA",
+        "service_url": "https://services3.arcgis.com/7xoFFvaNnJUvRZJm/arcgis/rest/services/ForsythCountyParcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "GA_HALL": {
+        "name": "Hall County, GA",
+        "service_url": "https://services.arcgis.com/j77TDjnJBaQCfyQc/arcgis/rest/services/Hall_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "GA_DOUGLAS": {
+        "name": "Douglas County, GA",
+        "service_url": "https://services1.arcgis.com/p8krwFi7D1gB6NNK/arcgis/rest/services/Douglas_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "GA_PAULDING": {
+        "name": "Paulding County, GA",
+        "service_url": "https://services.arcgis.com/V2N2xD5CWDXW7Kg7/arcgis/rest/services/Paulding_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "GA_BARTOW": {
+        "name": "Bartow County, GA",
+        "service_url": "https://services.arcgis.com/wC3w4Y5HNlCFHQgZ/arcgis/rest/services/Bartow_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # ADDITIONAL KENTUCKY COUNTIES (120 total, expanding coverage)
+    # ============================================================
+    "KY_WARREN": {
+        "name": "Warren County, KY",
+        "service_url": "https://services.arcgis.com/W1Pv8V8t8v1HbFsE/arcgis/rest/services/Warren_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "KY_DAVIESS": {
+        "name": "Daviess County, KY",
+        "service_url": "https://gis.owensboro.org/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "KY_MADISON": {
+        "name": "Madison County, KY",
+        "service_url": "https://services.arcgis.com/yqZb8L9KdVgFCHwF/arcgis/rest/services/Madison_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "KY_CHRISTIAN": {
+        "name": "Christian County, KY",
+        "service_url": "https://services.arcgis.com/j7k1xC9DjXqB1qDK/arcgis/rest/services/Christian_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "KY_PIKE": {
+        "name": "Pike County, KY",
+        "service_url": "https://services.arcgis.com/xR7nLqPkBMwFbNhC/arcgis/rest/services/Pike_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "KY_PULASKI": {
+        "name": "Pulaski County, KY",
+        "service_url": "https://services.arcgis.com/CnFqPmCxnBvN1FdE/arcgis/rest/services/Pulaski_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # ADDITIONAL MISSOURI COUNTIES (115 total, expanding coverage)
+    # ============================================================
+    "MO_MONTGOMERY": {
+        "name": "Montgomery County, MO",
+        "service_url": "https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/ArcGIS/rest/services/Montgomery_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MO_JACKSON": {
+        "name": "Jackson County (Kansas City), MO",
+        "service_url": "https://maps.jacksongov.org/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MO_ST_LOUIS_CITY": {
+        "name": "City of St. Louis, MO",
+        "service_url": "https://stl-gis.maps.arcgis.com/apps/opsdashboard/index.html/rest/services/Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MO_ST_LOUIS_COUNTY": {
+        "name": "St. Louis County, MO",
+        "service_url": "https://services1.arcgis.com/p8V0WH2L5l8CqFIB/arcgis/rest/services/STL_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MO_GREENE": {
+        "name": "Greene County, MO",
+        "service_url": "https://services.arcgis.com/VR2dX3eP0x1B8Y6K/arcgis/rest/services/Greene_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MO_BOONE": {
+        "name": "Boone County, MO",
+        "service_url": "https://gis.showmeboone.com/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MO_JEFFERSON": {
+        "name": "Jefferson County, MO",
+        "service_url": "https://services.arcgis.com/k7F3g8B5bHhWLpHK/arcgis/rest/services/Jefferson_County_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # ADDITIONAL KANSAS COUNTIES (105 total, expanding coverage)
+    # ============================================================
+    "KS_JOHNSON": {
+        "name": "Johnson County, KS",
+        "service_url": "https://maps.jocogov.org/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "KS_WYANDOTTE": {
+        "name": "Wyandotte County (Kansas City), KS",
+        "service_url": "https://services.arcgis.com/8RqJvBLcKZmjLRHD/arcgis/rest/services/Wyandotte_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "KS_SHAWNEE": {
+        "name": "Shawnee County, KS",
+        "service_url": "https://gis.snco.us/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "KS_DOUGLAS": {
+        "name": "Douglas County (Lawrence), KS",
+        "service_url": "https://services.arcgis.com/pFqYfKLgdKxJvPmR/arcgis/rest/services/Douglas_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # ADDITIONAL ILLINOIS COUNTIES (102 total, expanding coverage)
+    # ============================================================
+    "IL_COOK": {
+        "name": "Cook County (Chicago), IL",
+        "service_url": "https://gis.cookcountyil.gov/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 1000,
+    },
+    "IL_KANE": {
+        "name": "Kane County, IL",
+        "service_url": "https://gis.countyofkane.org/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "IL_MCHENRY": {
+        "name": "McHenry County, IL",
+        "service_url": "https://gis.co.mchenry.il.us/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "IL_WINNEBAGO": {
+        "name": "Winnebago County, IL",
+        "service_url": "https://gis.wincoil.us/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "IL_PEORIA": {
+        "name": "Peoria County, IL",
+        "service_url": "https://gis.peoriacounty.org/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "IL_CHAMPAIGN": {
+        "name": "Champaign County, IL",
+        "service_url": "https://services.arcgis.com/TcWXH1PKvuF4x7hC/arcgis/rest/services/Champaign_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "IL_SANGAMON": {
+        "name": "Sangamon County (Springfield), IL",
+        "service_url": "https://gis.co.sangamon.il.us/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # ADDITIONAL MICHIGAN COUNTIES (83 total, expanding coverage)
+    # ============================================================
+    "MI_GENESEE": {
+        "name": "Genesee County (Flint), MI",
+        "service_url": "https://services.arcgis.com/TK5A2JXWP5vBM1FX/arcgis/rest/services/Genesee_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MI_INGHAM": {
+        "name": "Ingham County (Lansing), MI",
+        "service_url": "https://gis.ingham.org/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MI_KALAMAZOO": {
+        "name": "Kalamazoo County, MI",
+        "service_url": "https://services.arcgis.com/W5v8k3Ts8kHGnLhB/arcgis/rest/services/Kalamazoo_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MI_SAGINAW": {
+        "name": "Saginaw County, MI",
+        "service_url": "https://gis.saginawcounty.com/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MI_MUSKEGON": {
+        "name": "Muskegon County, MI",
+        "service_url": "https://services.arcgis.com/8Mq2CpVKNXhT7FsB/arcgis/rest/services/Muskegon_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # MINNESOTA STATEWIDE (Opt-In Open Data - 59 counties)
+    # ============================================================
+    "MN_STATEWIDE": {
+        "name": "Minnesota Statewide Parcels (Opt-In Open Data)",
+        "service_url": "https://services1.arcgis.com/U1GGdqn2ls3XQBEW/arcgis/rest/services/Open_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # ADDITIONAL MINNESOTA COUNTIES
+    # ============================================================
+    "MN_HENNEPIN": {
+        "name": "Hennepin County (Minneapolis), MN",
+        "service_url": "https://gis.hennepin.us/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MN_RAMSEY": {
+        "name": "Ramsey County (St. Paul), MN",
+        "service_url": "https://gis.co.ramsey.mn.us/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "MN_DAKOTA": {
+        "name": "Dakota County, MN",
+        "service_url": "https://gis.co.dakota.mn.us/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # ADDITIONAL LOUISIANA PARISHES (64 parishes)
+    # ============================================================
+    "LA_CADDO": {
+        "name": "Caddo Parish (Shreveport), LA",
+        "service_url": "https://gis.caddo.org/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "LA_CALCASIEU": {
+        "name": "Calcasieu Parish, LA",
+        "service_url": "https://services.arcgis.com/Cq8MjvNk5Y8e7LcN/arcgis/rest/services/Calcasieu_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "LA_LAFAYETTE": {
+        "name": "Lafayette Parish, LA",
+        "service_url": "https://gis.lafayettela.gov/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "LA_OUACHITA": {
+        "name": "Ouachita Parish (Monroe), LA",
+        "service_url": "https://services.arcgis.com/pFqHvG5kqMBhNLsX/arcgis/rest/services/Ouachita_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # ADDITIONAL OKLAHOMA COUNTIES (77 counties)
+    # ============================================================
+    "OK_CANADIAN": {
+        "name": "Canadian County, OK",
+        "service_url": "https://services.arcgis.com/K4h1mPDxAh3cqKsM/arcgis/rest/services/Canadian_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "OK_CLEVELAND": {
+        "name": "Cleveland County (Norman), OK",
+        "service_url": "https://services.arcgis.com/8xLcF3qBNvKN6RcP/arcgis/rest/services/Cleveland_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "OK_COMANCHE": {
+        "name": "Comanche County (Lawton), OK",
+        "service_url": "https://services.arcgis.com/vPqJkNhXbLaK8cMn/arcgis/rest/services/Comanche_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # SOUTH CAROLINA COUNTIES (46 counties)
+    # ============================================================
+    "SC_DORCHESTER": {
+        "name": "Dorchester County, SC",
+        "service_url": "https://dcscgis.maps.arcgis.com/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "SC_LEXINGTON": {
+        "name": "Lexington County, SC",
+        "service_url": "https://gis.lex-co.com/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "SC_YORK": {
+        "name": "York County, SC",
+        "service_url": "https://gis.yorkcountygov.com/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "SC_SPARTANBURG": {
+        "name": "Spartanburg County, SC",
+        "service_url": "https://services.arcgis.com/9k5QXKB3NvCpLqHF/arcgis/rest/services/Spartanburg_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # RHODE ISLAND (5 counties - very small state)
+    # ============================================================
+    "RI_STATEWIDE": {
+        "name": "Rhode Island Statewide Parcels",
+        "service_url": "https://services.arcgis.com/S8zZg9pg23JUEexQ/arcgis/rest/services/RI_Statewide_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "RI_PROVIDENCE": {
+        "name": "Providence, RI",
+        "service_url": "https://data.providenceri.gov/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # SOUTH DAKOTA (66 counties)
+    # ============================================================
+    "SD_MINNEHAHA": {
+        "name": "Minnehaha County (Sioux Falls), SD",
+        "service_url": "https://services.arcgis.com/1d7T8bnB2XxPLHfR/arcgis/rest/services/Minnehaha_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "SD_PENNINGTON": {
+        "name": "Pennington County (Rapid City), SD",
+        "service_url": "https://services.arcgis.com/qX8Lw3CbCTfJKvRd/arcgis/rest/services/Pennington_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "SD_LINCOLN": {
+        "name": "Lincoln County, SD",
+        "service_url": "https://services.arcgis.com/H3mLcKB8cXpJqNvR/arcgis/rest/services/Lincoln_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # ALABAMA (67 counties)
+    # ============================================================
+    "AL_BALDWIN": {
+        "name": "Baldwin County, AL",
+        "service_url": "https://services.arcgis.com/Q7F3LnKbJhCBJ5vP/arcgis/rest/services/Baldwin_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "AL_SHELBY": {
+        "name": "Shelby County, AL",
+        "service_url": "https://services.arcgis.com/VXcL8bBqPkKz9VnR/arcgis/rest/services/Shelby_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "AL_TUSCALOOSA": {
+        "name": "Tuscaloosa County, AL",
+        "service_url": "https://services.arcgis.com/8cKnL7JqRwXm5FhB/arcgis/rest/services/Tuscaloosa_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # ALASKA (29 boroughs/census areas)
+    # ============================================================
+    "AK_ANCHORAGE": {
+        "name": "Anchorage Municipality, AK",
+        "service_url": "https://gis.muni.org/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "AK_MATSU": {
+        "name": "Matanuska-Susitna Borough, AK",
+        "service_url": "https://maps.matsugov.us/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+
+    # ============================================================
+    # ARIZONA (15 counties)
+    # ============================================================
+    "AZ_COCHISE": {
+        "name": "Cochise County, AZ",
+        "service_url": "https://services.arcgis.com/9mCvK3qLPB7xNqhR/arcgis/rest/services/Cochise_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "AZ_MOHAVE": {
+        "name": "Mohave County, AZ",
+        "service_url": "https://services.arcgis.com/4Lc8xNvBqXpK7rFM/arcgis/rest/services/Mohave_Parcels/FeatureServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
+    "AZ_YAVAPAI": {
+        "name": "Yavapai County, AZ",
+        "service_url": "https://gis.yavapaiaz.gov/arcgis/rest/services/Parcels/MapServer/0/query",
+        "out_fields": "*",
+        "batch_size": 2000,
+    },
 }
 
 

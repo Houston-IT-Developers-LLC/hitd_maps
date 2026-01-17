@@ -5,7 +5,9 @@
 # Usage: make <target>
 #
 
-.PHONY: help setup status update agent scrape pipeline cleanup docs test
+SHELL := /bin/bash
+
+.PHONY: help setup status update agent scrape pipeline cleanup docs test issues dashboard auto-fix auto-fix-continuous auto-fix-stats learning-report
 
 # Default target
 help:
@@ -26,6 +28,17 @@ help:
 	@echo "Agent:"
 	@echo "  make agent        Start autonomous agent (6hr interval)"
 	@echo "  make agent-once   Run one monitoring cycle"
+	@echo ""
+	@echo "Monitoring:"
+	@echo "  make dashboard    Show status dashboard"
+	@echo "  make issues       Show open issues"
+	@echo "  make issues-export Export issues for Claude"
+	@echo ""
+	@echo "Auto-Fix:"
+	@echo "  make auto-fix            Run auto-fixes once (aggressive)"
+	@echo "  make auto-fix-continuous Run continuously (INTERVAL=30)"
+	@echo "  make auto-fix-stats      Show fix history statistics"
+	@echo "  make learning-report     Show issues that couldn't be fixed"
 	@echo ""
 	@echo "Scraping:"
 	@echo "  make scrape STATE=TX          Scrape Texas"
@@ -113,6 +126,30 @@ install-service:
 # View agent logs
 logs:
 	@tail -f agent/agent.log 2>/dev/null || echo "No log file found"
+
+# Dashboard
+dashboard:
+	@source venv/bin/activate && python3 agent/dashboard.py
+
+# Issues management
+issues:
+	@source venv/bin/activate && python3 agent/data_agent.py --issues
+
+issues-export:
+	@source venv/bin/activate && python3 agent/data_agent.py --issues-export
+
+# Auto-fix operations
+auto-fix:
+	@source venv/bin/activate && python3 agent/auto_fixer.py
+
+auto-fix-continuous:
+	@source venv/bin/activate && python3 agent/auto_fixer.py --continuous --interval $${INTERVAL:-30}
+
+auto-fix-stats:
+	@source venv/bin/activate && python3 agent/auto_fixer.py --statistics
+
+learning-report:
+	@source venv/bin/activate && python3 agent/auto_fixer.py --learning-report
 
 # R2 inventory
 r2-inventory:

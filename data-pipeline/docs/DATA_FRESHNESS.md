@@ -120,3 +120,76 @@ python3 scripts/export_county_parcels.py TX_STATEWIDE -o output/geojson
 - Texas TNRIS: tnris.org
 - California Counties: Individual county assessor offices
 - National Parcel Data: regrid.com (commercial alternative)
+
+
+<!-- AGENT_STATUS_START -->
+## Automated API Health Check
+
+Last updated by Data Agent: 2026-01-17 19:57:47
+
+| Source | Status | Records | Last Check |
+|--------|--------|---------|------------|
+| tx_statewide | ✅ | 14,347,648 | 2026-01-17 19:57 |
+| tx_statewide_recent | ✅ | 14,347,648 | 2026-01-17 19:57 |
+| ny_statewide_v2 | ✅ | 3,713,082 | 2026-01-17 19:57 |
+| mt_statewide_v2 | ✅ | 915,189 | 2026-01-17 19:57 |
+| tn_statewide | ❌ | Error | 2026-01-17 19:57 |
+| or_statewide | ✅ | 0 | 2026-01-17 19:57 |
+| pa_statewide | ✅ | 4,280,310 | 2026-01-17 19:57 |
+| pa_pasda_statewide | ✅ | 4,280,310 | 2026-01-17 19:57 |
+| oh_statewide | ✅ | 6,318,338 | 2026-01-17 19:57 |
+| nj_statewide | ✅ | 3,475,671 | 2026-01-17 19:57 |
+| ny_statewide | ✅ | 3,713,082 | 2026-01-17 19:57 |
+| md_statewide | ✅ | 2,264,064 | 2026-01-17 19:57 |
+| vt_statewide | ✅ | 44,308 | 2026-01-17 19:57 |
+| ar_statewide | ✅ | 2,111,591 | 2026-01-17 19:57 |
+| mt_statewide | ✅ | 915,189 | 2026-01-17 19:57 |
+| wy_statewide | ✅ | 0 | 2026-01-17 19:57 |
+| ut_statewide | ✅ | 280,809 | 2026-01-17 19:57 |
+| id_statewide | ✅ | 1,151,432 | 2026-01-17 19:57 |
+| nv_statewide | ✅ | 1,394,190 | 2026-01-17 19:57 |
+| wi_statewide | ✅ | 3,562,907 | 2026-01-17 19:57 |
+| ms_statewide | ✅ | 85 | 2026-01-17 19:57 |
+| ms_east_statewide | ✅ | 1,120,249 | 2026-01-17 19:57 |
+| ms_west_statewide | ✅ | 874,590 | 2026-01-17 19:57 |
+| va_statewide_v2 | ✅ | 4,176,975 | 2026-01-17 19:57 |
+| fl_statewide | ✅ | 10,834,415 | 2026-01-17 19:57 |
+| nc_statewide | ✅ | 5,913,369 | 2026-01-17 19:57 |
+| wa_statewide_v2 | ✅ | 3,322,257 | 2026-01-17 19:57 |
+| ma_statewide | ✅ | 2,556,486 | 2026-01-17 19:57 |
+| ct_statewide | ✅ | 1,247,506 | 2026-01-17 19:57 |
+| wa_statewide | ✅ | 0 | 2026-01-17 19:57 |
+| de_statewide | ✅ | 449,787 | 2026-01-17 19:57 |
+| hi_statewide | ✅ | 384,262 | 2026-01-17 19:57 |
+| nm_statewide | ❌ | Error | 2026-01-17 19:57 |
+| nm_statewide_v2 | ✅ | 255,181 | 2026-01-17 19:57 |
+| nd_statewide | ✅ | 729,993 | 2026-01-17 19:57 |
+| ms_statewide_2024 | ✅ | 85 | 2026-01-17 19:57 |
+| vt_statewide_v2 | ✅ | 44,308 | 2026-01-17 19:57 |
+| wy_statewide_v2 | ✅ | 0 | 2026-01-17 19:57 |
+| in_statewide | ✅ | 0 | 2026-01-17 19:57 |
+| ca_zoning_statewide | ✅ | 264,417 | 2026-01-17 19:57 |
+| wv_statewide | ✅ | 1,389,855 | 2026-01-17 19:57 |
+| va_statewide | ❌ | Error | 2026-01-17 19:57 |
+| ne_statewide | ❌ | Error | 2026-01-17 19:57 |
+| nj_statewide_v2 | ✅ | 3,475,671 | 2026-01-17 19:57 |
+| me_statewide | ✅ | 716,975 | 2026-01-17 19:57 |
+| nh_statewide | ✅ | 616,179 | 2026-01-17 19:57 |
+| co_statewide | ✅ | 2,532,052 | 2026-01-17 19:57 |
+| ia_statewide | ✅ | 2,450,589 | 2026-01-17 19:57 |
+| wv_statewide_v2 | ✅ | 1,389,855 | 2026-01-17 19:57 |
+| wi_statewide_v2 | ✅ | 3,562,907 | 2026-01-17 19:57 |
+| ct_statewide_v2 | ✅ | 1,282,833 | 2026-01-17 19:57 |
+| mn_statewide | ✅ | 0 | 2026-01-17 19:57 |
+| ri_statewide | ✅ | 0 | 2026-01-17 19:57 |
+| enrichment_nwi | ✅ | 0 | 2026-01-17 19:57 |
+| enrichment_nhd | ✅ | 0 | 2026-01-17 19:57 |
+| enrichment_nlcd | ❌ | Error | 2026-01-17 19:57 |
+| enrichment_ssurgo | ❌ | Error | 2026-01-17 19:57 |
+| enrichment_blm_sma | ✅ | 0 | 2026-01-17 19:57 |
+| enrichment_usfs | ✅ | 0 | 2026-01-17 19:57 |
+| enrichment_fema_flood | ❌ | Error | 2026-01-17 19:57 |
+| enrichment_epa_brownfields | ❌ | Error | 2026-01-17 19:57 |
+| enrichment_tiger_roads | ❌ | Error | 2026-01-17 19:57 |
+
+<!-- AGENT_STATUS_END -->

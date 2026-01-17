@@ -156,7 +156,9 @@ rio rgbify -b -10000 -i 0.1 dem.tif terrain-rgb.tif
 
 ### Phase 3 - Advanced Features
 1. 🔲 Self-host OSRM for routing
-2. 🔲 Add Houston METRO transit data
+2. ✅ Add Houston METRO transit data
+   - URL: https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev/transit/houston_metro.pmtiles
+   - Features: 8,859 stops + 347 route shapes
 3. 🔲 Real-time traffic from TxDOT
 
 ## Storage Estimates
@@ -167,11 +169,25 @@ rio rgbify -b -10000 -i 0.1 dem.tif terrain-rgb.tif
 | Texas parcels (all counties) | ~50GB | Quarterly |
 | Texas POIs (Overture) | ~2GB | Monthly |
 | Texas aerial imagery | ~500GB | Yearly |
-| Texas terrain/elevation | ~20GB | Never |
-| Houston GTFS transit | ~50MB | Weekly |
+| Texas terrain/elevation | 2.3GB | Never |
+| Houston GTFS transit | 1MB | Weekly |
 
 **Total for Texas-focused app**: ~700GB
 **Monthly R2 cost at $0.015/GB**: ~$10.50/month storage
+
+## R2 Data URLs
+
+All data is hosted on Cloudflare R2 at: `https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev/`
+
+| Data Layer | URL | Size |
+|------------|-----|------|
+| Basemap | `basemap/planet.pmtiles` | 109GB |
+| Parcels (all 50 states) | `parcels/` | 127GB |
+| POIs | `pois/` | 4GB |
+| Roads | `roads/` | 18GB |
+| Addresses | `addresses/` | 7GB |
+| **Terrain RGB (Texas)** | `terrain/terrain-rgb-texas.pmtiles` | 2.3GB |
+| **Houston Transit** | `transit/houston_metro.pmtiles` | 1MB |
 
 ## Quick Start - Add POIs Now
 
