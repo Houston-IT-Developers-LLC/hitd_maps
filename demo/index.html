@@ -70,7 +70,7 @@
 
     <div class="section">
         <div class="section-title">Property Data</div>
-        <div class="layer"><input type="checkbox" id="lyrParcels" checked><label for="lyrParcels">Property Parcels</label><span class="count">50 states</span></div>
+        <div class="layer"><input type="checkbox" id="lyrParcels" checked><label for="lyrParcels">Property Parcels</label><span class="count">46 states</span></div>
         <div class="layer"><input type="checkbox" id="lyrBuildings" checked><label for="lyrBuildings">Buildings</label></div>
         <div class="layer"><input type="checkbox" id="lyrAddresses" checked><label for="lyrAddresses">Addresses</label></div>
     </div>
@@ -121,108 +121,114 @@ maplibregl.addProtocol("pmtiles", protocol.tile);
 
 var CDN = "https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev";
 
-// VERIFIED: 265 valid PMTiles covering all 50 states (verified 2026-01-17)
+// VERIFIED: 146 valid PMTiles with actual tile data (verified 2026-01-17)
+// Invalid/empty files removed - only files with real parcel data included
 var PARCELS = [
-    // Alaska (AK)
-    'parcels_ak','parcels_ak_juneau','parcels_ak_denali','parcels_ak_fairbanks',
+    // Alaska (AK) - statewide coverage
+    'parcels_ak',
     // Alabama (AL)
-    'parcels_al','parcels_al_madison_v2','parcels_al_montgomery',
+    'parcels_al', 'parcels_al_madison_v2', 'parcels_al_montgomery',
     // Arkansas (AR)
     'parcels_ar_statewide',
     // Arizona (AZ)
-    'parcels_az','parcels_az_maricopa','parcels_az_pima','parcels_az_pinal',
-    // California (CA) - includes fixed orange/sacramento
-    'parcels_ca','parcels_ca_los_angeles_v2','parcels_ca_sacramento_v2','parcels_ca_sacramento','parcels_ca_san_francisco','parcels_ca_san_diego','parcels_ca_riverside','parcels_ca_orange_v2','parcels_ca_orange','parcels_ca_sonoma','parcels_ca_fresno',
+    'parcels_az', 'parcels_az_maricopa',
+    // California (CA)
+    'parcels_ca', 'parcels_ca_los_angeles_v2', 'parcels_ca_sacramento_v2', 'parcels_ca_sacramento',
+    'parcels_ca_san_francisco', 'parcels_ca_orange_v2', 'parcels_ca_orange',
     // Colorado (CO)
-    'parcels_co_statewide','parcels_co','parcels_co_el_paso_v2','parcels_co_arapahoe_v2','parcels_co_boulder','parcels_co_douglas',
+    'parcels_co_statewide', 'parcels_co', 'parcels_co_el_paso_v2',
     // Connecticut (CT)
-    'parcels_ct_statewide','parcels_ct',
+    'parcels_ct',
     // Delaware (DE)
-    'parcels_de_statewide','parcels_de',
-    // Florida (FL) - includes fixed statewide
-    'parcels_fl_statewide','parcels_fl_miami_dade','parcels_fl_hillsborough','parcels_fl_pinellas','parcels_fl_broward','parcels_fl_orange',
+    'parcels_de',
+    // Florida (FL)
+    'parcels_fl_statewide', 'parcels_fl_orange',
     // Georgia (GA)
-    'parcels_ga','parcels_ga_fulton_v2','parcels_ga_gwinnett_v2','parcels_ga_dekalb','parcels_ga_cobb','parcels_ga_chatham','parcels_ga_richmond',
+    'parcels_ga', 'parcels_ga_gwinnett_v2', 'parcels_ga_gwinnett', 'parcels_ga_cobb',
+    'parcels_ga_chatham', 'parcels_ga_richmond',
     // Hawaii (HI)
-    'parcels_hi_statewide','parcels_hi','parcels_hi_honolulu','parcels_hi_maui','parcels_hi_hawaii_county','parcels_hi_kauai',
+    'parcels_hi_statewide', 'parcels_hi', 'parcels_hi_honolulu', 'parcels_hi_maui',
     // Idaho (ID)
-    'parcels_id_statewide','parcels_id','parcels_id_ada_meridian',
+    'parcels_id_statewide', 'parcels_id', 'parcels_id_ada_meridian',
     // Illinois (IL)
-    'parcels_il','parcels_il_cook','parcels_il_cook_county','parcels_il_dupage_v2','parcels_il_lake','parcels_il_will',
-    // Indiana (IN) - includes fixed statewide
-    'parcels_in_statewide','parcels_in_marion',
+    'parcels_il', 'parcels_il_cook', 'parcels_il_dupage_v2',
+    // Indiana (IN)
+    'parcels_in_statewide', 'parcels_in_marion',
     // Iowa (IA)
-    'parcels_ia_statewide','parcels_ia','parcels_ia_johnson','parcels_ia_polk','parcels_ia_scott','parcels_ia_story',
+    'parcels_ia_statewide', 'parcels_ia', 'parcels_ia_johnson',
     // Kansas (KS)
-    'parcels_ks','parcels_ks_sedgwick','parcels_ks_douglas','parcels_ks_wyandotte',
+    'parcels_ks', 'parcels_ks_sedgwick', 'parcels_ks_douglas',
     // Kentucky (KY)
-    'parcels_ky','parcels_ky_boone','parcels_ky_kenton','parcels_ky_campbell',
+    'parcels_ky', 'parcels_ky_boone', 'parcels_ky_kenton',
     // Louisiana (LA)
-    'parcels_la','parcels_la_east_baton_rouge','parcels_la_jefferson_v2','parcels_la_orleans_v2','parcels_la_lafayette',
+    'parcels_la', 'parcels_la_east_baton_rouge', 'parcels_la_jefferson_v2',
+    'parcels_la_orleans_v2', 'parcels_la_lafayette',
     // Maine (ME)
-    'parcels_me_statewide','parcels_me_portland','parcels_me_bangor','parcels_me_lewiston',
+    'parcels_me_statewide', 'parcels_me_portland', 'parcels_me_bangor',
     // Maryland (MD)
     'parcels_md_statewide',
     // Massachusetts (MA)
-    'parcels_ma_statewide','parcels_ma',
+    'parcels_ma',
     // Michigan (MI)
-    'parcels_mi','parcels_mi_wayne','parcels_mi_oakland','parcels_mi_macomb','parcels_mi_kent_v2','parcels_mi_ottawa',
+    'parcels_mi', 'parcels_mi_wayne', 'parcels_mi_oakland', 'parcels_mi_oakland_v2',
+    'parcels_mi_macomb', 'parcels_mi_kent_v2', 'parcels_mi_kent', 'parcels_mi_ottawa',
     // Minnesota (MN)
-    'parcels_mn','parcels_mn_hennepin','parcels_mn_ramsey','parcels_mn_dakota','parcels_mn_anoka',
+    'parcels_mn', 'parcels_mn_hennepin', 'parcels_mn_ramsey', 'parcels_mn_dakota', 'parcels_mn_anoka',
     // Mississippi (MS)
-    'parcels_ms','parcels_ms_desoto',
+    'parcels_ms', 'parcels_ms_desoto',
     // Missouri (MO)
-    'parcels_mo','parcels_mo_kansas_city','parcels_mo_jackson','parcels_mo_clay','parcels_mo_st_charles_v2','parcels_mo_stl_city','parcels_mo_stl_county',
+    'parcels_mo', 'parcels_mo_kansas_city', 'parcels_mo_jackson', 'parcels_mo_clay',
+    'parcels_mo_st_charles_v2', 'parcels_mo_st_charles', 'parcels_mo_christian', 'parcels_montgomery',
     // Montana (MT)
-    'parcels_mt_statewide','parcels_mt_gallatin','parcels_mt_flathead','parcels_mt_yellowstone',
+    'parcels_mt_statewide',
     // Nebraska (NE)
-    'parcels_ne_statewide','parcels_ne','parcels_ne_sarpy',
+    'parcels_ne',
     // Nevada (NV)
-    'parcels_nv_statewide','parcels_nv','parcels_nv_clark_v2','parcels_nv_washoe',
+    'parcels_nv',
     // New Hampshire (NH)
-    'parcels_nh_statewide','parcels_nh','parcels_nh_manchester','parcels_nh_keene',
+    'parcels_nh_statewide', 'parcels_nh',
     // New Jersey (NJ)
-    'parcels_nj_statewide_v2','parcels_nj_bergen','parcels_nj_passaic',
+    'parcels_nj_statewide_v2', 'parcels_nj_bergen', 'parcels_nj_passaic',
     // New Mexico (NM)
-    'parcels_nm_statewide_v2','parcels_nm','parcels_nm_valencia','parcels_nm_sandoval',
+    'parcels_nm',
     // New York (NY)
-    'parcels_ny_statewide_v2','parcels_ny_westchester','parcels_ny_nassau',
-    // North Carolina (NC)
-    'parcels_nc_statewide','parcels_nc_mecklenburg','parcels_nc_wake','parcels_nc_durham','parcels_nc_guilford','parcels_nc_forsyth',
+    'parcels_ny_statewide_v2', 'parcels_ny_statewide', 'parcels_ny_centroids',
     // North Dakota (ND)
-    'parcels_nd_statewide','parcels_nd','parcels_nd_cass',
+    'parcels_nd', 'parcels_nd_cass',
     // Ohio (OH)
-    'parcels_oh_statewide','parcels_oh_cuyahoga','parcels_oh_franklin','parcels_oh_hamilton','parcels_oh_montgomery','parcels_oh_summit_v2','parcels_oh_stark',
+    'parcels_oh_statewide', 'parcels_oh_cuyahoga', 'parcels_oh_franklin',
+    'parcels_oh_hamilton', 'parcels_oh_montgomery', 'parcels_oh_summit_v2',
     // Oklahoma (OK)
-    'parcels_ok_tulsa','parcels_ok_cleveland','parcels_ok_broken_arrow','parcels_ok_norman','parcels_ok_rogers','parcels_ok_wagoner','parcels_ok_county_v2',
+    'parcels_ok_cleveland',
     // Oregon (OR)
-    'parcels_or_multnomah_v2','parcels_or_lane','parcels_or_deschutes','parcels_or_benton','parcels_or_douglas',
-    // Pennsylvania (PA) - includes fixed pasda_statewide
-    'parcels_pa_statewide','parcels_pa_pasda_statewide','parcels_pa_allegheny','parcels_pa_philadelphia','parcels_pa_delaware','parcels_pa_bucks','parcels_pa_lackawanna','parcels_pa_lancaster_v2',
-    // Rhode Island (RI)
-    'parcels_ri_east_providence','parcels_ri_south_kingstown',
+    'parcels_or_multnomah_v2', 'parcels_or_lane',
+    // Pennsylvania (PA)
+    'parcels_pa_statewide', 'parcels_pa_pasda_statewide', 'parcels_pa_allegheny',
+    'parcels_pa_delaware', 'parcels_pa_lackawanna', 'parcels_pa_lancaster_v2',
     // South Carolina (SC)
-    'parcels_sc_charleston_v2','parcels_sc_greenville_v2','parcels_sc_spartanburg','parcels_sc_horry',
-    // South Dakota (SD)
-    'parcels_sd_minnehaha','parcels_sd_codington','parcels_sd_beadle',
+    'parcels_sc_spartanburg',
     // Tennessee (TN)
-    'parcels_tn_statewide','parcels_tn','parcels_tn_davidson','parcels_tn_nashville','parcels_tn_shelby','parcels_tn_hamilton','parcels_tn_montgomery',
-    // Texas (TX)
-    'parcels_tx_statewide','parcels_tx','parcels_tx_harris','parcels_tx_dallas','parcels_tx_bexar','parcels_tx_tarrant','parcels_tx_travis','parcels_tx_denton','parcels_tx_williamson_v2',
+    'parcels_tn_statewide', 'parcels_tn', 'parcels_tn_davidson', 'parcels_tn_nashville',
+    'parcels_tn_shelby', 'parcels_tn_hamilton', 'parcels_tn_montgomery', 'parcels_tn_williamson',
+    // Texas (TX) - Dallas, San Antonio (Bexar), Houston (Harris), Austin (Travis) all verified
+    'parcels_tx', 'parcels_tx_harris', 'parcels_tx_harris_new', 'parcels_tx_dallas',
+    'parcels_tx_bexar', 'parcels_tx_tarrant', 'parcels_tx_travis', 'parcels_tx_denton',
+    'parcels_tx_williamson_v2', 'parcels_tx_statewide_recent',
     // Utah (UT)
-    'parcels_ut_statewide','parcels_ut','parcels_ut_salt_lake','parcels_ut_utah','parcels_ut_davis','parcels_ut_weber','parcels_ut_cache','parcels_ut_washington',
-    // Vermont (VT) - includes fixed statewide
-    'parcels_vt_statewide','parcels_vt_statewide_v2',
+    'parcels_ut',
+    // Vermont (VT)
+    'parcels_vt_statewide',
     // Virginia (VA)
-    'parcels_va_statewide_v2','parcels_va','parcels_va_fairfax','parcels_va_loudoun_v2','parcels_va_prince_william_v2','parcels_va_henrico','parcels_va_virginia_beach',
-    // Washington (WA)
-    'parcels_wa_statewide_v2','parcels_wa_king','parcels_wa_spokane',
-    // West Virginia (WV) - includes fixed statewide
-    'parcels_wv_statewide','parcels_wv','parcels_wv_kanawha',
-    // Wisconsin (WI) - includes fixed milwaukee_v2
-    'parcels_wi_statewide','parcels_wi','parcels_wi_milwaukee','parcels_wi_milwaukee_v2','parcels_wi_waukesha','parcels_wi_racine','parcels_wi_kenosha','parcels_wi_brown',
+    'parcels_va', 'parcels_va_counties', 'parcels_va_loudoun_v2', 'parcels_va_prince_william_v2',
+    // West Virginia (WV)
+    'parcels_wv_statewide', 'parcels_wv',
+    // Wisconsin (WI)
+    'parcels_wi_statewide', 'parcels_wi', 'parcels_wi_milwaukee', 'parcels_wi_milwaukee_v2',
+    'parcels_wi_waukesha', 'parcels_wi_racine', 'parcels_wi_kenosha',
     // Wyoming (WY)
-    'parcels_wy','parcels_wy_laramie','parcels_wy_fremont','parcels_wy_campbell','parcels_wy_teton','parcels_wy_sheridan'
+    'parcels_wy',
+    // Multi-state
+    'parcels_counties'
 ];
 
 function status(m) { document.getElementById('status').textContent = m; }
@@ -488,6 +494,403 @@ function parcelClick(e) {
     new maplibregl.Popup({maxWidth: '350px'}).setLngLat(e.lngLat).setHTML(html).addTo(map);
 }
 
+// POI Click Handler - Shows ALL available fields from Overture Places data
+function poiClick(e) {
+    if (!e.features.length) return;
+    var p = e.features[0].properties;
+
+    var html = '<div style="max-height:400px;overflow-y:auto;font-size:12px;">';
+    html += '<b style="font-size:14px;color:#ef4444;">' + (p.name || p.names_primary || 'Business') + '</b>';
+
+    // Primary category
+    if (p.category || p.categories_primary) {
+        html += '<div style="color:#666;margin:2px 0;">' + (p.category || p.categories_primary) + '</div>';
+    }
+    html += '<hr style="margin:5px 0;">';
+
+    // Priority POI fields
+    var priorityFields = [
+        // Names
+        'name', 'names_primary', 'names_common', 'names_alternate', 'brand_names_primary',
+        // Categories
+        'category', 'categories_primary', 'categories_alternate',
+        // Address components
+        'address', 'freeform', 'addresses_freeform', 'addresses_locality', 'addresses_region',
+        'addresses_country', 'addresses_postcode', 'locality', 'region', 'country', 'postcode',
+        // Contact info
+        'phone', 'phones_value', 'phones', 'email', 'emails_value', 'emails',
+        // Websites and social media
+        'website', 'websites_url', 'websites', 'socials_url', 'socials', 'facebook', 'twitter', 'instagram',
+        // Operating hours
+        'hours', 'opening_hours', 'operating_hours',
+        // Brand info
+        'brand', 'brand_names_primary', 'brand_wikidata',
+        // Confidence and metadata
+        'confidence', 'sources', 'version'
+    ];
+
+    var shownFields = {};
+
+    // Build full address if components exist
+    var addressParts = [];
+    ['freeform', 'addresses_freeform'].forEach(function(k) { if (p[k]) addressParts.push(p[k]); });
+    if (addressParts.length === 0) {
+        ['locality', 'addresses_locality'].forEach(function(k) { if (p[k]) addressParts.push(p[k]); });
+        ['region', 'addresses_region'].forEach(function(k) { if (p[k]) addressParts.push(p[k]); });
+        ['postcode', 'addresses_postcode'].forEach(function(k) { if (p[k]) addressParts.push(p[k]); });
+    }
+    if (addressParts.length > 0) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Address:</span> <strong>' + addressParts.join(', ') + '</strong></div>';
+        shownFields['freeform'] = shownFields['addresses_freeform'] = shownFields['locality'] = shownFields['addresses_locality'] = true;
+        shownFields['region'] = shownFields['addresses_region'] = shownFields['postcode'] = shownFields['addresses_postcode'] = true;
+    }
+
+    // Phone numbers
+    var phone = p.phone || p.phones_value || p.phones;
+    if (phone) {
+        // Format phone number for tel: link
+        var phoneClean = String(phone).replace(/[^\d+]/g, '');
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Phone:</span> <a href="tel:' + phoneClean + '" style="color:#1a73e8;">' + phone + '</a></div>';
+        shownFields['phone'] = shownFields['phones_value'] = shownFields['phones'] = true;
+    }
+
+    // Emails
+    var email = p.email || p.emails_value || p.emails;
+    if (email) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Email:</span> <a href="mailto:' + email + '" style="color:#1a73e8;">' + email + '</a></div>';
+        shownFields['email'] = shownFields['emails_value'] = shownFields['emails'] = true;
+    }
+
+    // Website
+    var website = p.website || p.websites_url || p.websites;
+    if (website) {
+        var url = String(website);
+        if (!url.startsWith('http')) url = 'https://' + url;
+        var displayUrl = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+        if (displayUrl.length > 40) displayUrl = displayUrl.substring(0, 40) + '...';
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Website:</span> <a href="' + url + '" target="_blank" style="color:#1a73e8;">' + displayUrl + '</a></div>';
+        shownFields['website'] = shownFields['websites_url'] = shownFields['websites'] = true;
+    }
+
+    // Social media
+    var socials = p.socials_url || p.socials || p.facebook || p.twitter || p.instagram;
+    if (socials) {
+        var socialUrl = String(socials);
+        if (!socialUrl.startsWith('http')) socialUrl = 'https://' + socialUrl;
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Social:</span> <a href="' + socialUrl + '" target="_blank" style="color:#1a73e8;">View Profile</a></div>';
+        shownFields['socials_url'] = shownFields['socials'] = shownFields['facebook'] = shownFields['twitter'] = shownFields['instagram'] = true;
+    }
+
+    // Operating hours
+    var hours = p.hours || p.opening_hours || p.operating_hours;
+    if (hours) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Hours:</span> ' + hours + '</div>';
+        shownFields['hours'] = shownFields['opening_hours'] = shownFields['operating_hours'] = true;
+    }
+
+    // Brand info
+    var brand = p.brand || p.brand_names_primary;
+    if (brand && brand !== p.name && brand !== p.names_primary) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Brand:</span> ' + brand + '</div>';
+        shownFields['brand'] = shownFields['brand_names_primary'] = true;
+    }
+
+    // Alternate categories
+    var altCat = p.categories_alternate;
+    if (altCat) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Also:</span> ' + altCat + '</div>';
+        shownFields['categories_alternate'] = true;
+    }
+
+    // Confidence score
+    if (p.confidence !== undefined && p.confidence !== null) {
+        var conf = parseFloat(p.confidence);
+        var confPct = (conf * 100).toFixed(0);
+        var confColor = conf > 0.8 ? '#22c55e' : (conf > 0.5 ? '#f59e0b' : '#ef4444');
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Confidence:</span> <span style="color:' + confColor + ';font-weight:bold;">' + confPct + '%</span></div>';
+        shownFields['confidence'] = true;
+    }
+
+    // Mark name fields as shown
+    shownFields['name'] = shownFields['names_primary'] = shownFields['names_common'] = true;
+    shownFields['category'] = shownFields['categories_primary'] = true;
+
+    // Show ALL remaining fields
+    var otherFields = Object.keys(p).filter(function(k) { return !shownFields[k]; });
+    if (otherFields.length > 0) {
+        html += '<hr style="margin:8px 0;"><b style="font-size:11px;color:#888;">Additional Data</b>';
+        otherFields.forEach(function(key) {
+            var val = p[key];
+            if (val !== undefined && val !== null && val !== '') {
+                var displayKey = key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim();
+
+                // Format URLs as clickable links
+                if (typeof val === 'string' && (val.startsWith('http') || val.includes('.com') || val.includes('.org'))) {
+                    var linkUrl = val.startsWith('http') ? val : 'https://' + val;
+                    val = '<a href="' + linkUrl + '" target="_blank" style="color:#1a73e8;">Link</a>';
+                } else if (typeof val === 'number') {
+                    val = val.toLocaleString();
+                } else if (typeof val === 'string' && val.length > 80) {
+                    val = val.substring(0, 80) + '...';
+                }
+
+                html += '<div style="margin:2px 0;font-size:11px;"><span style="color:#888;text-transform:capitalize;">' + displayKey + ':</span> ' + val + '</div>';
+            }
+        });
+    }
+
+    html += '</div>';
+    new maplibregl.Popup({maxWidth: '350px'}).setLngLat(e.lngLat).setHTML(html).addTo(map);
+}
+
+// Address Click Handler - Shows ALL available address fields
+function addressClick(e) {
+    if (!e.features.length) return;
+    var p = e.features[0].properties;
+
+    var html = '<div style="max-height:400px;overflow-y:auto;font-size:12px;">';
+    html += '<b style="font-size:14px;color:#6366f1;">Address Details</b><hr style="margin:5px 0;">';
+
+    // Priority address fields (OpenAddresses/Overture format)
+    var priorityFields = [
+        // Full address
+        'full_address', 'address', 'freeform', 'number', 'street', 'unit',
+        // Location components
+        'city', 'locality', 'region', 'state', 'postcode', 'country',
+        // Additional identifiers
+        'hash', 'id', 'source', 'confidence'
+    ];
+
+    var shownFields = {};
+
+    // Build formatted full address
+    var fullAddr = p.full_address || p.address || p.freeform;
+    if (!fullAddr) {
+        var addrParts = [];
+        if (p.number) addrParts.push(p.number);
+        if (p.street) addrParts.push(p.street);
+        if (p.unit) addrParts.push('Unit ' + p.unit);
+        if (addrParts.length > 0) fullAddr = addrParts.join(' ');
+    }
+
+    if (fullAddr) {
+        html += '<div style="margin:4px 0;font-size:13px;"><strong>' + fullAddr + '</strong></div>';
+        shownFields['full_address'] = shownFields['address'] = shownFields['freeform'] = true;
+        shownFields['number'] = shownFields['street'] = shownFields['unit'] = true;
+    }
+
+    // City/State/Zip line
+    var locParts = [];
+    var city = p.city || p.locality;
+    var state = p.state || p.region;
+    var zip = p.postcode;
+    if (city) locParts.push(city);
+    if (state) locParts.push(state);
+    if (zip) locParts.push(zip);
+    if (locParts.length > 0) {
+        html += '<div style="margin:4px 0;color:#666;">' + locParts.join(', ') + '</div>';
+        shownFields['city'] = shownFields['locality'] = shownFields['state'] = shownFields['region'] = shownFields['postcode'] = true;
+    }
+
+    // Country
+    if (p.country) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Country:</span> ' + p.country + '</div>';
+        shownFields['country'] = true;
+    }
+
+    // Confidence score
+    if (p.confidence !== undefined && p.confidence !== null) {
+        var conf = parseFloat(p.confidence);
+        var confPct = (conf * 100).toFixed(0);
+        var confColor = conf > 0.8 ? '#22c55e' : (conf > 0.5 ? '#f59e0b' : '#ef4444');
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Confidence:</span> <span style="color:' + confColor + ';font-weight:bold;">' + confPct + '%</span></div>';
+        shownFields['confidence'] = true;
+    }
+
+    // Source info
+    if (p.source) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Source:</span> ' + p.source + '</div>';
+        shownFields['source'] = true;
+    }
+
+    // Show ALL remaining fields
+    var otherFields = Object.keys(p).filter(function(k) { return !shownFields[k]; });
+    if (otherFields.length > 0) {
+        html += '<hr style="margin:8px 0;"><b style="font-size:11px;color:#888;">Additional Data</b>';
+        otherFields.forEach(function(key) {
+            var val = p[key];
+            if (val !== undefined && val !== null && val !== '') {
+                var displayKey = key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim();
+
+                if (typeof val === 'number') {
+                    val = val.toLocaleString();
+                } else if (typeof val === 'string' && val.length > 80) {
+                    val = val.substring(0, 80) + '...';
+                }
+
+                html += '<div style="margin:2px 0;font-size:11px;"><span style="color:#888;text-transform:capitalize;">' + displayKey + ':</span> ' + val + '</div>';
+            }
+        });
+    }
+
+    html += '</div>';
+    new maplibregl.Popup({maxWidth: '350px'}).setLngLat(e.lngLat).setHTML(html).addTo(map);
+}
+
+// HIFLD Infrastructure Click Handler - Shows ALL available infrastructure fields
+function hifldClick(e) {
+    if (!e.features.length) return;
+    var p = e.features[0].properties;
+
+    var html = '<div style="max-height:400px;overflow-y:auto;font-size:12px;">';
+    html += '<b style="font-size:14px;color:#f59e0b;">Infrastructure Details</b><hr style="margin:5px 0;">';
+
+    // Priority HIFLD fields (common across infrastructure datasets)
+    var priorityFields = [
+        // Identification
+        'NAME', 'name', 'FACILITY', 'FACNAME', 'FAC_NAME', 'SITE_NAME',
+        // Type/Category
+        'TYPE', 'type', 'NAICS_CODE', 'NAICS_DESC', 'SIC_CODE', 'CATEGORY', 'STATUS',
+        // Address
+        'ADDRESS', 'address', 'CITY', 'city', 'STATE', 'state', 'ZIP', 'zip', 'COUNTY', 'county',
+        // Contact
+        'TELEPHONE', 'PHONE', 'phone', 'WEBSITE', 'website', 'EMAIL', 'email',
+        // Operator/Owner
+        'OWNER', 'owner', 'OPERATOR', 'operator', 'OWNER_TYPE',
+        // Capacity/Size
+        'CAPACITY', 'capacity', 'POPULATION', 'NUM_BEDS', 'NUM_EMPLOYEES', 'SQFT', 'ACREAGE',
+        // Dates
+        'YEAR_BUILT', 'OPEN_DATE', 'CLOSE_DATE', 'LAST_UPDATE',
+        // IDs
+        'ID', 'OBJECTID', 'FACID', 'FAC_ID', 'SOURCE', 'SOURCEID'
+    ];
+
+    var shownFields = {};
+
+    // Name (try multiple common field names)
+    var name = p.NAME || p.name || p.FACILITY || p.FACNAME || p.FAC_NAME || p.SITE_NAME;
+    if (name) {
+        html += '<div style="margin:4px 0;font-size:13px;"><strong>' + name + '</strong></div>';
+        shownFields['NAME'] = shownFields['name'] = shownFields['FACILITY'] = shownFields['FACNAME'] = shownFields['FAC_NAME'] = shownFields['SITE_NAME'] = true;
+    }
+
+    // Type/Category
+    var type = p.TYPE || p.type || p.CATEGORY || p.NAICS_DESC;
+    if (type) {
+        html += '<div style="margin:4px 0;color:#666;">' + type + '</div>';
+        shownFields['TYPE'] = shownFields['type'] = shownFields['CATEGORY'] = shownFields['NAICS_DESC'] = true;
+    }
+
+    // Status
+    if (p.STATUS) {
+        var statusColor = p.STATUS.toLowerCase().includes('open') || p.STATUS.toLowerCase().includes('active') ? '#22c55e' : '#ef4444';
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Status:</span> <span style="color:' + statusColor + ';font-weight:bold;">' + p.STATUS + '</span></div>';
+        shownFields['STATUS'] = true;
+    }
+
+    // Address
+    var addrParts = [];
+    if (p.ADDRESS || p.address) addrParts.push(p.ADDRESS || p.address);
+    var cityStateZip = [];
+    if (p.CITY || p.city) cityStateZip.push(p.CITY || p.city);
+    if (p.STATE || p.state) cityStateZip.push(p.STATE || p.state);
+    if (p.ZIP || p.zip) cityStateZip.push(p.ZIP || p.zip);
+    if (cityStateZip.length > 0) addrParts.push(cityStateZip.join(', '));
+    if (addrParts.length > 0) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Address:</span> ' + addrParts.join('<br>') + '</div>';
+        shownFields['ADDRESS'] = shownFields['address'] = shownFields['CITY'] = shownFields['city'] = true;
+        shownFields['STATE'] = shownFields['state'] = shownFields['ZIP'] = shownFields['zip'] = true;
+    }
+
+    // County
+    if (p.COUNTY || p.county) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">County:</span> ' + (p.COUNTY || p.county) + '</div>';
+        shownFields['COUNTY'] = shownFields['county'] = true;
+    }
+
+    // Phone
+    var phone = p.TELEPHONE || p.PHONE || p.phone;
+    if (phone) {
+        var phoneClean = String(phone).replace(/[^\d+]/g, '');
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Phone:</span> <a href="tel:' + phoneClean + '" style="color:#1a73e8;">' + phone + '</a></div>';
+        shownFields['TELEPHONE'] = shownFields['PHONE'] = shownFields['phone'] = true;
+    }
+
+    // Website
+    var website = p.WEBSITE || p.website;
+    if (website) {
+        var url = String(website);
+        if (!url.startsWith('http')) url = 'https://' + url;
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Website:</span> <a href="' + url + '" target="_blank" style="color:#1a73e8;">Visit Site</a></div>';
+        shownFields['WEBSITE'] = shownFields['website'] = true;
+    }
+
+    // Owner/Operator
+    var owner = p.OWNER || p.owner;
+    var operator = p.OPERATOR || p.operator;
+    if (owner) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Owner:</span> ' + owner + '</div>';
+        shownFields['OWNER'] = shownFields['owner'] = true;
+    }
+    if (operator && operator !== owner) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Operator:</span> ' + operator + '</div>';
+        shownFields['OPERATOR'] = shownFields['operator'] = true;
+    }
+
+    // Capacity/Size metrics
+    if (p.CAPACITY || p.capacity) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Capacity:</span> ' + (p.CAPACITY || p.capacity).toLocaleString() + '</div>';
+        shownFields['CAPACITY'] = shownFields['capacity'] = true;
+    }
+    if (p.NUM_BEDS) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Beds:</span> ' + p.NUM_BEDS.toLocaleString() + '</div>';
+        shownFields['NUM_BEDS'] = true;
+    }
+    if (p.NUM_EMPLOYEES) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Employees:</span> ' + p.NUM_EMPLOYEES.toLocaleString() + '</div>';
+        shownFields['NUM_EMPLOYEES'] = true;
+    }
+
+    // Year Built
+    if (p.YEAR_BUILT) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">Year Built:</span> ' + p.YEAR_BUILT + '</div>';
+        shownFields['YEAR_BUILT'] = true;
+    }
+
+    // NAICS Code
+    if (p.NAICS_CODE) {
+        html += '<div style="margin:4px 0;"><span style="color:#666;">NAICS:</span> ' + p.NAICS_CODE + '</div>';
+        shownFields['NAICS_CODE'] = true;
+    }
+
+    // Show ALL remaining fields
+    var otherFields = Object.keys(p).filter(function(k) { return !shownFields[k]; });
+    if (otherFields.length > 0) {
+        html += '<hr style="margin:8px 0;"><b style="font-size:11px;color:#888;">Additional Data</b>';
+        otherFields.forEach(function(key) {
+            var val = p[key];
+            if (val !== undefined && val !== null && val !== '') {
+                var displayKey = key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim();
+
+                // Format URLs as clickable links
+                if (typeof val === 'string' && (val.startsWith('http') || (val.includes('.') && val.includes('/')))) {
+                    var linkUrl = val.startsWith('http') ? val : 'https://' + val;
+                    val = '<a href="' + linkUrl + '" target="_blank" style="color:#1a73e8;">Link</a>';
+                } else if (typeof val === 'number') {
+                    val = val.toLocaleString();
+                } else if (typeof val === 'string' && val.length > 80) {
+                    val = val.substring(0, 80) + '...';
+                }
+
+                html += '<div style="margin:2px 0;font-size:11px;"><span style="color:#888;text-transform:capitalize;">' + displayKey + ':</span> ' + val + '</div>';
+            }
+        });
+    }
+
+    html += '</div>';
+    new maplibregl.Popup({maxWidth: '350px'}).setLngLat(e.lngLat).setHTML(html).addTo(map);
+}
+
 // Layer checkbox handlers
 document.getElementById('lyrParcels').onchange = function() {
     if (this.checked && !loaded.parcels) loadParcels();
@@ -504,7 +907,8 @@ document.getElementById('lyrBuildings').onchange = function() {
 document.getElementById('lyrAddresses').onchange = function() {
     if (this.checked && !loaded.addresses) {
         loadLayer('addresses', 'addresses/usa_addresses.pmtiles', 'addresses',
-            { circle: '#6366f1', circleRadius: 3, minzoom: 14 });
+            { circle: '#6366f1', circleRadius: 3, minzoom: 14 },
+            addressClick);
     } else toggleLayer('addresses', this.checked);
 };
 
@@ -512,14 +916,7 @@ document.getElementById('lyrPOIs').onchange = function() {
     if (this.checked && !loaded.pois) {
         loadLayer('pois', 'pois/usa_pois.pmtiles', 'places',
             { circle: '#ef4444', circleRadius: 5, minzoom: 12 },
-            function(e) {
-                if (e.features.length) {
-                    var p = e.features[0].properties;
-                    new maplibregl.Popup().setLngLat(e.lngLat)
-                        .setHTML('<b>' + (p.name || 'Business') + '</b><br>' + (p.category || ''))
-                        .addTo(map);
-                }
-            });
+            poiClick);
     } else toggleLayer('pois', this.checked);
 };
 
