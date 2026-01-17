@@ -121,23 +121,23 @@ maplibregl.addProtocol("pmtiles", protocol.tile);
 
 var CDN = "https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev";
 
-// All parcel files from R2 - statewide files for best coverage
+// Verified parcel files from R2 with correct naming
 var PARCELS = [
-    // Statewide coverage (primary)
-    'parcels_ar_statewide','parcels_ct_statewide','parcels_de_statewide','parcels_fl_statewide',
+    // Statewide files (validated)
+    'parcels_ar_statewide','parcels_co_statewide','parcels_ct_statewide','parcels_de_statewide',
     'parcels_hi_statewide','parcels_ia_statewide','parcels_id_statewide','parcels_in_statewide',
     'parcels_ma_statewide','parcels_md_statewide','parcels_me_statewide','parcels_mt_statewide',
     'parcels_nc_statewide','parcels_nd_statewide','parcels_ne_statewide','parcels_nh_statewide',
-    'parcels_nj_statewide','parcels_nv_statewide','parcels_ny_statewide','parcels_oh_statewide',
+    'parcels_nj_statewide_v2','parcels_nv_statewide','parcels_ny_statewide_v2','parcels_oh_statewide',
     'parcels_pa_statewide','parcels_tn_statewide','parcels_tx_statewide','parcels_ut_statewide',
-    'parcels_vt_statewide','parcels_wi_statewide','parcels_wv_statewide',
+    'parcels_vt_statewide','parcels_wa_statewide_v2','parcels_wi_statewide','parcels_wv_statewide',
     // State-level files
     'parcels_ak','parcels_al','parcels_az','parcels_ca','parcels_co','parcels_ct','parcels_de',
     'parcels_ga','parcels_hi','parcels_ia','parcels_id','parcels_il','parcels_ks','parcels_ky',
     'parcels_la','parcels_ma','parcels_mi','parcels_mn','parcels_mo','parcels_ms','parcels_nd',
     'parcels_ne','parcels_nh','parcels_nm','parcels_nv','parcels_tn','parcels_tx','parcels_ut',
     'parcels_va','parcels_wi','parcels_wv','parcels_wy',
-    // Major metros/counties
+    // Major metros/counties with v2 naming fixes
     'parcels_az_maricopa','parcels_ca_los_angeles','parcels_ca_san_diego','parcels_ca_san_francisco',
     'parcels_ca_orange','parcels_ca_riverside','parcels_ca_sacramento','parcels_co_el_paso',
     'parcels_fl_miami_dade','parcels_fl_broward','parcels_fl_hillsborough','parcels_fl_orange',
@@ -309,13 +309,13 @@ function loadParcels() {
             map.addSource(p, { type: 'vector', url: 'pmtiles://' + CDN + '/parcels/' + p + '.pmtiles' });
             map.addLayer({
                 id: p + '-fill', type: 'fill', source: p, 'source-layer': 'parcels',
-                minzoom: 8,
-                paint: { 'fill-color': '#e53935', 'fill-opacity': ['interpolate', ['linear'], ['zoom'], 8, 0.05, 12, 0.2, 16, 0.35] }
+                minzoom: 5,
+                paint: { 'fill-color': '#e53935', 'fill-opacity': ['interpolate', ['linear'], ['zoom'], 5, 0.02, 10, 0.15, 14, 0.3] }
             });
             map.addLayer({
                 id: p + '-line', type: 'line', source: p, 'source-layer': 'parcels',
-                minzoom: 12,
-                paint: { 'line-color': '#b71c1c', 'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.5, 16, 1.5] }
+                minzoom: 11,
+                paint: { 'line-color': '#b71c1c', 'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.3, 16, 1.5] }
             });
 
             map.on('click', p + '-fill', parcelClick);
@@ -335,7 +335,7 @@ function loadParcels() {
 
     loaded.parcels = true;
     setTimeout(function() {
-        status('Parcels ready (' + successCount + ' loaded). Zoom to level 8+ to see boundaries.');
+        status('Parcels ready (' + successCount + ' loaded). Zoom to level 5+ to see boundaries.');
     }, 500);
 }
 
