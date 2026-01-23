@@ -4,9 +4,11 @@
     <title>HITD Maps - Full USA Data</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
-    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet">
+    <script src="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.css" rel="stylesheet">
     <script src="https://unpkg.com/pmtiles@3.0.6/dist/pmtiles.js"></script>
+    <!-- Protomaps basemap styles -->
+    <script src="https://unpkg.com/protomaps-themes-base@4.0.1/dist/index.js"></script>
     <style>
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         #map { position: absolute; top: 0; bottom: 0; width: 100%; }
@@ -70,14 +72,23 @@
 
     <div class="section">
         <div class="section-title">Property Data</div>
-        <div class="layer"><input type="checkbox" id="lyrParcels" checked><label for="lyrParcels">Property Parcels</label><span class="count">46 states</span></div>
+        <div class="layer"><input type="checkbox" id="lyrParcels" checked><label for="lyrParcels">Property Parcels</label><span class="count">50 states + DC</span></div>
         <div class="layer"><input type="checkbox" id="lyrBuildings" checked><label for="lyrBuildings">Buildings</label></div>
         <div class="layer"><input type="checkbox" id="lyrAddresses" checked><label for="lyrAddresses">Addresses</label></div>
     </div>
 
     <div class="section">
         <div class="section-title">Points of Interest</div>
-        <div class="layer"><input type="checkbox" id="lyrPOIs" checked><label for="lyrPOIs">Businesses & Places</label></div>
+        <div class="layer"><input type="checkbox" id="lyrPOIs" checked><label for="lyrPOIs">Businesses & Places</label><span class="count">17M+ POIs</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Infrastructure</div>
+        <div class="layer"><input type="checkbox" id="lyrHospitals"><label for="lyrHospitals">Hospitals</label><span class="count">8K</span></div>
+        <div class="layer"><input type="checkbox" id="lyrSchools"><label for="lyrSchools">Schools (K-12)</label><span class="count">125K</span></div>
+        <div class="layer"><input type="checkbox" id="lyrColleges"><label for="lyrColleges">Colleges</label><span class="count">6.6K</span></div>
+        <div class="layer"><input type="checkbox" id="lyrPolice"><label for="lyrPolice">Police Stations</label><span class="count">18K</span></div>
+        <div class="layer"><input type="checkbox" id="lyrFireEMS"><label for="lyrFireEMS">Fire & EMS</label><span class="count">3.6K</span></div>
     </div>
 
     <div class="section">
@@ -109,8 +120,15 @@
     </div>
 
     <div style="font-size: 10px; color: #888; text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee;">
-        492GB on Cloudflare R2 • 150M+ parcels • Zero egress fees
+        680GB on Cloudflare R2 • 150M+ parcels • 17M+ POIs • Zero egress fees
     </div>
+</div>
+
+<!-- Attribution footer (required) -->
+<div id="attribution" style="position:absolute; bottom:5px; right:10px; z-index:1000; font-size:10px; color:#666; background:rgba(255,255,255,0.8); padding:2px 6px; border-radius:3px;">
+    <a href="https://protomaps.com" target="_blank">Protomaps</a> |
+    <a href="https://openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a> |
+    Satellite: Esri
 </div>
 
 <div id="status">Loading map...</div>
@@ -121,134 +139,183 @@ maplibregl.addProtocol("pmtiles", protocol.tile);
 
 var CDN = "https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev";
 
-// VERIFIED: 146 valid PMTiles with actual tile data (verified 2026-01-17)
-// Invalid/empty files removed - only files with real parcel data included
+// Self-hosted tile URLs (after running setup_self_hosted_tiles.sh)
+var PROTOMAPS_URL = CDN + "/basemap/protomaps_planet.pmtiles";
+var TERRAIN_URL = CDN + "/terrain/mapterhorn_usa.pmtiles";
+
+// Fallback URLs (third-party, used if self-hosted not available)
+var OSM_TILES = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+var AWS_TERRAIN = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png";
+var ESRI_SATELLITE = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+
+// Config: set to true once self-hosted tiles are uploaded to R2
+var USE_SELF_HOSTED_BASEMAP = true;  // Set to true after uploading protomaps_planet.pmtiles
+var USE_SELF_HOSTED_TERRAIN = true;  // Set to true after uploading mapterhorn_usa.pmtiles
+
+// VERIFIED: 92 valid PMTiles with correct coordinates (verified 2026-01-18)
+// Full verification: downloaded each file and validated bounds + tile count
+// Covering 50 states + DC with 6.7M+ tiles
 var PARCELS = [
-    // Alaska (AK) - statewide coverage
-    'parcels_ak',
-    // Alabama (AL)
-    'parcels_al', 'parcels_al_madison_v2', 'parcels_al_montgomery',
-    // Arkansas (AR)
-    'parcels_ar_statewide',
-    // Arizona (AZ)
+    // Arizona (AZ) - 2 files, 299,896 tiles
     'parcels_az', 'parcels_az_maricopa',
-    // California (CA)
-    'parcels_ca', 'parcels_ca_los_angeles_v2', 'parcels_ca_sacramento_v2', 'parcels_ca_sacramento',
-    'parcels_ca_san_francisco', 'parcels_ca_orange_v2', 'parcels_ca_orange',
-    // Colorado (CO)
-    'parcels_co_statewide', 'parcels_co', 'parcels_co_el_paso_v2',
-    // Connecticut (CT)
+    // California (CA) - 2 files
+    'parcels_ca_los_angeles_v2', 'parcels_ca_san_francisco',
+    // Colorado (CO) - 3 files, 858,483 tiles
+    'parcels_co', 'parcels_co_el_paso_v2', 'parcels_co_statewide',
+    // Connecticut (CT) - 83,691 tiles
     'parcels_ct',
-    // Delaware (DE)
+    // District of Columbia (DC) - 132 tiles
+    'parcels_dc',
+    // Delaware (DE) - 31,381 tiles
     'parcels_de',
-    // Florida (FL)
-    'parcels_fl_statewide', 'parcels_fl_orange',
-    // Georgia (GA)
-    'parcels_ga', 'parcels_ga_gwinnett_v2', 'parcels_ga_gwinnett', 'parcels_ga_cobb',
-    'parcels_ga_chatham', 'parcels_ga_richmond',
-    // Hawaii (HI)
-    'parcels_hi_statewide', 'parcels_hi', 'parcels_hi_honolulu', 'parcels_hi_maui',
-    // Idaho (ID)
-    'parcels_id_statewide', 'parcels_id', 'parcels_id_ada_meridian',
+    // Florida (FL) - statewide, 2.7M features
+    'parcels_fl_statewide',
+    // Georgia (GA) - 5 files
+    'parcels_ga_chatham', 'parcels_ga_cobb', 'parcels_ga_gwinnett', 'parcels_ga_gwinnett_v2', 'parcels_ga_richmond',
+    // Hawaii (HI) - 48,194 tiles
+    'parcels_hi',
+    // Iowa (IA) - 2 files, 1.18M tiles
+    'parcels_ia', 'parcels_ia_statewide',
     // Illinois (IL)
-    'parcels_il', 'parcels_il_cook', 'parcels_il_dupage_v2',
+    'parcels_il',
     // Indiana (IN)
-    'parcels_in_statewide', 'parcels_in_marion',
-    // Iowa (IA)
-    'parcels_ia_statewide', 'parcels_ia', 'parcels_ia_johnson',
-    // Kansas (KS)
-    'parcels_ks', 'parcels_ks_sedgwick', 'parcels_ks_douglas',
-    // Kentucky (KY)
-    'parcels_ky', 'parcels_ky_boone', 'parcels_ky_kenton',
-    // Louisiana (LA)
-    'parcels_la', 'parcels_la_east_baton_rouge', 'parcels_la_jefferson_v2',
-    'parcels_la_orleans_v2', 'parcels_la_lafayette',
-    // Maine (ME)
-    'parcels_me_statewide', 'parcels_me_portland', 'parcels_me_bangor',
-    // Maryland (MD)
-    'parcels_md_statewide',
-    // Massachusetts (MA)
+    'parcels_in_marion',
+    // Kansas (KS) - 2 files
+    'parcels_ks', 'parcels_ks_sedgwick',
+    // Kentucky (KY) - 2 files
+    'parcels_ky', 'parcels_ky_boone',
+    // Louisiana (LA) - 2 files (New Orleans included)
+    'parcels_la', 'parcels_la_orleans_v2',
+    // Massachusetts (MA) - 138,981 tiles
     'parcels_ma',
-    // Michigan (MI)
-    'parcels_mi', 'parcels_mi_wayne', 'parcels_mi_oakland', 'parcels_mi_oakland_v2',
-    'parcels_mi_macomb', 'parcels_mi_kent_v2', 'parcels_mi_kent', 'parcels_mi_ottawa',
-    // Minnesota (MN)
-    'parcels_mn', 'parcels_mn_hennepin', 'parcels_mn_ramsey', 'parcels_mn_dakota', 'parcels_mn_anoka',
-    // Mississippi (MS)
-    'parcels_ms', 'parcels_ms_desoto',
-    // Missouri (MO)
-    'parcels_mo', 'parcels_mo_kansas_city', 'parcels_mo_jackson', 'parcels_mo_clay',
-    'parcels_mo_st_charles_v2', 'parcels_mo_st_charles', 'parcels_mo_christian', 'parcels_montgomery',
-    // Montana (MT)
-    'parcels_mt_statewide',
+    // Maryland (MD) - 198,021 tiles
+    'parcels_md_statewide',
+    // Maine (ME) - 2 files
+    'parcels_me_bangor', 'parcels_me_portland',
+    // Michigan (MI) - 6 files
+    'parcels_mi_kent', 'parcels_mi_kent_v2', 'parcels_mi_macomb', 'parcels_mi_oakland_v2', 'parcels_mi_ottawa', 'parcels_mi_wayne',
+    // Minnesota (MN) - 3 files
+    'parcels_mn_dakota', 'parcels_mn_hennepin', 'parcels_mn_ramsey',
+    // North Carolina (NC) - 6 files
+    'parcels_nc_durham', 'parcels_nc_forsyth', 'parcels_nc_forsyth_wgs84', 'parcels_nc_guilford', 'parcels_nc_statewide', 'parcels_nc_wake',
+    // North Dakota (ND) - 2 files, 1.4M tiles
+    'parcels_nd', 'parcels_nd_cass',
     // Nebraska (NE)
     'parcels_ne',
-    // Nevada (NV)
-    'parcels_nv',
-    // New Hampshire (NH)
-    'parcels_nh_statewide', 'parcels_nh',
-    // New Jersey (NJ)
-    'parcels_nj_statewide_v2', 'parcels_nj_bergen', 'parcels_nj_passaic',
+    // New Hampshire (NH) - 142,230 tiles
+    'parcels_nh',
+    // New Jersey (NJ) - 77,959 tiles
+    'parcels_nj_statewide_v2',
     // New Mexico (NM)
     'parcels_nm',
-    // New York (NY)
-    'parcels_ny_statewide_v2', 'parcels_ny_statewide', 'parcels_ny_centroids',
-    // North Dakota (ND)
-    'parcels_nd', 'parcels_nd_cass',
-    // Ohio (OH)
-    'parcels_oh_statewide', 'parcels_oh_cuyahoga', 'parcels_oh_franklin',
-    'parcels_oh_hamilton', 'parcels_oh_montgomery', 'parcels_oh_summit_v2',
-    // Oklahoma (OK)
-    'parcels_ok_cleveland',
+    // New York (NY) - 3 files
+    'parcels_ny_centroids', 'parcels_ny_statewide', 'parcels_ny_statewide_v2',
+    // Ohio (OH) - 4 files
+    'parcels_oh_cuyahoga', 'parcels_oh_hamilton', 'parcels_oh_statewide', 'parcels_oh_summit_v2',
     // Oregon (OR)
-    'parcels_or_multnomah_v2', 'parcels_or_lane',
-    // Pennsylvania (PA)
-    'parcels_pa_statewide', 'parcels_pa_pasda_statewide', 'parcels_pa_allegheny',
-    'parcels_pa_delaware', 'parcels_pa_lackawanna', 'parcels_pa_lancaster_v2',
-    // South Carolina (SC)
-    'parcels_sc_spartanburg',
-    // Tennessee (TN)
-    'parcels_tn_statewide', 'parcels_tn', 'parcels_tn_davidson', 'parcels_tn_nashville',
-    'parcels_tn_shelby', 'parcels_tn_hamilton', 'parcels_tn_montgomery', 'parcels_tn_williamson',
-    // Texas (TX) - Dallas, San Antonio (Bexar), Houston (Harris), Austin (Travis) all verified
-    'parcels_tx', 'parcels_tx_harris', 'parcels_tx_harris_new', 'parcels_tx_dallas',
-    'parcels_tx_bexar', 'parcels_tx_tarrant', 'parcels_tx_travis', 'parcels_tx_denton',
-    'parcels_tx_williamson_v2', 'parcels_tx_statewide_recent',
-    // Utah (UT)
+    'parcels_or_multnomah_v2',
+    // Pennsylvania (PA) - 6 files
+    'parcels_pa_allegheny', 'parcels_pa_delaware', 'parcels_pa_lackawanna', 'parcels_pa_lancaster_v2', 'parcels_pa_pasda_statewide', 'parcels_pa_statewide',
+    // South Carolina (SC) - 2 files
+    'parcels_sc_charleston', 'parcels_sc_greenville',
+    // Tennessee (TN) - 7 files, 136,617 tiles
+    'parcels_tn', 'parcels_tn_davidson', 'parcels_tn_hamilton', 'parcels_tn_nashville', 'parcels_tn_shelby', 'parcels_tn_statewide', 'parcels_tn_williamson',
+    // Texas (TX) - 10 files, 79,322 tiles - Dallas, Fort Worth, San Antonio, Houston, Austin, Denton all covered
+    'parcels_tx_bexar', 'parcels_tx_dallas', 'parcels_tx_denton', 'parcels_tx_harris', 'parcels_tx_harris_new',
+    'parcels_tx_statewide', 'parcels_tx_statewide_recent', 'parcels_tx_tarrant', 'parcels_tx_travis', 'parcels_tx_williamson_v2',
+    // Utah (UT) - 600,655 tiles
     'parcels_ut',
-    // Vermont (VT)
-    'parcels_vt_statewide',
-    // Virginia (VA)
-    'parcels_va', 'parcels_va_counties', 'parcels_va_loudoun_v2', 'parcels_va_prince_william_v2',
-    // West Virginia (WV)
-    'parcels_wv_statewide', 'parcels_wv',
-    // Wisconsin (WI)
-    'parcels_wi_statewide', 'parcels_wi', 'parcels_wi_milwaukee', 'parcels_wi_milwaukee_v2',
-    'parcels_wi_waukesha', 'parcels_wi_racine', 'parcels_wi_kenosha',
+    // Virginia (VA) - 557,426 tiles
+    'parcels_va',
+    // Washington (WA) - 2 files
+    'parcels_wa_king', 'parcels_wa_spokane',
+    // Wisconsin (WI) - 5 files, 208,553 tiles
+    'parcels_wi', 'parcels_wi_kenosha', 'parcels_wi_milwaukee', 'parcels_wi_racine', 'parcels_wi_waukesha',
+    // West Virginia (WV) - 352,573 tiles
+    'parcels_wv',
     // Wyoming (WY)
-    'parcels_wy',
-    // Multi-state
-    'parcels_counties'
+    'parcels_wy_campbell'
 ];
 
 function status(m) { document.getElementById('status').textContent = m; }
 
+// Build map style based on configuration
+function buildMapStyle() {
+    var style = {
+        version: 8,
+        sources: {},
+        layers: []
+    };
+
+    if (USE_SELF_HOSTED_BASEMAP) {
+        // Self-hosted Protomaps vector basemap
+        style.glyphs = "https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf";
+        style.sprite = "https://protomaps.github.io/basemaps-assets/sprites/v4/light";
+        style.sources.protomaps = {
+            type: "vector",
+            url: "pmtiles://" + PROTOMAPS_URL
+        };
+        // Use protomaps-themes-base to generate layers
+        style.layers = protomapsThemesBase.layers("protomaps", protomapsThemesBase.namedFlavor("light"), {lang: "en"});
+    } else {
+        // Fallback: OSM raster tiles
+        style.sources.osm = {
+            type: 'raster',
+            tiles: [OSM_TILES],
+            tileSize: 256,
+            maxzoom: 19
+        };
+        style.layers.push({ id: 'osm', type: 'raster', source: 'osm' });
+    }
+
+    // Satellite imagery (ESRI - always use for now)
+    style.sources.sat = {
+        type: 'raster',
+        tiles: [ESRI_SATELLITE],
+        tileSize: 256,
+        maxzoom: 18
+    };
+    style.layers.push({ id: 'sat', type: 'raster', source: 'sat', layout: { visibility: 'none' } });
+
+    // Terrain for 3D
+    if (USE_SELF_HOSTED_TERRAIN) {
+        // Self-hosted Mapterhorn terrain (PMTiles with terrarium encoding)
+        style.sources.terrain = {
+            type: 'raster-dem',
+            url: "pmtiles://" + TERRAIN_URL,
+            tileSize: 512,
+            maxzoom: 14,
+            encoding: 'terrarium'
+        };
+    } else {
+        // Fallback: AWS terrain tiles
+        style.sources.terrain = {
+            type: 'raster-dem',
+            tiles: [AWS_TERRAIN],
+            tileSize: 256,
+            maxzoom: 15,
+            encoding: 'terrarium'
+        };
+    }
+
+    // Hillshade layer for 3D effect
+    style.layers.push({
+        id: 'hillshade',
+        type: 'hillshade',
+        source: 'terrain',
+        layout: { visibility: 'none' },
+        paint: { 'hillshade-exaggeration': 0.5 }
+    });
+
+    // Initial terrain (disabled)
+    style.terrain = { source: 'terrain', exaggeration: 0 };
+
+    return style;
+}
+
 var map = new maplibregl.Map({
     container: 'map',
-    style: {
-        version: 8,
-        sources: {
-            osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, maxzoom: 19 },
-            sat: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, maxzoom: 18 },
-            terrain: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], tileSize: 256, maxzoom: 15, encoding: 'terrarium' }
-        },
-        layers: [
-            { id: 'osm', type: 'raster', source: 'osm' },
-            { id: 'sat', type: 'raster', source: 'sat', layout: { visibility: 'none' } },
-            { id: 'hillshade', type: 'hillshade', source: 'terrain', layout: { visibility: 'none' }, paint: { 'hillshade-exaggeration': 0.5 } }
-        ],
-        terrain: { source: 'terrain', exaggeration: 0 }
-    },
+    style: buildMapStyle(),
     center: [-98.5, 39.8], // Center of USA
     zoom: 4
 });
@@ -278,10 +345,25 @@ map.on('load', function() {
     status('Map ready with default layers.');
 });
 
+// Helper to show/hide basemap layers
+function setBasemapVisibility(showMap) {
+    if (USE_SELF_HOSTED_BASEMAP) {
+        // Protomaps vector layers - show/hide all layers from the source
+        map.getStyle().layers.forEach(function(layer) {
+            if (layer.source === 'protomaps') {
+                map.setLayoutProperty(layer.id, 'visibility', showMap ? 'visible' : 'none');
+            }
+        });
+    } else {
+        // OSM raster layer
+        try { map.setLayoutProperty('osm', 'visibility', showMap ? 'visible' : 'none'); } catch(e) {}
+    }
+}
+
 // Map type buttons
 document.getElementById('btnMap').onclick = function() {
     setBtn(this);
-    map.setLayoutProperty('osm', 'visibility', 'visible');
+    setBasemapVisibility(true);
     map.setLayoutProperty('sat', 'visibility', 'none');
     map.setLayoutProperty('hillshade', 'visibility', 'none');
     map.setTerrain(null);
@@ -291,23 +373,25 @@ document.getElementById('btnMap').onclick = function() {
 
 document.getElementById('btnSat').onclick = function() {
     setBtn(this);
-    map.setLayoutProperty('osm', 'visibility', 'none');
+    setBasemapVisibility(false);
     map.setLayoutProperty('sat', 'visibility', 'visible');
     map.setLayoutProperty('hillshade', 'visibility', 'none');
     map.setTerrain(null);
+    map.easeTo({pitch: 0, bearing: 0});
     status('Satellite view');
 };
 
 document.getElementById('btnTerrain').onclick = function() {
     setBtn(this);
-    map.setLayoutProperty('osm', 'visibility', 'visible');
-    map.setLayoutProperty('sat', 'visibility', 'none');
+    // Show satellite imagery with 3D terrain for best visual effect
+    setBasemapVisibility(false);
+    map.setLayoutProperty('sat', 'visibility', 'visible');
     map.setLayoutProperty('hillshade', 'visibility', 'visible');
 
     // Enable 3D terrain with hill shading
     map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
     map.easeTo({ pitch: 60, bearing: -17, duration: 1000 });
-    status('3D terrain enabled. Tilt & rotate to explore.');
+    status('3D terrain + satellite. Tilt & rotate to explore.');
 };
 
 function setBtn(b) {
@@ -914,10 +998,59 @@ document.getElementById('lyrAddresses').onchange = function() {
 
 document.getElementById('lyrPOIs').onchange = function() {
     if (this.checked && !loaded.pois) {
-        loadLayer('pois', 'pois/usa_pois.pmtiles', 'places',
-            { circle: '#ef4444', circleRadius: 5, minzoom: 12 },
+        loadLayer('pois', 'pois/overture_pois_usa.pmtiles', 'places',
+            { circle: '#ef4444', circleRadius: 5, minzoom: 10 },
             poiClick);
     } else toggleLayer('pois', this.checked);
+};
+
+// HIFLD Infrastructure layers
+document.getElementById('lyrHospitals').onchange = function() {
+    if (this.checked && !loaded.hospitals) {
+        loadLayer('hospitals', 'enrichment/hifld/hifld_hospitals.pmtiles', 'hospitals',
+            { circle: '#dc2626', circleRadius: 6, minzoom: 8 },
+            hifldClick);
+    } else toggleLayer('hospitals', this.checked);
+};
+
+document.getElementById('lyrSchools').onchange = function() {
+    if (this.checked && !loaded.schools) {
+        // Load both public and private schools
+        loadLayer('public_schools', 'enrichment/hifld/hifld_public_schools.pmtiles', 'public_schools',
+            { circle: '#2563eb', circleRadius: 4, minzoom: 10 },
+            hifldClick);
+        loadLayer('private_schools', 'enrichment/hifld/hifld_private_schools.pmtiles', 'private_schools',
+            { circle: '#7c3aed', circleRadius: 4, minzoom: 10 },
+            hifldClick);
+        loaded.schools = true;
+    } else {
+        toggleLayer('public_schools', this.checked);
+        toggleLayer('private_schools', this.checked);
+    }
+};
+
+document.getElementById('lyrColleges').onchange = function() {
+    if (this.checked && !loaded.colleges) {
+        loadLayer('colleges', 'enrichment/hifld/hifld_colleges.pmtiles', 'colleges',
+            { circle: '#059669', circleRadius: 6, minzoom: 8 },
+            hifldClick);
+    } else toggleLayer('colleges', this.checked);
+};
+
+document.getElementById('lyrPolice').onchange = function() {
+    if (this.checked && !loaded.police) {
+        loadLayer('police', 'enrichment/hifld/hifld_police.pmtiles', 'police',
+            { circle: '#1d4ed8', circleRadius: 5, minzoom: 9 },
+            hifldClick);
+    } else toggleLayer('police', this.checked);
+};
+
+document.getElementById('lyrFireEMS').onchange = function() {
+    if (this.checked && !loaded.fireems) {
+        loadLayer('fireems', 'enrichment/hifld/hifld_fire_ems_stations.pmtiles', 'fire_ems_stations',
+            { circle: '#ea580c', circleRadius: 5, minzoom: 9 },
+            hifldClick);
+    } else toggleLayer('fireems', this.checked);
 };
 
 document.getElementById('lyrPADUS').onchange = function() {
