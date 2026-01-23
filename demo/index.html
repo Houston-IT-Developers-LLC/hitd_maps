@@ -280,10 +280,11 @@ function buildMapStyle() {
     // Terrain for 3D
     if (USE_SELF_HOSTED_TERRAIN) {
         // Self-hosted Mapterhorn terrain (PMTiles with terrarium encoding)
+        // Note: raster-dem requires tiles array, not url - pmtiles protocol handles the conversion
         style.sources.terrain = {
             type: 'raster-dem',
-            url: "pmtiles://" + TERRAIN_URL,
-            tileSize: 512,
+            tiles: ["pmtiles://" + TERRAIN_URL + "/{z}/{x}/{y}.png"],
+            tileSize: 256,
             maxzoom: 14,
             encoding: 'terrarium'
         };
