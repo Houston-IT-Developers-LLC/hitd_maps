@@ -247,7 +247,8 @@ function buildMapStyle() {
         layers: []
     };
 
-    if (USE_SELF_HOSTED_BASEMAP) {
+    // Try to use self-hosted Protomaps, fall back to OSM if library not loaded
+    if (USE_SELF_HOSTED_BASEMAP && typeof protomapsThemesBase !== 'undefined') {
         // Self-hosted Protomaps vector basemap
         style.glyphs = "https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf";
         style.sprite = "https://protomaps.github.io/basemaps-assets/sprites/v4/light";
@@ -256,7 +257,14 @@ function buildMapStyle() {
             url: "pmtiles://" + PROTOMAPS_URL
         };
         // Use protomaps-themes-base to generate layers
-        style.layers = protomapsThemesBase.layers("protomaps", protomapsThemesBase.namedFlavor("light"), {lang: "en"});
+        try {
+            style.layers = protomapsThemesBase.layers("protomaps", protomapsThemesBase.namedFlavor("light"), {lang: "en"});
+        } catch(e) {
+            console.error("Failed to load Protomaps theme:", e);
+            // Fall back to OSM
+            style.sources.osm = { type: 'raster', tiles: [OSM_TILES], tileSize: 256, maxzoom: 19 };
+            style.layers.push({ id: 'osm', type: 'raster', source: 'osm' });
+        }
     } else {
         // Fallback: OSM raster tiles
         style.sources.osm = {
@@ -277,27 +285,14 @@ function buildMapStyle() {
     };
     style.layers.push({ id: 'sat', type: 'raster', source: 'sat', layout: { visibility: 'none' } });
 
-    // Terrain for 3D
-    if (USE_SELF_HOSTED_TERRAIN) {
-        // Self-hosted Mapterhorn terrain (PMTiles with terrarium encoding)
-        // Note: raster-dem requires tiles array, not url - pmtiles protocol handles the conversion
-        style.sources.terrain = {
-            type: 'raster-dem',
-            tiles: ["pmtiles://" + TERRAIN_URL + "/{z}/{x}/{y}.png"],
-            tileSize: 256,
-            maxzoom: 14,
-            encoding: 'terrarium'
-        };
-    } else {
-        // Fallback: AWS terrain tiles
-        style.sources.terrain = {
-            type: 'raster-dem',
-            tiles: [AWS_TERRAIN],
-            tileSize: 256,
-            maxzoom: 15,
-            encoding: 'terrarium'
-        };
-    }
+    // Terrain for 3D - always use AWS terrain (PMTiles raster-dem not yet supported)
+    style.sources.terrain = {
+        type: 'raster-dem',
+        tiles: [AWS_TERRAIN],
+        tileSize: 256,
+        maxzoom: 15,
+        encoding: 'terrarium'
+    };
 
     // Hillshade layer for 3D effect
     style.layers.push({
