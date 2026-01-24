@@ -31,6 +31,9 @@ pubspec.lock
 
 # Web
 lib/generated_plugin_registrant.dart
+web/node_modules/
+web/.next/
+web/.env.local
 
 # Symbolication related
 app.*.symbols
