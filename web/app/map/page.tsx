@@ -6,10 +6,17 @@ import { Button } from '@/components/ui/button'
 import { MapPin, Layers, Mountain, Satellite } from 'lucide-react'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
+const CDN = 'https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev'
+const PROTOMAPS_URL = `${CDN}/basemap/protomaps_planet.pmtiles`
+const OSM_TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+const ESRI_SATELLITE = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+const AWS_TERRAIN = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
+
 export default function MapDemoPage() {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
   const [mapStyle, setMapStyle] = useState<'map' | 'satellite' | 'terrain'>('map')
+  const [status, setStatus] = useState('Loading map...')
   const [layers, setLayers] = useState({
     parcels: true,
     pois: true,
@@ -22,96 +29,128 @@ export default function MapDemoPage() {
     const initMap = async () => {
       const maplibregl = (await import('maplibre-gl')).default
       const pmtiles = await import('pmtiles')
+      const protomapsThemes = await import('protomaps-themes-base')
 
       // Register PMTiles protocol
       const protocol = new pmtiles.Protocol()
       maplibregl.addProtocol('pmtiles', protocol.tile)
 
-      const CDN = 'https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev'
+      // Build map style - try Protomaps first, fall back to OSM
+      let mapStyleObj: maplibregl.StyleSpecification
 
-      map.current = new maplibregl.Map({
-        container: mapContainer.current!,
-        style: {
+      try {
+        // Try to use Protomaps vector basemap
+        const protomapsLayers = protomapsThemes.layers(
+          'protomaps',
+          protomapsThemes.namedTheme('light'),
+          { lang: 'en' }
+        )
+
+        mapStyleObj = {
           version: 8,
+          glyphs: 'https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf',
+          sprite: 'https://protomaps.github.io/basemaps-assets/sprites/v4/light',
           sources: {
             protomaps: {
               type: 'vector',
-              url: `pmtiles://${CDN}/basemap/protomaps_planet.pmtiles`,
+              url: `pmtiles://${PROTOMAPS_URL}`,
+            },
+            sat: {
+              type: 'raster',
+              tiles: [ESRI_SATELLITE],
+              tileSize: 256,
+              maxzoom: 18,
+            },
+            terrain: {
+              type: 'raster-dem',
+              tiles: [AWS_TERRAIN],
+              tileSize: 256,
+              maxzoom: 15,
+              encoding: 'terrarium',
             },
           },
           layers: [
+            ...protomapsLayers,
             {
-              id: 'background',
-              type: 'background',
-              paint: { 'background-color': '#f8f4f0' },
+              id: 'sat',
+              type: 'raster',
+              source: 'sat',
+              layout: { visibility: 'none' },
             },
             {
-              id: 'water',
-              type: 'fill',
-              source: 'protomaps',
-              'source-layer': 'water',
-              paint: { 'fill-color': '#a0c4e8' },
-            },
-            {
-              id: 'landuse-park',
-              type: 'fill',
-              source: 'protomaps',
-              'source-layer': 'landuse',
-              filter: ['==', ['get', 'kind'], 'park'],
-              paint: { 'fill-color': '#c8e6c9' },
-            },
-            {
-              id: 'roads-minor',
-              type: 'line',
-              source: 'protomaps',
-              'source-layer': 'roads',
-              filter: ['in', ['get', 'kind'], ['literal', ['minor_road', 'service']]],
-              paint: { 'line-color': '#ffffff', 'line-width': 1 },
-              minzoom: 12,
-            },
-            {
-              id: 'roads-major',
-              type: 'line',
-              source: 'protomaps',
-              'source-layer': 'roads',
-              filter: ['in', ['get', 'kind'], ['literal', ['major_road', 'highway']]],
-              paint: { 'line-color': '#ffc107', 'line-width': 2 },
-            },
-            {
-              id: 'buildings',
-              type: 'fill',
-              source: 'protomaps',
-              'source-layer': 'buildings',
-              paint: { 'fill-color': '#d4d4d4', 'fill-opacity': 0.8 },
-              minzoom: 14,
-            },
-            {
-              id: 'places-label',
-              type: 'symbol',
-              source: 'protomaps',
-              'source-layer': 'places',
-              layout: {
-                'text-field': ['get', 'name'],
-                'text-size': 12,
-              },
-              paint: {
-                'text-color': '#333',
-                'text-halo-color': '#fff',
-                'text-halo-width': 1,
-              },
+              id: 'hillshade',
+              type: 'hillshade',
+              source: 'terrain',
+              layout: { visibility: 'none' },
+              paint: { 'hillshade-exaggeration': 0.5 },
             },
           ],
-        },
-        center: [-95.37, 29.76], // Houston
-        zoom: 10,
+          terrain: { source: 'terrain', exaggeration: 0 },
+        }
+        setStatus('Map loaded with Protomaps')
+      } catch (e) {
+        console.error('Failed to load Protomaps theme, falling back to OSM:', e)
+        // Fallback to OSM raster tiles
+        mapStyleObj = {
+          version: 8,
+          sources: {
+            osm: {
+              type: 'raster',
+              tiles: [OSM_TILES],
+              tileSize: 256,
+              maxzoom: 19,
+            },
+            sat: {
+              type: 'raster',
+              tiles: [ESRI_SATELLITE],
+              tileSize: 256,
+              maxzoom: 18,
+            },
+            terrain: {
+              type: 'raster-dem',
+              tiles: [AWS_TERRAIN],
+              tileSize: 256,
+              maxzoom: 15,
+              encoding: 'terrarium',
+            },
+          },
+          layers: [
+            { id: 'osm', type: 'raster', source: 'osm' },
+            {
+              id: 'sat',
+              type: 'raster',
+              source: 'sat',
+              layout: { visibility: 'none' },
+            },
+            {
+              id: 'hillshade',
+              type: 'hillshade',
+              source: 'terrain',
+              layout: { visibility: 'none' },
+              paint: { 'hillshade-exaggeration': 0.5 },
+            },
+          ],
+          terrain: { source: 'terrain', exaggeration: 0 },
+        }
+        setStatus('Map loaded with OSM fallback')
+      }
+
+      map.current = new maplibregl.Map({
+        container: mapContainer.current!,
+        style: mapStyleObj,
+        center: [-98.5, 39.8], // Center of USA
+        zoom: 4,
       })
 
       // Add navigation controls
       map.current.addControl(new maplibregl.NavigationControl(), 'top-right')
+      map.current.addControl(new maplibregl.ScaleControl(), 'bottom-right')
 
       // Add parcels layer on load
       map.current.on('load', () => {
-        // Add parcel source
+        setStatus('Loading parcels...')
+
+        // Add Harris County parcels as demo
         map.current!.addSource('parcels', {
           type: 'vector',
           url: `pmtiles://${CDN}/parcels_tx_harris_v2.pmtiles`,
@@ -171,6 +210,13 @@ export default function MapDemoPage() {
         map.current!.on('mouseleave', 'parcels-fill', () => {
           map.current!.getCanvas().style.cursor = ''
         })
+
+        setStatus('Map ready - zoom to Houston to see parcels')
+      })
+
+      map.current.on('error', (e) => {
+        console.error('Map error:', e)
+        setStatus(`Map error: ${e.error?.message || 'Unknown error'}`)
       })
     }
 
@@ -180,6 +226,47 @@ export default function MapDemoPage() {
       map.current?.remove()
     }
   }, [])
+
+  // Handle map style switching
+  useEffect(() => {
+    if (!map.current) return
+
+    const m = map.current
+
+    // Helper to set layer visibility
+    const setLayerVisibility = (layerId: string, visible: boolean) => {
+      if (m.getLayer(layerId)) {
+        m.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none')
+      }
+    }
+
+    // Helper to set basemap visibility (protomaps or osm layers)
+    const setBasemapVisibility = (visible: boolean) => {
+      m.getStyle()?.layers?.forEach((layer) => {
+        const layerSource = 'source' in layer ? layer.source : null
+        if (layerSource === 'protomaps' || layerSource === 'osm') {
+          setLayerVisibility(layer.id, visible)
+        }
+      })
+    }
+
+    if (mapStyle === 'map') {
+      setBasemapVisibility(true)
+      setLayerVisibility('sat', false)
+      setLayerVisibility('hillshade', false)
+      m.setTerrain({ source: 'terrain', exaggeration: 0 })
+    } else if (mapStyle === 'satellite') {
+      setBasemapVisibility(false)
+      setLayerVisibility('sat', true)
+      setLayerVisibility('hillshade', false)
+      m.setTerrain({ source: 'terrain', exaggeration: 0 })
+    } else if (mapStyle === 'terrain') {
+      setBasemapVisibility(true)
+      setLayerVisibility('sat', false)
+      setLayerVisibility('hillshade', true)
+      m.setTerrain({ source: 'terrain', exaggeration: 1.5 })
+    }
+  }, [mapStyle])
 
   return (
     <div className="h-screen flex flex-col">
@@ -243,7 +330,7 @@ export default function MapDemoPage() {
                 className="rounded"
               />
               <span className="text-sm">Property Parcels</span>
-              <span className="text-xs text-muted-foreground ml-auto">Harris County</span>
+              <span className="text-xs text-muted-foreground ml-auto">150M+</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -266,12 +353,13 @@ export default function MapDemoPage() {
                 className="rounded"
               />
               <span className="text-sm">Points of Interest</span>
+              <span className="text-xs text-muted-foreground ml-auto">17M+</span>
             </label>
           </div>
 
           <div className="mt-4 pt-4 border-t">
             <p className="text-xs text-muted-foreground">
-              Click on a parcel to see property details
+              {status}
             </p>
           </div>
         </div>
