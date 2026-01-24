@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { MapPin, Layers, Mountain, Satellite } from 'lucide-react'
+import 'maplibre-gl/dist/maplibre-gl.css'
 
 export default function MapDemoPage() {
   const mapContainer = useRef<HTMLDivElement>(null)
