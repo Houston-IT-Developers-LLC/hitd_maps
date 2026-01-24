@@ -7,6 +7,12 @@ const footerLinks = {
     { href: '/pricing', label: 'Pricing' },
     { href: 'https://docs.mapsfordevelopers.com', label: 'Documentation', external: true },
     { href: '/map', label: 'Live Map' },
+    { href: '/quickstart', label: 'Quickstart' },
+    { href: '/api-reference', label: 'API Reference' },
+  ],
+  resources: [
+    { href: '/use-cases', label: 'Use Cases' },
+    { href: 'https://status.mapsfordevelopers.com', label: 'Status', external: true },
   ],
   compare: [
     { href: '/alternatives/google-maps', label: 'vs Google Maps' },
@@ -26,7 +32,7 @@ export function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-400 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-5 gap-8">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 text-white">
@@ -44,6 +50,31 @@ export function Footer() {
             <h4 className="font-semibold text-white mb-4">Product</h4>
             <ul className="space-y-2 text-sm">
               {footerLinks.product.map((link) => (
+                <li key={link.href}>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="hover:text-white transition-colors">
+                      {link.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h4 className="font-semibold text-white mb-4">Resources</h4>
+            <ul className="space-y-2 text-sm">
+              {footerLinks.resources.map((link) => (
                 <li key={link.href}>
                   {link.external ? (
                     <a
