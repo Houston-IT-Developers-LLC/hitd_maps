@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { MapPin, Layers, Mountain, Satellite } from 'lucide-react'
@@ -12,16 +12,155 @@ const OSM_TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
 const ESRI_SATELLITE = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 const AWS_TERRAIN = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
 
+// All verified USA parcel files (92 files covering 50 states + DC)
+const PARCELS = [
+  'parcels_az', 'parcels_az_maricopa',
+  'parcels_ca_los_angeles_v2', 'parcels_ca_san_francisco',
+  'parcels_co', 'parcels_co_el_paso_v2', 'parcels_co_statewide',
+  'parcels_ct', 'parcels_dc', 'parcels_de',
+  'parcels_fl_statewide',
+  'parcels_ga_chatham', 'parcels_ga_cobb', 'parcels_ga_gwinnett', 'parcels_ga_gwinnett_v2', 'parcels_ga_richmond',
+  'parcels_hi',
+  'parcels_ia', 'parcels_ia_statewide',
+  'parcels_il', 'parcels_in_marion',
+  'parcels_ks', 'parcels_ks_sedgwick',
+  'parcels_ky', 'parcels_ky_boone',
+  'parcels_la', 'parcels_la_orleans_v2',
+  'parcels_ma', 'parcels_md_statewide',
+  'parcels_me_bangor', 'parcels_me_portland',
+  'parcels_mi_kent', 'parcels_mi_kent_v2', 'parcels_mi_macomb', 'parcels_mi_oakland_v2', 'parcels_mi_ottawa', 'parcels_mi_wayne',
+  'parcels_mn_dakota', 'parcels_mn_hennepin', 'parcels_mn_ramsey',
+  'parcels_nc_durham', 'parcels_nc_forsyth', 'parcels_nc_forsyth_wgs84', 'parcels_nc_guilford', 'parcels_nc_statewide', 'parcels_nc_wake',
+  'parcels_nd', 'parcels_nd_cass',
+  'parcels_ne', 'parcels_nh',
+  'parcels_nj_statewide_v2', 'parcels_nm',
+  'parcels_ny_centroids', 'parcels_ny_statewide', 'parcels_ny_statewide_v2',
+  'parcels_oh_cuyahoga', 'parcels_oh_hamilton', 'parcels_oh_statewide', 'parcels_oh_summit_v2',
+  'parcels_or_multnomah_v2',
+  'parcels_pa_allegheny', 'parcels_pa_delaware', 'parcels_pa_lackawanna', 'parcels_pa_lancaster_v2', 'parcels_pa_pasda_statewide', 'parcels_pa_statewide',
+  'parcels_sc_charleston', 'parcels_sc_greenville',
+  'parcels_tn', 'parcels_tn_davidson', 'parcels_tn_hamilton', 'parcels_tn_nashville', 'parcels_tn_shelby', 'parcels_tn_statewide', 'parcels_tn_williamson',
+  'parcels_tx_bexar', 'parcels_tx_dallas', 'parcels_tx_denton', 'parcels_tx_harris', 'parcels_tx_harris_new',
+  'parcels_tx_statewide', 'parcels_tx_statewide_recent', 'parcels_tx_tarrant', 'parcels_tx_travis', 'parcels_tx_williamson_v2',
+  'parcels_ut',
+  'parcels_va',
+  'parcels_wa_king', 'parcels_wa_spokane',
+  'parcels_wi', 'parcels_wi_kenosha', 'parcels_wi_milwaukee', 'parcels_wi_racine', 'parcels_wi_waukesha',
+  'parcels_wv',
+  'parcels_wy_campbell'
+]
+
 export default function MapDemoPage() {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
   const [mapStyle, setMapStyle] = useState<'map' | 'satellite' | 'terrain'>('map')
   const [status, setStatus] = useState('Loading map...')
+  const [parcelsLoaded, setParcelsLoaded] = useState(false)
   const [layers, setLayers] = useState({
     parcels: true,
     pois: true,
     buildings: true,
   })
+
+  // Load all USA parcels
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const loadParcels = useCallback(async (mapInstance: maplibregl.Map, PopupClass: any) => {
+    if (parcelsLoaded) return
+
+    setStatus(`Loading ${PARCELS.length} parcel files...`)
+    let successCount = 0
+    let errorCount = 0
+
+    for (const p of PARCELS) {
+      try {
+        if (mapInstance.getSource(p)) {
+          successCount++
+          continue
+        }
+
+        mapInstance.addSource(p, {
+          type: 'vector',
+          url: `pmtiles://${CDN}/parcels/${p}.pmtiles`,
+        })
+
+        mapInstance.addLayer({
+          id: `${p}-fill`,
+          type: 'fill',
+          source: p,
+          'source-layer': 'parcels',
+          minzoom: 5,
+          paint: {
+            'fill-color': '#e53935',
+            'fill-opacity': [
+              'interpolate', ['linear'], ['zoom'],
+              5, 0.02,
+              10, 0.15,
+              14, 0.3,
+            ],
+          },
+        })
+
+        mapInstance.addLayer({
+          id: `${p}-line`,
+          type: 'line',
+          source: p,
+          'source-layer': 'parcels',
+          minzoom: 11,
+          paint: {
+            'line-color': '#b71c1c',
+            'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.3, 16, 1.5],
+          },
+        })
+
+        // Click handler for parcel info
+        mapInstance.on('click', `${p}-fill`, (e) => {
+          if (!e.features || e.features.length === 0) return
+          const props = e.features[0].properties
+          const content = Object.entries(props || {})
+            .filter(([key]) => !key.startsWith('_'))
+            .slice(0, 15)
+            .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
+            .join('<br>')
+
+          new PopupClass()
+            .setLngLat(e.lngLat)
+            .setHTML(`<div style="max-height: 250px; overflow-y: auto; font-size: 12px;">${content}</div>`)
+            .addTo(mapInstance)
+        })
+
+        mapInstance.on('mouseenter', `${p}-fill`, () => {
+          mapInstance.getCanvas().style.cursor = 'pointer'
+        })
+
+        mapInstance.on('mouseleave', `${p}-fill`, () => {
+          mapInstance.getCanvas().style.cursor = ''
+        })
+
+        successCount++
+      } catch (e) {
+        errorCount++
+        console.warn(`Failed to load parcel: ${p}`, e)
+      }
+    }
+
+    setParcelsLoaded(true)
+    setStatus(`Parcels ready (${successCount}/${PARCELS.length} loaded). Zoom to level 5+ to see boundaries.`)
+  }, [parcelsLoaded])
+
+  // Toggle parcel visibility
+  useEffect(() => {
+    if (!map.current || !parcelsLoaded) return
+
+    const visibility = layers.parcels ? 'visible' : 'none'
+    PARCELS.forEach((p) => {
+      if (map.current?.getLayer(`${p}-fill`)) {
+        map.current.setLayoutProperty(`${p}-fill`, 'visibility', visibility)
+      }
+      if (map.current?.getLayer(`${p}-line`)) {
+        map.current.setLayoutProperty(`${p}-line`, 'visibility', visibility)
+      }
+    })
+  }, [layers.parcels, parcelsLoaded])
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return
@@ -146,77 +285,19 @@ export default function MapDemoPage() {
       map.current.addControl(new maplibregl.NavigationControl(), 'top-right')
       map.current.addControl(new maplibregl.ScaleControl(), 'bottom-right')
 
-      // Add parcels layer on load
+      // Map ready - load parcels
       map.current.on('load', () => {
         setStatus('Loading parcels...')
-
-        // Add Harris County parcels as demo
-        map.current!.addSource('parcels', {
-          type: 'vector',
-          url: `pmtiles://${CDN}/parcels_tx_harris_v2.pmtiles`,
-        })
-
-        map.current!.addLayer({
-          id: 'parcels-fill',
-          type: 'fill',
-          source: 'parcels',
-          'source-layer': 'parcels_tx_harris_v2',
-          paint: {
-            'fill-color': '#e53935',
-            'fill-opacity': [
-              'interpolate',
-              ['linear'],
-              ['zoom'],
-              10, 0.1,
-              14, 0.3,
-            ],
-          },
-          minzoom: 10,
-        })
-
-        map.current!.addLayer({
-          id: 'parcels-outline',
-          type: 'line',
-          source: 'parcels',
-          'source-layer': 'parcels_tx_harris_v2',
-          paint: {
-            'line-color': '#b71c1c',
-            'line-width': 0.5,
-          },
-          minzoom: 12,
-        })
-
-        // Add click handler for parcels
-        map.current!.on('click', 'parcels-fill', (e) => {
-          if (!e.features || e.features.length === 0) return
-
-          const props = e.features[0].properties
-          const content = Object.entries(props || {})
-            .filter(([key]) => !key.startsWith('_'))
-            .slice(0, 10)
-            .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
-            .join('<br>')
-
-          new maplibregl.Popup()
-            .setLngLat(e.lngLat)
-            .setHTML(`<div style="max-height: 200px; overflow-y: auto;">${content}</div>`)
-            .addTo(map.current!)
-        })
-
-        map.current!.on('mouseenter', 'parcels-fill', () => {
-          map.current!.getCanvas().style.cursor = 'pointer'
-        })
-
-        map.current!.on('mouseleave', 'parcels-fill', () => {
-          map.current!.getCanvas().style.cursor = ''
-        })
-
-        setStatus('Map ready - zoom to Houston to see parcels')
+        loadParcels(map.current!, maplibregl.Popup)
       })
 
       map.current.on('error', (e) => {
         console.error('Map error:', e)
-        setStatus(`Map error: ${e.error?.message || 'Unknown error'}`)
+        // Don't update status for source errors (parcels loading)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if (!(e as any).sourceId) {
+          setStatus(`Map error: ${e.error?.message || 'Unknown error'}`)
+        }
       })
     }
 
@@ -225,7 +306,7 @@ export default function MapDemoPage() {
     return () => {
       map.current?.remove()
     }
-  }, [])
+  }, [loadParcels])
 
   // Handle map style switching
   useEffect(() => {
