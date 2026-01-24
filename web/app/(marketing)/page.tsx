@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Header } from '@/components/marketing/header'
+import { Footer } from '@/components/marketing/footer'
 import {
   MapPin,
   ArrowRight,
@@ -13,7 +15,6 @@ import {
   Building,
   Mountain,
   Satellite,
-  Navigation,
 } from 'lucide-react'
 
 export default function LandingPage() {
@@ -73,39 +74,7 @@ map.on('click', 'parcels', (e) => {
 
   return (
     <div className="min-h-screen">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <MapPin className="h-8 w-8 text-primary" />
-              <span className="font-bold text-xl">Maps for Developers</span>
-            </Link>
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="/features" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                Features
-              </Link>
-              <Link href="/pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                Pricing
-              </Link>
-              <Link href="/docs" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                Docs
-              </Link>
-              <Link href="/map" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                Demo
-              </Link>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" asChild>
-                <Link href="/login">Log in</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/signup">Get Started</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white py-20 sm:py-32">
@@ -301,53 +270,7 @@ map.on('click', 'parcels', (e) => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 text-white">
-                <MapPin className="h-6 w-6" />
-                <span className="font-bold">Maps for Developers</span>
-              </div>
-              <p className="mt-4 text-sm">
-                The most developer-friendly maps API.
-                Built for modern applications.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Product</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/features" className="hover:text-white">Features</Link></li>
-                <li><Link href="/pricing" className="hover:text-white">Pricing</Link></li>
-                <li><Link href="/docs" className="hover:text-white">Documentation</Link></li>
-                <li><Link href="/map" className="hover:text-white">Demo</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Compare</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/alternatives/google-maps" className="hover:text-white">vs Google Maps</Link></li>
-                <li><Link href="/alternatives/mapbox" className="hover:text-white">vs Mapbox</Link></li>
-                <li><Link href="/alternatives/here-maps" className="hover:text-white">vs HERE Maps</Link></li>
-                <li><Link href="/alternatives/maptiler" className="hover:text-white">vs MapTiler</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Company</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link href="/about" className="hover:text-white">About</Link></li>
-                <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
-                <li><Link href="/privacy" className="hover:text-white">Privacy</Link></li>
-                <li><Link href="/terms" className="hover:text-white">Terms</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 border-t border-gray-800 text-sm text-center">
-            &copy; {new Date().getFullYear()} Maps for Developers. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

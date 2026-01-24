@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { MapPin, ArrowRight, Check, X } from 'lucide-react'
+import { Header } from '@/components/marketing/header'
+import { Footer } from '@/components/marketing/footer'
+import { ArrowRight, Check, X } from 'lucide-react'
 
 export const metadata = {
   title: 'Maps for Developers vs Google Maps - Best Alternative in 2024',
@@ -88,25 +90,7 @@ export default function GoogleMapsAlternativePage() {
 
   return (
     <div className="min-h-screen">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <MapPin className="h-8 w-8 text-primary" />
-              <span className="font-bold text-xl">Maps for Developers</span>
-            </Link>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" asChild>
-                <Link href="/login">Log in</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/signup">Get Started</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Hero */}
       <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
@@ -252,6 +236,8 @@ export default function GoogleMapsAlternativePage() {
           </Button>
         </div>
       </section>
+
+      <Footer />
 
       {/* JSON-LD Schema */}
       <script

@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Check, MapPin, ArrowRight } from 'lucide-react'
+import { Header } from '@/components/marketing/header'
+import { Footer } from '@/components/marketing/footer'
+import { Check, ArrowRight } from 'lucide-react'
 import { PLANS } from '@/lib/stripe/plans'
 
 export const metadata = {
@@ -12,36 +14,7 @@ export const metadata = {
 export default function PricingPage() {
   return (
     <div className="min-h-screen">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <MapPin className="h-8 w-8 text-primary" />
-              <span className="font-bold text-xl">Maps for Developers</span>
-            </Link>
-            <div className="hidden md:flex items-center gap-8">
-              <Link href="/features" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                Features
-              </Link>
-              <Link href="/pricing" className="text-sm font-medium text-foreground">
-                Pricing
-              </Link>
-              <Link href="/docs" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                Docs
-              </Link>
-            </div>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" asChild>
-                <Link href="/login">Log in</Link>
-              </Button>
-              <Button asChild>
-                <Link href="/signup">Get Started</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* Hero */}
       <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
@@ -211,6 +184,8 @@ export default function PricingPage() {
           </Button>
         </div>
       </section>
+
+      <Footer />
     </div>
   )
 }
