@@ -225,14 +225,14 @@ map.on('click', 'parcels', (e) => {
                   <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
                     <Shield className="h-4 w-4 text-primary" />
                   </div>
-                  <span>SOC 2 compliant infrastructure with global CDN</span>
+                  <span>Global CDN with edge caching for low-latency responses</span>
                 </li>
               </ul>
               <Button className="mt-8" asChild>
-                <a href="https://docs.mapsfordevelopers.com" target="_blank" rel="noopener noreferrer">
+                <Link href="/docs">
                   Read the Docs
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </a>
+                </Link>
               </Button>
             </div>
             <div className="bg-gray-900 rounded-xl p-6 overflow-x-auto">

@@ -5,14 +5,14 @@ const footerLinks = {
   product: [
     { href: '/features', label: 'Features' },
     { href: '/pricing', label: 'Pricing' },
-    { href: 'https://docs.mapsfordevelopers.com', label: 'Documentation', external: true },
+    { href: '/docs', label: 'Documentation' },
     { href: '/map', label: 'Live Map' },
     { href: '/quickstart', label: 'Quickstart' },
     { href: '/api-reference', label: 'API Reference' },
   ],
   resources: [
     { href: '/use-cases', label: 'Use Cases' },
-    { href: 'https://status.mapsfordevelopers.com', label: 'Status', external: true },
+    { href: '/status', label: 'Status' },
   ],
   compare: [
     { href: '/alternatives/google-maps', label: 'vs Google Maps' },
@@ -51,20 +51,9 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               {footerLinks.product.map((link) => (
                 <li key={link.href}>
-                  {link.external ? (
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  ) : (
-                    <Link href={link.href} className="hover:text-white transition-colors">
-                      {link.label}
-                    </Link>
-                  )}
+                  <Link href={link.href} className="hover:text-white transition-colors">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -76,20 +65,9 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               {footerLinks.resources.map((link) => (
                 <li key={link.href}>
-                  {link.external ? (
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  ) : (
-                    <Link href={link.href} className="hover:text-white transition-colors">
-                      {link.label}
-                    </Link>
-                  )}
+                  <Link href={link.href} className="hover:text-white transition-colors">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
