@@ -11,6 +11,9 @@ const PROTOMAPS_URL = `${CDN}/basemap/protomaps_planet.pmtiles`
 const ESRI_SATELLITE = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 const AWS_TERRAIN = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
 
+// Minimum zoom level before loading parcels (neighborhood level)
+const PARCEL_LOAD_ZOOM = 8
+
 // All verified USA parcel files (92 files covering 50 states + DC)
 const PARCELS = [
   'parcels_az', 'parcels_az_maricopa',
@@ -52,7 +55,10 @@ const PARCELS = [
 export default function MapDemoPage() {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const maplibreRef = useRef<any>(null)
   const parcelsLoadedRef = useRef(false)
+  const parcelsLoadingRef = useRef(false)
   const [mapStyle, setMapStyle] = useState<'map' | 'satellite' | 'terrain'>('map')
   const [status, setStatus] = useState('Loading map...')
   const [parcelsLoaded, setParcelsLoaded] = useState(false)
@@ -83,6 +89,7 @@ export default function MapDemoPage() {
     const initMap = async () => {
       try {
         const maplibregl = (await import('maplibre-gl')).default
+        maplibreRef.current = maplibregl
         const pmtiles = await import('pmtiles')
         const protomapsThemes = await import('protomaps-themes-base')
 
@@ -152,20 +159,16 @@ export default function MapDemoPage() {
         map.current.addControl(new maplibregl.NavigationControl(), 'top-right')
         map.current.addControl(new maplibregl.ScaleControl(), 'bottom-right')
 
-        // Map ready - load parcels
-        map.current.on('load', async () => {
-          if (parcelsLoadedRef.current) return
-          parcelsLoadedRef.current = true
+        // Load parcels function - called when zoom >= PARCEL_LOAD_ZOOM
+        const loadParcels = async () => {
+          if (parcelsLoadedRef.current || parcelsLoadingRef.current || !map.current) return
+          parcelsLoadingRef.current = true
 
-          setStatus('Map loaded! Loading parcels...')
-          let successCount = 0
+          setStatus('Loading parcels...')
 
           for (const p of PARCELS) {
             try {
-              if (map.current?.getSource(p)) {
-                successCount++
-                continue
-              }
+              if (map.current?.getSource(p)) continue
 
               map.current?.addSource(p, {
                 type: 'vector',
@@ -200,39 +203,76 @@ export default function MapDemoPage() {
                   'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.3, 16, 1.5],
                 },
               })
-
-              // Click handler for parcel info
-              map.current?.on('click', `${p}-fill`, (e) => {
-                if (!e.features || e.features.length === 0) return
-                const props = e.features[0].properties
-                const content = Object.entries(props || {})
-                  .filter(([key]) => !key.startsWith('_'))
-                  .slice(0, 15)
-                  .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
-                  .join('<br>')
-
-                new maplibregl.Popup()
-                  .setLngLat(e.lngLat)
-                  .setHTML(`<div style="max-height: 250px; overflow-y: auto; font-size: 12px;">${content}</div>`)
-                  .addTo(map.current!)
-              })
-
-              map.current?.on('mouseenter', `${p}-fill`, () => {
-                if (map.current) map.current.getCanvas().style.cursor = 'pointer'
-              })
-
-              map.current?.on('mouseleave', `${p}-fill`, () => {
-                if (map.current) map.current.getCanvas().style.cursor = ''
-              })
-
-              successCount++
             } catch (e) {
               console.warn(`Failed to load parcel: ${p}`, e)
             }
           }
 
+          parcelsLoadedRef.current = true
           setParcelsLoaded(true)
-          setStatus(`Ready! ${successCount} parcel layers loaded. Zoom in to see property boundaries.`)
+          setStatus('Ready! Click any parcel for details.')
+        }
+
+        // Map ready - set up lazy loading
+        map.current.on('load', () => {
+          setStatus('Map ready! Zoom in to see parcels.')
+
+          // Single delegated click handler for all parcels (much more efficient)
+          map.current?.on('click', (e) => {
+            if (!parcelsLoadedRef.current || !map.current) return
+
+            // Get all parcel fill layers that exist
+            const parcelLayers = PARCELS
+              .map(p => `${p}-fill`)
+              .filter(l => map.current?.getLayer(l))
+
+            if (parcelLayers.length === 0) return
+
+            const features = map.current.queryRenderedFeatures(e.point, {
+              layers: parcelLayers
+            })
+
+            if (features.length > 0 && maplibreRef.current) {
+              const props = features[0].properties
+              const content = Object.entries(props || {})
+                .filter(([key]) => !key.startsWith('_'))
+                .slice(0, 15)
+                .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
+                .join('<br>')
+
+              new maplibreRef.current.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(`<div style="max-height: 250px; overflow-y: auto; font-size: 12px;">${content}</div>`)
+                .addTo(map.current!)
+            }
+          })
+
+          // Single mousemove handler for cursor changes
+          map.current?.on('mousemove', (e) => {
+            if (!parcelsLoadedRef.current || !map.current) return
+
+            const parcelLayers = PARCELS
+              .map(p => `${p}-fill`)
+              .filter(l => map.current?.getLayer(l))
+
+            if (parcelLayers.length === 0) return
+
+            const features = map.current.queryRenderedFeatures(e.point, {
+              layers: parcelLayers
+            })
+
+            map.current.getCanvas().style.cursor = features.length > 0 ? 'pointer' : ''
+          })
+
+          // Zoom listener for lazy loading parcels
+          map.current?.on('zoom', () => {
+            if (!map.current) return
+            const zoom = map.current.getZoom()
+
+            if (zoom >= PARCEL_LOAD_ZOOM && !parcelsLoadedRef.current && !parcelsLoadingRef.current) {
+              loadParcels()
+            }
+          })
         })
 
         map.current.on('error', (e) => {
@@ -344,7 +384,7 @@ export default function MapDemoPage() {
 
       {/* Map */}
       <div className="flex-1 relative">
-        <div ref={mapContainer} className="absolute inset-0" />
+        <div ref={mapContainer} className="absolute inset-0 z-0" />
 
         {/* Layer Panel */}
         <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 w-64 z-10">
