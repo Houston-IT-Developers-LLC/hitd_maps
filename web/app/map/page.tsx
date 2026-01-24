@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { MapPin, Layers, Mountain, Satellite } from 'lucide-react'
@@ -53,6 +53,7 @@ const PARCELS = [
 export default function MapDemoPage() {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
+  const parcelsLoadedRef = useRef(false)
   const [mapStyle, setMapStyle] = useState<'map' | 'satellite' | 'terrain'>('map')
   const [status, setStatus] = useState('Loading map...')
   const [parcelsLoaded, setParcelsLoaded] = useState(false)
@@ -61,91 +62,6 @@ export default function MapDemoPage() {
     pois: true,
     buildings: true,
   })
-
-  // Load all USA parcels
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const loadParcels = useCallback(async (mapInstance: maplibregl.Map, PopupClass: any) => {
-    if (parcelsLoaded) return
-
-    setStatus(`Loading ${PARCELS.length} parcel files...`)
-    let successCount = 0
-    let errorCount = 0
-
-    for (const p of PARCELS) {
-      try {
-        if (mapInstance.getSource(p)) {
-          successCount++
-          continue
-        }
-
-        mapInstance.addSource(p, {
-          type: 'vector',
-          url: `pmtiles://${CDN}/parcels/${p}.pmtiles`,
-        })
-
-        mapInstance.addLayer({
-          id: `${p}-fill`,
-          type: 'fill',
-          source: p,
-          'source-layer': 'parcels',
-          minzoom: 5,
-          paint: {
-            'fill-color': '#e53935',
-            'fill-opacity': [
-              'interpolate', ['linear'], ['zoom'],
-              5, 0.02,
-              10, 0.15,
-              14, 0.3,
-            ],
-          },
-        })
-
-        mapInstance.addLayer({
-          id: `${p}-line`,
-          type: 'line',
-          source: p,
-          'source-layer': 'parcels',
-          minzoom: 11,
-          paint: {
-            'line-color': '#b71c1c',
-            'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.3, 16, 1.5],
-          },
-        })
-
-        // Click handler for parcel info
-        mapInstance.on('click', `${p}-fill`, (e) => {
-          if (!e.features || e.features.length === 0) return
-          const props = e.features[0].properties
-          const content = Object.entries(props || {})
-            .filter(([key]) => !key.startsWith('_'))
-            .slice(0, 15)
-            .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
-            .join('<br>')
-
-          new PopupClass()
-            .setLngLat(e.lngLat)
-            .setHTML(`<div style="max-height: 250px; overflow-y: auto; font-size: 12px;">${content}</div>`)
-            .addTo(mapInstance)
-        })
-
-        mapInstance.on('mouseenter', `${p}-fill`, () => {
-          mapInstance.getCanvas().style.cursor = 'pointer'
-        })
-
-        mapInstance.on('mouseleave', `${p}-fill`, () => {
-          mapInstance.getCanvas().style.cursor = ''
-        })
-
-        successCount++
-      } catch (e) {
-        errorCount++
-        console.warn(`Failed to load parcel: ${p}`, e)
-      }
-    }
-
-    setParcelsLoaded(true)
-    setStatus(`Parcels ready (${successCount}/${PARCELS.length} loaded). Zoom to level 5+ to see boundaries.`)
-  }, [parcelsLoaded])
 
   // Toggle parcel visibility
   useEffect(() => {
@@ -286,9 +202,86 @@ export default function MapDemoPage() {
       map.current.addControl(new maplibregl.ScaleControl(), 'bottom-right')
 
       // Map ready - load parcels
-      map.current.on('load', () => {
-        setStatus('Loading parcels...')
-        loadParcels(map.current!, maplibregl.Popup)
+      map.current.on('load', async () => {
+        if (parcelsLoadedRef.current) return
+        parcelsLoadedRef.current = true
+
+        setStatus(`Loading ${PARCELS.length} parcel files...`)
+        let successCount = 0
+
+        for (const p of PARCELS) {
+          try {
+            if (map.current?.getSource(p)) {
+              successCount++
+              continue
+            }
+
+            map.current?.addSource(p, {
+              type: 'vector',
+              url: `pmtiles://${CDN}/parcels/${p}.pmtiles`,
+            })
+
+            map.current?.addLayer({
+              id: `${p}-fill`,
+              type: 'fill',
+              source: p,
+              'source-layer': 'parcels',
+              minzoom: 5,
+              paint: {
+                'fill-color': '#e53935',
+                'fill-opacity': [
+                  'interpolate', ['linear'], ['zoom'],
+                  5, 0.02,
+                  10, 0.15,
+                  14, 0.3,
+                ],
+              },
+            })
+
+            map.current?.addLayer({
+              id: `${p}-line`,
+              type: 'line',
+              source: p,
+              'source-layer': 'parcels',
+              minzoom: 11,
+              paint: {
+                'line-color': '#b71c1c',
+                'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.3, 16, 1.5],
+              },
+            })
+
+            // Click handler for parcel info
+            map.current?.on('click', `${p}-fill`, (e) => {
+              if (!e.features || e.features.length === 0) return
+              const props = e.features[0].properties
+              const content = Object.entries(props || {})
+                .filter(([key]) => !key.startsWith('_'))
+                .slice(0, 15)
+                .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
+                .join('<br>')
+
+              new maplibregl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(`<div style="max-height: 250px; overflow-y: auto; font-size: 12px;">${content}</div>`)
+                .addTo(map.current!)
+            })
+
+            map.current?.on('mouseenter', `${p}-fill`, () => {
+              if (map.current) map.current.getCanvas().style.cursor = 'pointer'
+            })
+
+            map.current?.on('mouseleave', `${p}-fill`, () => {
+              if (map.current) map.current.getCanvas().style.cursor = ''
+            })
+
+            successCount++
+          } catch (e) {
+            console.warn(`Failed to load parcel: ${p}`, e)
+          }
+        }
+
+        setParcelsLoaded(true)
+        setStatus(`Parcels ready (${successCount}/${PARCELS.length} loaded). Zoom to level 5+ to see boundaries.`)
       })
 
       map.current.on('error', (e) => {
@@ -306,7 +299,8 @@ export default function MapDemoPage() {
     return () => {
       map.current?.remove()
     }
-  }, [loadParcels])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Handle map style switching
   useEffect(() => {
