@@ -149,11 +149,11 @@ export default function FeaturesPage() {
       <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold">
-            680GB of map data at your fingertips
+            167M+ queryable records
           </h1>
           <p className="mt-4 text-xl text-muted-foreground max-w-2xl mx-auto">
-            The most comprehensive maps API for developers. Property data, POIs,
-            terrain, satellite imagery, and more. Always up-to-date.
+            Production-ready geospatial data via REST API. Property parcels, POIs,
+            terrain, and satellite imagery. Built for developers.
           </p>
           <Button size="lg" className="mt-8" asChild>
             <Link href="/signup">
@@ -320,9 +320,9 @@ export default function FeaturesPage() {
       {/* CTA */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold">Ready to explore?</h2>
+          <h2 className="text-3xl font-bold">Ready to ship?</h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Try our interactive demo or start building with the free tier
+            Explore the live map or start building with the free tier
           </p>
           <div className="mt-8 flex items-center justify-center gap-4">
             <Button size="lg" asChild>
@@ -332,7 +332,7 @@ export default function FeaturesPage() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/map">View Demo</Link>
+              <Link href="/map">Live Map</Link>
             </Button>
           </div>
         </div>

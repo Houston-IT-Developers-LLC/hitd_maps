@@ -52,10 +52,10 @@ export default function LandingPage() {
   ]
 
   const stats = [
-    { value: '680GB', label: 'Map Data' },
+    { value: '167M+', label: 'Total Records' },
     { value: '150M+', label: 'Property Parcels' },
     { value: '17M+', label: 'Points of Interest' },
-    { value: '47', label: 'States Covered' },
+    { value: '47', label: 'States + DC' },
   ]
 
   const codeExample = `import { MapsForDevelopers } from '@mapsfordevelopers/js'
@@ -85,9 +85,9 @@ map.on('click', 'parcels', (e) => {
               <span className="text-primary">Developers</span>
             </h1>
             <p className="mt-6 text-xl text-muted-foreground">
-              Build stunning map experiences with 680GB of data. Property parcels,
-              POIs, 3D terrain, satellite imagery, and offline support.
-              No surprise bills.
+              Ship faster with 167M+ queryable records. Property parcels,
+              POIs, 3D terrain, and satellite imagery via REST API.
+              Zero egress fees.
             </p>
             <div className="mt-10 flex items-center justify-center gap-4">
               <Button size="lg" asChild>
@@ -98,7 +98,7 @@ map.on('click', 'parcels', (e) => {
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <Link href="/map">
-                  View Demo
+                  Live Map
                 </Link>
               </Button>
             </div>
@@ -114,10 +114,10 @@ map.on('click', 'parcels', (e) => {
                     <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/30 transition-colors">
                       <MapPin className="h-12 w-12 text-primary" />
                     </div>
-                    <p className="text-xl font-semibold text-gray-800">Interactive Map Demo</p>
-                    <p className="text-muted-foreground mt-2">Click to explore 680GB of map data</p>
+                    <p className="text-xl font-semibold text-gray-800">Interactive Live Map</p>
+                    <p className="text-muted-foreground mt-2">Query 167M+ records in real-time</p>
                     <div className="mt-4 inline-flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all">
-                      Try the Demo
+                      Explore Live Map
                       <ArrowRight className="h-5 w-5" />
                     </div>
                   </div>
@@ -229,10 +229,10 @@ map.on('click', 'parcels', (e) => {
                 </li>
               </ul>
               <Button className="mt-8" asChild>
-                <Link href="/docs">
-                  Read the docs
+                <a href="https://docs.mapsfordevelopers.com" target="_blank" rel="noopener noreferrer">
+                  Read the Docs
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                </a>
               </Button>
             </div>
             <div className="bg-gray-900 rounded-xl p-6 overflow-x-auto">

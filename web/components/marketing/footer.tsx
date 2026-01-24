@@ -5,8 +5,8 @@ const footerLinks = {
   product: [
     { href: '/features', label: 'Features' },
     { href: '/pricing', label: 'Pricing' },
-    { href: '/docs', label: 'Documentation' },
-    { href: '/map', label: 'Demo' },
+    { href: 'https://docs.mapsfordevelopers.com', label: 'Documentation', external: true },
+    { href: '/map', label: 'Live Map' },
   ],
   compare: [
     { href: '/alternatives/google-maps', label: 'vs Google Maps' },
@@ -45,9 +45,20 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               {footerLinks.product.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="hover:text-white transition-colors">
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

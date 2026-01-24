@@ -113,7 +113,7 @@ export default function GoogleMapsAlternativePage() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/map">View Demo</Link>
+              <Link href="/map">Live Map</Link>
             </Button>
           </div>
         </div>

@@ -10,8 +10,8 @@ import { cn } from '@/lib/utils'
 const navLinks = [
   { href: '/features', label: 'Features' },
   { href: '/pricing', label: 'Pricing' },
-  { href: '/docs', label: 'Docs' },
-  { href: '/map', label: 'Demo' },
+  { href: 'https://docs.mapsfordevelopers.com', label: 'Docs', external: true },
+  { href: '/map', label: 'Live Map' },
 ]
 
 interface HeaderProps {
@@ -40,16 +40,28 @@ export function Header({ className }: HeaderProps) {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'text-sm font-medium transition-colors hover:text-foreground',
-                  isActive(link.href) ? 'text-foreground' : 'text-muted-foreground'
-                )}
-              >
-                {link.label}
-              </Link>
+              link.external ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium transition-colors hover:text-foreground text-muted-foreground"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'text-sm font-medium transition-colors hover:text-foreground',
+                    isActive(link.href) ? 'text-foreground' : 'text-muted-foreground'
+                  )}
+                >
+                  {link.label}
+                </Link>
+              )
             ))}
           </div>
 
@@ -94,19 +106,32 @@ export function Header({ className }: HeaderProps) {
           <div className="fixed top-16 left-0 right-0 bg-white border-b shadow-lg z-50 md:hidden">
             <div className="px-4 py-4 space-y-1">
               {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    'block px-3 py-2 rounded-md text-base font-medium transition-colors',
-                    isActive(link.href)
-                      ? 'bg-primary/10 text-foreground'
-                      : 'text-muted-foreground hover:bg-gray-100 hover:text-foreground'
-                  )}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
+                link.external ? (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block px-3 py-2 rounded-md text-base font-medium transition-colors text-muted-foreground hover:bg-gray-100 hover:text-foreground"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      'block px-3 py-2 rounded-md text-base font-medium transition-colors',
+                      isActive(link.href)
+                        ? 'bg-primary/10 text-foreground'
+                        : 'text-muted-foreground hover:bg-gray-100 hover:text-foreground'
+                    )}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                )
               ))}
               <div className="pt-4 mt-4 border-t space-y-2">
                 <Button variant="ghost" className="w-full justify-center" asChild>
