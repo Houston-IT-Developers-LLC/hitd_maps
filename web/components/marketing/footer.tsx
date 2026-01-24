@@ -34,8 +34,8 @@ export function Footer() {
               <span className="font-bold">Maps for Developers</span>
             </div>
             <p className="mt-4 text-sm">
-              The most developer-friendly maps API.
-              Built for modern applications.
+              Enterprise-grade geospatial data platform.
+              Trusted by thousands of developers worldwide.
             </p>
           </div>
 

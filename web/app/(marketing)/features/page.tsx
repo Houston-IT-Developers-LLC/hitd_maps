@@ -23,8 +23,8 @@ import {
 } from 'lucide-react'
 
 export const metadata = {
-  title: 'Features',
-  description: 'Comprehensive map data for developers. Property parcels, POIs, terrain, satellite imagery, and more.',
+  title: 'Features - Enterprise Map Data Platform',
+  description: 'Production-ready geospatial data for developers. 167M+ verified records including property parcels, POIs, terrain, and satellite imagery.',
 }
 
 export default function FeaturesPage() {
@@ -32,49 +32,49 @@ export default function FeaturesPage() {
     {
       icon: Building,
       title: 'Property Parcels',
-      description: '150M+ property boundaries across 47 states + DC',
+      description: '150M+ verified property boundaries across 47 states + DC',
       details: [
-        'Owner names and addresses',
-        'Property values and assessments',
-        'Lot sizes and dimensions',
-        'Zoning information',
-        'Year built and improvements',
+        'Legal owner names and mailing addresses',
+        'Assessed values and tax records',
+        'Lot dimensions and acreage',
+        'Zoning classifications',
+        'Year built and improvement data',
       ],
     },
     {
       icon: MapPin,
       title: 'Points of Interest',
-      description: '17M+ businesses, restaurants, services, and landmarks',
+      description: '17M+ verified business listings and landmarks',
       details: [
-        'Business names and categories',
-        'Addresses and coordinates',
-        'Phone numbers and websites',
-        'Hours of operation',
-        'Ratings and reviews',
+        'Business names and NAICS categories',
+        'Verified addresses and coordinates',
+        'Contact information and websites',
+        'Operating hours',
+        'Customer ratings and reviews',
       ],
     },
     {
       icon: Building2,
       title: 'Building Footprints',
-      description: 'Accurate building outlines for the entire USA',
+      description: 'Precise building outlines for the entire USA',
       details: [
-        '3D extrusion support',
-        'Building heights',
-        'Roof types',
-        'Construction dates',
-        'Building classifications',
+        '3D extrusion rendering',
+        'Estimated building heights',
+        'Roof type classifications',
+        'Construction year estimates',
+        'Commercial/residential classification',
       ],
     },
     {
       icon: Navigation,
       title: 'Addresses',
-      description: 'Comprehensive address database with geocoding',
+      description: 'Nationwide address database with precision geocoding',
       details: [
         'Full street addresses',
         'Unit and suite numbers',
-        'Postal codes',
-        'Coordinate precision',
-        'Address validation',
+        'ZIP+4 postal codes',
+        'Sub-meter coordinate precision',
+        'USPS address validation',
       ],
     },
   ]
@@ -149,11 +149,11 @@ export default function FeaturesPage() {
       <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold">
-            167M+ queryable records
+            167M+ Verified Records
           </h1>
           <p className="mt-4 text-xl text-muted-foreground max-w-2xl mx-auto">
-            Production-ready geospatial data via REST API. Property parcels, POIs,
-            terrain, and satellite imagery. Built for developers.
+            Enterprise-grade geospatial data platform. Property parcels, POIs,
+            terrain, and satellite imagery. Built for production.
           </p>
           <Button size="lg" className="mt-8" asChild>
             <Link href="/signup">

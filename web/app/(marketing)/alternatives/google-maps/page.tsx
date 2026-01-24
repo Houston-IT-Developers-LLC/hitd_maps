@@ -56,35 +56,35 @@ export default function GoogleMapsAlternativePage() {
       note: '17M+ points of interest',
     },
     {
-      feature: 'Self-Hosted Option',
+      feature: 'On-Premise Option',
       us: true,
       competitor: false,
-      note: 'PMTiles on your infrastructure',
+      note: 'Enterprise deployment available',
     },
     {
-      feature: 'Open Source Base',
+      feature: 'No Vendor Lock-in',
       us: true,
       competitor: false,
-      note: 'MapLibre GL JS',
+      note: 'Standard formats, easy migration',
     },
   ]
 
   const faqs = [
     {
       q: 'Is Maps for Developers a drop-in replacement for Google Maps?',
-      a: 'While the APIs differ, Maps for Developers provides similar functionality with additional features like property parcel data. Our JavaScript SDK makes migration straightforward.',
+      a: 'Our platform provides similar core functionality with additional features like property parcel data. Our SDK makes migration straightforward with comprehensive documentation and migration guides.',
     },
     {
       q: 'How does pricing compare to Google Maps?',
-      a: 'Google Maps charges per API call with complex pricing tiers. We offer a simple $49.99/mo plan with 100,000 tile requests/day included. No surprise bills.',
+      a: 'Google Maps charges per API call with complex pricing tiers. We offer transparent flat-rate pricing at $49.99/mo with 100,000 requests/day included. No surprise bills.',
     },
     {
       q: 'Do you have property boundary data?',
-      a: 'Yes! This is our key differentiator. We have 150M+ property parcels covering 47 states + DC with owner information, property values, and boundaries.',
+      a: 'Yes. This is our key differentiator. We provide 150M+ verified property parcels covering 47 states + DC with owner information, assessed values, and legal boundaries.',
     },
     {
-      q: 'Can I use my own infrastructure?',
-      a: 'Yes. We use PMTiles format which can be self-hosted on any cloud provider. Or use our CDN with zero egress fees.',
+      q: 'Do you offer enterprise deployment options?',
+      a: 'Yes. Enterprise customers can deploy on-premise or use our dedicated infrastructure. Contact our sales team for custom deployment options.',
     },
   ]
 

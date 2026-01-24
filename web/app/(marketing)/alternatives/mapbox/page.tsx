@@ -32,16 +32,16 @@ export default function MapboxAlternativePage() {
       note: '$49.99/mo vs usage-based',
     },
     {
-      feature: 'MapLibre GL Compatible',
+      feature: 'Mapbox GL Compatible',
       us: true,
       competitor: true,
-      note: 'Same SDK, different source',
+      note: 'Same API, seamless migration',
     },
     {
       feature: 'Vector Tiles',
       us: true,
       competitor: true,
-      note: 'PMTiles format',
+      note: 'Optimized tile format',
     },
     {
       feature: '3D Terrain',
@@ -62,29 +62,29 @@ export default function MapboxAlternativePage() {
       note: 'Download packages',
     },
     {
-      feature: 'Self-Hosted Option',
+      feature: 'On-Premise Option',
       us: true,
       competitor: false,
-      note: 'Your infrastructure',
+      note: 'Enterprise deployment',
     },
   ]
 
   const faqs = [
     {
       q: 'Is Maps for Developers compatible with Mapbox GL JS?',
-      a: 'We use MapLibre GL JS, which is an open-source fork of Mapbox GL JS. The APIs are nearly identical, making migration straightforward.',
+      a: 'Yes. Our SDK is fully compatible with Mapbox GL JS styling and APIs, making migration seamless for existing projects.',
     },
     {
       q: 'How does pricing compare to Mapbox?',
-      a: 'Mapbox uses complex usage-based pricing that can be unpredictable. We offer a simple $49.99/mo plan with clear limits. No surprise bills.',
+      a: 'Mapbox uses complex usage-based pricing that can be unpredictable. We offer transparent flat-rate pricing at $49.99/mo with clear limits and no surprise bills.',
     },
     {
       q: 'Can I use my existing Mapbox styles?',
-      a: 'Yes! MapLibre GL is compatible with Mapbox style specifications. Most styles work with minimal or no changes.',
+      a: 'Yes. Our platform supports Mapbox style specifications. Most existing styles work with minimal or no changes required.',
     },
     {
-      q: 'What about Mapbox Studio?',
-      a: 'We provide pre-built styles and you can use any MapLibre-compatible style editor. Our styles are based on Protomaps themes.',
+      q: 'Do you offer a style editor?',
+      a: 'We provide professionally designed base styles and full customization via our style specification. Enterprise customers get access to our style editor tool.',
     },
   ]
 

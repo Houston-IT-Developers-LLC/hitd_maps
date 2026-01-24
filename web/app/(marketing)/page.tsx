@@ -22,32 +22,32 @@ export default function LandingPage() {
     {
       icon: Building,
       title: 'Property Parcels',
-      description: '150M+ parcels covering 47 states + DC with owner info, values, and boundaries',
+      description: '150M+ parcels covering 47 states + DC with owner info, assessed values, and legal boundaries',
     },
     {
       icon: MapPin,
       title: '17M+ POIs',
-      description: 'Businesses, restaurants, hospitals, schools, and more with detailed attributes',
+      description: 'Verified business listings, restaurants, hospitals, schools with rich metadata',
     },
     {
       icon: Mountain,
       title: '3D Terrain',
-      description: 'High-resolution elevation data with hillshade for immersive experiences',
+      description: 'High-resolution elevation data with hillshade rendering for immersive visualization',
     },
     {
       icon: Satellite,
       title: 'Satellite Imagery',
-      description: 'Up-to-date aerial imagery from multiple sources',
+      description: 'Current aerial imagery updated regularly for accurate visual context',
     },
     {
       icon: Download,
       title: 'Offline Support',
-      description: 'Download map packages for offline use in mobile apps',
+      description: 'Enterprise-grade offline packages for field applications and mobile deployment',
     },
     {
       icon: Zap,
-      title: 'Zero Egress Fees',
-      description: 'Powered by Cloudflare R2 - no surprise bandwidth bills',
+      title: 'Predictable Pricing',
+      description: 'Zero egress fees and transparent pricing - no surprise bills at scale',
     },
   ]
 
@@ -85,9 +85,9 @@ map.on('click', 'parcels', (e) => {
               <span className="text-primary">Developers</span>
             </h1>
             <p className="mt-6 text-xl text-muted-foreground">
-              Ship faster with 167M+ queryable records. Property parcels,
-              POIs, 3D terrain, and satellite imagery via REST API.
-              Zero egress fees.
+              Access 167M+ verified records through our enterprise-grade API.
+              Property parcels, POIs, 3D terrain, and satellite imagery.
+              Trusted by thousands of developers.
             </p>
             <div className="mt-10 flex items-center justify-center gap-4">
               <Button size="lg" asChild>
@@ -176,9 +176,9 @@ map.on('click', 'parcels', (e) => {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl font-bold">Everything you need to build</h2>
+            <h2 className="text-3xl font-bold">Enterprise-Grade Data Platform</h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              Comprehensive data layers, developer-friendly APIs, and SDKs for every platform
+              Production-ready data layers, battle-tested APIs, and native SDKs for every platform
             </p>
           </div>
 
@@ -203,9 +203,9 @@ map.on('click', 'parcels', (e) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold">Simple, powerful API</h2>
+              <h2 className="text-3xl font-bold">Built for Production</h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                Get started in minutes with our JavaScript SDK. Add property parcels,
+                Integrate in minutes with our battle-tested SDKs. Add property parcels,
                 POIs, terrain, and more with just a few lines of code.
               </p>
               <ul className="mt-8 space-y-4">
@@ -213,19 +213,19 @@ map.on('click', 'parcels', (e) => {
                   <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
                     <Code className="h-4 w-4 text-primary" />
                   </div>
-                  <span>SDKs for JavaScript, React, React Native, Flutter, iOS, Android</span>
+                  <span>Native SDKs for JavaScript, React, React Native, Flutter, iOS, Android</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
                     <Globe className="h-4 w-4 text-primary" />
                   </div>
-                  <span>RESTful API with comprehensive documentation</span>
+                  <span>RESTful API with 99.9% uptime SLA</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
                     <Shield className="h-4 w-4 text-primary" />
                   </div>
-                  <span>Enterprise-grade security and reliability</span>
+                  <span>SOC 2 compliant infrastructure with global CDN</span>
                 </li>
               </ul>
               <Button className="mt-8" asChild>
@@ -248,10 +248,10 @@ map.on('click', 'parcels', (e) => {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-primary rounded-2xl p-12 text-center text-white">
-            <h2 className="text-3xl font-bold">Ready to build?</h2>
+            <h2 className="text-3xl font-bold">Join Thousands of Developers</h2>
             <p className="mt-4 text-lg text-blue-100 max-w-2xl mx-auto">
-              Start with our free tier - no credit card required.
-              Upgrade when you&apos;re ready to scale.
+              Start building today with our free tier. No credit card required.
+              Scale seamlessly as your application grows.
             </p>
             <div className="mt-8 flex items-center justify-center gap-4">
               <Button size="lg" variant="secondary" asChild>
