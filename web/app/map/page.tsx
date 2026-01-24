@@ -8,7 +8,6 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 
 const CDN = 'https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev'
 const PROTOMAPS_URL = `${CDN}/basemap/protomaps_planet.pmtiles`
-const OSM_TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
 const ESRI_SATELLITE = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 const AWS_TERRAIN = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
 
@@ -82,26 +81,23 @@ export default function MapDemoPage() {
     if (!mapContainer.current || map.current) return
 
     const initMap = async () => {
-      const maplibregl = (await import('maplibre-gl')).default
-      const pmtiles = await import('pmtiles')
-      const protomapsThemes = await import('protomaps-themes-base')
-
-      // Register PMTiles protocol
-      const protocol = new pmtiles.Protocol()
-      maplibregl.addProtocol('pmtiles', protocol.tile)
-
-      // Build map style - try Protomaps first, fall back to OSM
-      let mapStyleObj: maplibregl.StyleSpecification
-
       try {
-        // Try to use Protomaps vector basemap
+        const maplibregl = (await import('maplibre-gl')).default
+        const pmtiles = await import('pmtiles')
+        const protomapsThemes = await import('protomaps-themes-base')
+
+        // Register PMTiles protocol
+        const protocol = new pmtiles.Protocol()
+        maplibregl.addProtocol('pmtiles', protocol.tile)
+
+        // Build map style with Protomaps
         const protomapsLayers = protomapsThemes.layers(
           'protomaps',
           protomapsThemes.namedTheme('light'),
           { lang: 'en' }
         )
 
-        mapStyleObj = {
+        const mapStyleObj: maplibregl.StyleSpecification = {
           version: 8,
           glyphs: 'https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf',
           sprite: 'https://protomaps.github.io/basemaps-assets/sprites/v4/light',
@@ -142,156 +138,115 @@ export default function MapDemoPage() {
           ],
           terrain: { source: 'terrain', exaggeration: 0 },
         }
-        setStatus('Map loaded with Protomaps')
-      } catch (e) {
-        console.error('Failed to load Protomaps theme, falling back to OSM:', e)
-        // Fallback to OSM raster tiles
-        mapStyleObj = {
-          version: 8,
-          sources: {
-            osm: {
-              type: 'raster',
-              tiles: [OSM_TILES],
-              tileSize: 256,
-              maxzoom: 19,
-            },
-            sat: {
-              type: 'raster',
-              tiles: [ESRI_SATELLITE],
-              tileSize: 256,
-              maxzoom: 18,
-            },
-            terrain: {
-              type: 'raster-dem',
-              tiles: [AWS_TERRAIN],
-              tileSize: 256,
-              maxzoom: 15,
-              encoding: 'terrarium',
-            },
-          },
-          layers: [
-            { id: 'osm', type: 'raster', source: 'osm' },
-            {
-              id: 'sat',
-              type: 'raster',
-              source: 'sat',
-              layout: { visibility: 'none' },
-            },
-            {
-              id: 'hillshade',
-              type: 'hillshade',
-              source: 'terrain',
-              layout: { visibility: 'none' },
-              paint: { 'hillshade-exaggeration': 0.5 },
-            },
-          ],
-          terrain: { source: 'terrain', exaggeration: 0 },
-        }
-        setStatus('Map loaded with OSM fallback')
-      }
 
-      map.current = new maplibregl.Map({
-        container: mapContainer.current!,
-        style: mapStyleObj,
-        center: [-98.5, 39.8], // Center of USA
-        zoom: 4,
-      })
+        map.current = new maplibregl.Map({
+          container: mapContainer.current!,
+          style: mapStyleObj,
+          center: [-98.5, 39.8], // Center of USA
+          zoom: 4,
+        })
 
-      // Add navigation controls
-      map.current.addControl(new maplibregl.NavigationControl(), 'top-right')
-      map.current.addControl(new maplibregl.ScaleControl(), 'bottom-right')
+        setStatus('Initializing map...')
 
-      // Map ready - load parcels
-      map.current.on('load', async () => {
-        if (parcelsLoadedRef.current) return
-        parcelsLoadedRef.current = true
+        // Add navigation controls
+        map.current.addControl(new maplibregl.NavigationControl(), 'top-right')
+        map.current.addControl(new maplibregl.ScaleControl(), 'bottom-right')
 
-        setStatus(`Loading ${PARCELS.length} parcel files...`)
-        let successCount = 0
+        // Map ready - load parcels
+        map.current.on('load', async () => {
+          if (parcelsLoadedRef.current) return
+          parcelsLoadedRef.current = true
 
-        for (const p of PARCELS) {
-          try {
-            if (map.current?.getSource(p)) {
+          setStatus('Map loaded! Loading parcels...')
+          let successCount = 0
+
+          for (const p of PARCELS) {
+            try {
+              if (map.current?.getSource(p)) {
+                successCount++
+                continue
+              }
+
+              map.current?.addSource(p, {
+                type: 'vector',
+                url: `pmtiles://${CDN}/parcels/${p}.pmtiles`,
+              })
+
+              map.current?.addLayer({
+                id: `${p}-fill`,
+                type: 'fill',
+                source: p,
+                'source-layer': 'parcels',
+                minzoom: 5,
+                paint: {
+                  'fill-color': '#e53935',
+                  'fill-opacity': [
+                    'interpolate', ['linear'], ['zoom'],
+                    5, 0.02,
+                    10, 0.15,
+                    14, 0.3,
+                  ],
+                },
+              })
+
+              map.current?.addLayer({
+                id: `${p}-line`,
+                type: 'line',
+                source: p,
+                'source-layer': 'parcels',
+                minzoom: 11,
+                paint: {
+                  'line-color': '#b71c1c',
+                  'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.3, 16, 1.5],
+                },
+              })
+
+              // Click handler for parcel info
+              map.current?.on('click', `${p}-fill`, (e) => {
+                if (!e.features || e.features.length === 0) return
+                const props = e.features[0].properties
+                const content = Object.entries(props || {})
+                  .filter(([key]) => !key.startsWith('_'))
+                  .slice(0, 15)
+                  .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
+                  .join('<br>')
+
+                new maplibregl.Popup()
+                  .setLngLat(e.lngLat)
+                  .setHTML(`<div style="max-height: 250px; overflow-y: auto; font-size: 12px;">${content}</div>`)
+                  .addTo(map.current!)
+              })
+
+              map.current?.on('mouseenter', `${p}-fill`, () => {
+                if (map.current) map.current.getCanvas().style.cursor = 'pointer'
+              })
+
+              map.current?.on('mouseleave', `${p}-fill`, () => {
+                if (map.current) map.current.getCanvas().style.cursor = ''
+              })
+
               successCount++
-              continue
+            } catch (e) {
+              console.warn(`Failed to load parcel: ${p}`, e)
             }
-
-            map.current?.addSource(p, {
-              type: 'vector',
-              url: `pmtiles://${CDN}/parcels/${p}.pmtiles`,
-            })
-
-            map.current?.addLayer({
-              id: `${p}-fill`,
-              type: 'fill',
-              source: p,
-              'source-layer': 'parcels',
-              minzoom: 5,
-              paint: {
-                'fill-color': '#e53935',
-                'fill-opacity': [
-                  'interpolate', ['linear'], ['zoom'],
-                  5, 0.02,
-                  10, 0.15,
-                  14, 0.3,
-                ],
-              },
-            })
-
-            map.current?.addLayer({
-              id: `${p}-line`,
-              type: 'line',
-              source: p,
-              'source-layer': 'parcels',
-              minzoom: 11,
-              paint: {
-                'line-color': '#b71c1c',
-                'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.3, 16, 1.5],
-              },
-            })
-
-            // Click handler for parcel info
-            map.current?.on('click', `${p}-fill`, (e) => {
-              if (!e.features || e.features.length === 0) return
-              const props = e.features[0].properties
-              const content = Object.entries(props || {})
-                .filter(([key]) => !key.startsWith('_'))
-                .slice(0, 15)
-                .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
-                .join('<br>')
-
-              new maplibregl.Popup()
-                .setLngLat(e.lngLat)
-                .setHTML(`<div style="max-height: 250px; overflow-y: auto; font-size: 12px;">${content}</div>`)
-                .addTo(map.current!)
-            })
-
-            map.current?.on('mouseenter', `${p}-fill`, () => {
-              if (map.current) map.current.getCanvas().style.cursor = 'pointer'
-            })
-
-            map.current?.on('mouseleave', `${p}-fill`, () => {
-              if (map.current) map.current.getCanvas().style.cursor = ''
-            })
-
-            successCount++
-          } catch (e) {
-            console.warn(`Failed to load parcel: ${p}`, e)
           }
-        }
 
-        setParcelsLoaded(true)
-        setStatus(`Parcels ready (${successCount}/${PARCELS.length} loaded). Zoom to level 5+ to see boundaries.`)
-      })
+          setParcelsLoaded(true)
+          setStatus(`Ready! ${successCount} parcel layers loaded. Zoom in to see property boundaries.`)
+        })
 
-      map.current.on('error', (e) => {
-        console.error('Map error:', e)
-        // Don't update status for source errors (parcels loading)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (!(e as any).sourceId) {
-          setStatus(`Map error: ${e.error?.message || 'Unknown error'}`)
-        }
-      })
+        map.current.on('error', (e) => {
+          console.error('Map error:', e)
+          // Don't update status for source errors (parcels loading)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          if (!(e as any).sourceId) {
+            setStatus(`Map error: ${e.error?.message || 'Unknown error'}`)
+          }
+        })
+      } catch (err) {
+        console.error('Failed to initialize map:', err)
+        setStatus('Failed to load map. Please refresh the page.')
+      }
     }
 
     initMap()
@@ -315,11 +270,11 @@ export default function MapDemoPage() {
       }
     }
 
-    // Helper to set basemap visibility (protomaps or osm layers)
+    // Helper to set basemap visibility (protomaps layers)
     const setBasemapVisibility = (visible: boolean) => {
       m.getStyle()?.layers?.forEach((layer) => {
         const layerSource = 'source' in layer ? layer.source : null
-        if (layerSource === 'protomaps' || layerSource === 'osm') {
+        if (layerSource === 'protomaps') {
           setLayerVisibility(layer.id, visible)
         }
       })
