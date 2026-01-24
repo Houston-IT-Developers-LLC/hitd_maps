@@ -33,8 +33,9 @@ export async function GET(
   if (usage.exceeded) {
     return NextResponse.json(
       {
-        error: 'Daily usage limit exceeded',
+        error: 'Monthly usage limit exceeded',
         current: usage.current,
+        limits: usage.limits,
         tier: validation.tier,
       },
       { status: 429 }
@@ -95,9 +96,7 @@ export async function GET(
         'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
         'Access-Control-Allow-Origin': '*',
         'X-Tiles-Remaining': String(
-          validation.tier === 'enterprise'
-            ? 'unlimited'
-            : Math.max(0, 100000 - usage.current.tiles)
+          Math.max(0, usage.limits.tiles - usage.current.tiles)
         ),
       },
     })

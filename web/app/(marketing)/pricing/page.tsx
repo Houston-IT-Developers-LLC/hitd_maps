@@ -60,7 +60,7 @@ export default function PricingPage() {
               </CardFooter>
             </Card>
 
-            {/* Developer */}
+            {/* Pro */}
             <Card className="border-primary relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <span className="bg-primary text-white text-sm font-medium px-3 py-1 rounded-full">
@@ -68,16 +68,16 @@ export default function PricingPage() {
                 </span>
               </div>
               <CardHeader>
-                <CardTitle>{PLANS.developer.name}</CardTitle>
-                <CardDescription>{PLANS.developer.description}</CardDescription>
+                <CardTitle>{PLANS.pro.name}</CardTitle>
+                <CardDescription>{PLANS.pro.description}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="mb-8">
-                  <span className="text-4xl font-bold">$49.99</span>
+                  <span className="text-4xl font-bold">$49</span>
                   <span className="text-muted-foreground">/month</span>
                 </div>
                 <ul className="space-y-3">
-                  {PLANS.developer.features.map((feature) => (
+                  {PLANS.pro.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-3">
                       <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
                       <span className="text-sm">{feature}</span>
@@ -88,7 +88,7 @@ export default function PricingPage() {
               <CardFooter>
                 <Button className="w-full" asChild>
                   <Link href="/signup">
-                    Start Free Trial
+                    Get Started
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -103,7 +103,8 @@ export default function PricingPage() {
               </CardHeader>
               <CardContent>
                 <div className="mb-8">
-                  <span className="text-4xl font-bold">Custom</span>
+                  <span className="text-4xl font-bold">$199</span>
+                  <span className="text-muted-foreground">/month</span>
                 </div>
                 <ul className="space-y-3">
                   {PLANS.enterprise.features.map((feature) => (
@@ -116,7 +117,7 @@ export default function PricingPage() {
               </CardContent>
               <CardFooter>
                 <Button variant="outline" className="w-full" asChild>
-                  <Link href="/contact">Contact Sales</Link>
+                  <Link href="/signup">Get Started</Link>
                 </Button>
               </CardFooter>
             </Card>
@@ -135,7 +136,7 @@ export default function PricingPage() {
               <h3 className="font-semibold text-lg">What happens if I exceed my limits?</h3>
               <p className="mt-2 text-muted-foreground">
                 We&apos;ll notify you when you&apos;re approaching your limits. If you exceed them,
-                additional requests are billed at $0.001 per tile request. Upgrade to avoid overages.
+                requests will be rate-limited until the next billing cycle. Upgrade to avoid interruptions.
               </p>
             </div>
             <div>

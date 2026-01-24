@@ -47,11 +47,11 @@ export default async function UsagePage() {
 
   const tier = profile?.subscription_tier || 'free'
   const tierLimits = {
-    free: { tiles: 1000, api: 100 },
-    developer: { tiles: 100000, api: 10000 },
-    enterprise: { tiles: Infinity, api: Infinity },
+    free: { tiles: 10000, api: 1000 },       // 10K tiles, 1K API per month
+    pro: { tiles: 5000000, api: 500000 },    // 5M tiles, 500K API per month
+    enterprise: { tiles: 25000000, api: 2500000 }, // 25M tiles, 2.5M API per month
   }
-  const limits = tierLimits[tier as keyof typeof tierLimits]
+  const limits = tierLimits[tier as keyof typeof tierLimits] || tierLimits.free
 
   // Format bytes
   const formatBytes = (bytes: number) => {
@@ -62,9 +62,9 @@ export default async function UsagePage() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
-  // Calculate usage percentage
-  const tilePercent = limits.tiles === Infinity ? 0 : ((todayUsage?.tile_requests || 0) / limits.tiles) * 100
-  const apiPercent = limits.api === Infinity ? 0 : ((todayUsage?.api_requests || 0) / limits.api) * 100
+  // Calculate usage percentage (based on monthly totals now)
+  const tilePercent = limits.tiles === Infinity ? 0 : (totals.tiles / limits.tiles) * 100
+  const apiPercent = limits.api === Infinity ? 0 : (totals.api / limits.api) * 100
 
   return (
     <div className="space-y-8">
@@ -80,23 +80,23 @@ export default async function UsagePage() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Tile Requests Today</CardTitle>
+            <CardTitle className="text-sm font-medium">Tile Requests (This Month)</CardTitle>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {(todayUsage?.tile_requests || 0).toLocaleString()}
+              {totals.tiles.toLocaleString()}
             </div>
             <div className="mt-2">
               <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
                 <span>
-                  {limits.tiles === Infinity ? 'Unlimited' : `${tilePercent.toFixed(1)}% used`}
+                  {limits.tiles >= 25000000 ? 'Unlimited' : `${tilePercent.toFixed(1)}% used`}
                 </span>
                 <span>
-                  {limits.tiles === Infinity ? '∞' : limits.tiles.toLocaleString()}
+                  {limits.tiles >= 25000000 ? '25M+' : limits.tiles.toLocaleString()}
                 </span>
               </div>
-              {limits.tiles !== Infinity && (
+              {limits.tiles < 25000000 && (
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className={`h-2 rounded-full ${
@@ -112,23 +112,23 @@ export default async function UsagePage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">API Calls Today</CardTitle>
+            <CardTitle className="text-sm font-medium">API Calls (This Month)</CardTitle>
             <Zap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {(todayUsage?.api_requests || 0).toLocaleString()}
+              {totals.api.toLocaleString()}
             </div>
             <div className="mt-2">
               <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
                 <span>
-                  {limits.api === Infinity ? 'Unlimited' : `${apiPercent.toFixed(1)}% used`}
+                  {limits.api >= 2500000 ? 'Unlimited' : `${apiPercent.toFixed(1)}% used`}
                 </span>
                 <span>
-                  {limits.api === Infinity ? '∞' : limits.api.toLocaleString()}
+                  {limits.api >= 2500000 ? '2.5M+' : limits.api.toLocaleString()}
                 </span>
               </div>
-              {limits.api !== Infinity && (
+              {limits.api < 2500000 && (
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className={`h-2 rounded-full ${

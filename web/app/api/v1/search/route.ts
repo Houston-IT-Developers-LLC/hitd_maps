@@ -32,8 +32,9 @@ export async function GET(request: NextRequest) {
   if (usage.exceeded) {
     return NextResponse.json(
       {
-        error: 'Daily usage limit exceeded',
+        error: 'Monthly usage limit exceeded',
         current: usage.current,
+        limits: usage.limits,
         tier: validation.tier,
       },
       { status: 429 }

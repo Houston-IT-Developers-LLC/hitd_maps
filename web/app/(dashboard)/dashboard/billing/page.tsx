@@ -12,48 +12,48 @@ const plans = [
     id: 'free',
     name: 'Free',
     price: '$0',
-    period: 'forever',
-    description: 'Perfect for trying out the API',
+    period: '/month',
+    description: 'For testing and evaluation',
     features: [
-      '1,000 tile requests/day',
-      '100 API calls/day',
-      'Property parcels',
+      '10,000 tile requests/month',
+      '1,000 API calls/month',
+      'Property parcels (47 states)',
       'Community support',
     ],
-    limits: { tiles: 1000, api: 100 },
+    limits: { tiles: 10000, api: 1000 },
   },
   {
-    id: 'developer',
-    name: 'Developer',
-    price: '$49.99',
+    id: 'pro',
+    name: 'Pro',
+    price: '$49',
     period: '/month',
     description: 'For production applications',
     features: [
-      '100,000 tile requests/day',
-      '10,000 API calls/day',
+      '5M tile requests/month',
+      '500K API calls/month',
       'All data layers',
       'Offline packages',
       'Email support',
       'Usage analytics',
     ],
-    limits: { tiles: 100000, api: 10000 },
+    limits: { tiles: 5000000, api: 500000 },
     popular: true,
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
-    price: 'Custom',
-    period: '',
-    description: 'For large-scale deployments',
+    price: '$199',
+    period: '/month',
+    description: 'For high-volume applications',
     features: [
-      'Unlimited requests',
-      'Dedicated infrastructure',
-      'On-premise deployment',
-      'Custom SLAs',
-      'Priority support',
-      'Custom data integration',
+      '25M tile requests/month',
+      '2.5M API calls/month',
+      'Dedicated support',
+      'Custom SLA',
+      'Priority bug fixes',
+      'Custom integrations',
     ],
-    limits: { tiles: Infinity, api: Infinity },
+    limits: { tiles: 25000000, api: 2500000 },
   },
 ]
 
@@ -96,15 +96,16 @@ function BillingContent() {
     loadProfile()
   }, [])
 
-  const handleUpgrade = async () => {
+  const handleUpgrade = async (planId: string) => {
     setUpgradeLoading(true)
+    const priceId = planId === 'pro'
+      ? process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID
+      : process.env.NEXT_PUBLIC_STRIPE_ENTERPRISE_PRICE_ID
     try {
       const response = await fetch('/api/billing/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          priceId: process.env.NEXT_PUBLIC_STRIPE_DEVELOPER_PRICE_ID,
-        }),
+        body: JSON.stringify({ priceId }),
       })
 
       const data = await response.json()
@@ -219,7 +220,9 @@ function BillingContent() {
         <div className="grid md:grid-cols-3 gap-6">
           {plans.map((plan) => {
             const isCurrent = currentTier === plan.id
-            const canUpgrade = currentTier === 'free' && plan.id === 'developer'
+            const canUpgradeToPro = currentTier === 'free' && plan.id === 'pro'
+            const canUpgradeToEnterprise = (currentTier === 'free' || currentTier === 'pro') && plan.id === 'enterprise'
+            const canUpgrade = canUpgradeToPro || canUpgradeToEnterprise
 
             return (
               <Card
@@ -238,7 +241,7 @@ function BillingContent() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     {plan.id === 'free' && <Zap className="h-5 w-5" />}
-                    {plan.id === 'developer' && <CreditCard className="h-5 w-5" />}
+                    {plan.id === 'pro' && <CreditCard className="h-5 w-5" />}
                     {plan.id === 'enterprise' && <Building className="h-5 w-5" />}
                     {plan.name}
                   </CardTitle>
@@ -265,7 +268,7 @@ function BillingContent() {
                   ) : canUpgrade ? (
                     <Button
                       className="w-full"
-                      onClick={handleUpgrade}
+                      onClick={() => handleUpgrade(plan.id)}
                       disabled={upgradeLoading}
                     >
                       {upgradeLoading ? (
@@ -274,13 +277,13 @@ function BillingContent() {
                       Upgrade Now
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
-                  ) : plan.id === 'enterprise' ? (
-                    <Button className="w-full" variant="outline" asChild>
-                      <a href="mailto:sales@mapsfordevelopers.com">Contact Sales</a>
+                  ) : plan.id === 'free' && currentTier !== 'free' ? (
+                    <Button className="w-full" variant="outline" disabled>
+                      Downgrade via Portal
                     </Button>
                   ) : (
                     <Button className="w-full" variant="outline" disabled>
-                      {currentTier === 'developer' ? 'Downgrade' : 'Upgrade'}
+                      {currentTier === 'enterprise' ? 'Current tier is higher' : 'Upgrade'}
                     </Button>
                   )}
                 </CardContent>
@@ -305,7 +308,7 @@ function BillingContent() {
           <div>
             <h4 className="font-medium">What happens if I exceed my limits?</h4>
             <p className="text-sm text-muted-foreground">
-              API requests will return a 429 status code. Consider upgrading to Developer for 100x more requests.
+              API requests will return a 429 status code. Consider upgrading to Pro for 500x more requests.
             </p>
           </div>
           <div>

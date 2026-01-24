@@ -1,11 +1,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { hashApiKey } from './generate'
+import { SubscriptionTier } from '@/lib/usage/track'
 
 export interface ApiKeyValidation {
   valid: boolean
   userId?: string
   keyId?: string
-  tier?: 'free' | 'developer' | 'enterprise'
+  tier?: SubscriptionTier
   permissions?: {
     tiles: boolean
     parcels: boolean
@@ -64,11 +65,17 @@ export async function validateApiKey(apiKey: string): Promise<ApiKeyValidation> 
     .update({ last_used_at: new Date().toISOString() })
     .eq('id', keyData.id)
 
+  // Map legacy 'developer' tier to 'pro'
+  let tier = typedProfile.subscription_tier as SubscriptionTier
+  if (tier === 'developer' as unknown) {
+    tier = 'pro'
+  }
+
   return {
     valid: true,
     userId: keyData.user_id,
     keyId: keyData.id,
-    tier: typedProfile.subscription_tier as 'free' | 'developer' | 'enterprise',
+    tier,
     permissions: keyData.permissions as { tiles: boolean; parcels: boolean; geocode: boolean },
   }
 }
