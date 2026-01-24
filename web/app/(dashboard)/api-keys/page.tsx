@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { useState, useEffect, useMemo } from 'react'
+import { createBrowserClient } from '@supabase/ssr'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Key, Plus, Copy, Check, Trash2, Eye, EyeOff } from 'lucide-react'
+import { Key, Plus, Copy, Check, Trash2 } from 'lucide-react'
 
 interface ApiKey {
   id: string
@@ -25,13 +25,24 @@ export default function ApiKeysPage() {
   const [newKey, setNewKey] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
 
-  const supabase = createClient()
-
-  useEffect(() => {
-    loadKeys()
+  // Create supabase client only on client-side
+  const supabase = useMemo(() => {
+    if (typeof window === 'undefined') return null
+    return createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
   }, [])
 
+  useEffect(() => {
+    if (supabase) {
+      loadKeys()
+    }
+  }, [supabase])
+
   async function loadKeys() {
+    if (!supabase) return
+
     const { data } = await supabase
       .from('api_keys')
       .select('*')
@@ -66,6 +77,8 @@ export default function ApiKeysPage() {
   }
 
   async function deleteKey(keyId: string) {
+    if (!supabase) return
+
     await supabase
       .from('api_keys')
       .update({ is_active: false })
