@@ -215,6 +215,9 @@ export default function MapDemoPage() {
 
         // Map ready - set up lazy loading
         map.current.on('load', () => {
+          // Force resize in case container dimensions weren't ready during init
+          map.current?.resize()
+
           setStatus('Map ready! Zoom in to see parcels.')
 
           // Single delegated click handler for all parcels (much more efficient)
@@ -383,8 +386,8 @@ export default function MapDemoPage() {
       </header>
 
       {/* Map */}
-      <div className="flex-1 relative">
-        <div ref={mapContainer} className="absolute inset-0 z-0" />
+      <div className="flex-1 relative overflow-hidden">
+        <div ref={mapContainer} className="w-full h-full" />
 
         {/* Layer Panel */}
         <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 w-64 z-10">
