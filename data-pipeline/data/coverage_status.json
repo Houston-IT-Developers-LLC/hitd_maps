@@ -1,0 +1,1388 @@
+{
+  "generated_at": "2026-01-25T05:47:45.362090",
+  "summary": {
+    "total_states": 51,
+    "complete_states": 36,
+    "partial_states": 15,
+    "missing_states": 0,
+    "total_files": 255,
+    "coverage_pct": 70.6
+  },
+  "states": {
+    "AL": {
+      "name": "Alabama",
+      "total_counties": 67,
+      "status": "partial",
+      "completeness_pct": 5,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_al_jefferson",
+        "parcels_al_madison_v2",
+        "parcels_al_mobile",
+        "parcels_al_montgomery"
+      ],
+      "files": [
+        "parcels_al",
+        "parcels_al_jefferson",
+        "parcels_al_madison_v2",
+        "parcels_al_mobile",
+        "parcels_al_montgomery"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "AK": {
+      "name": "Alaska",
+      "total_counties": 30,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_ak_statewide",
+      "county_files": [],
+      "files": [
+        "parcels_ak",
+        "parcels_ak_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://services1.arcgis.com/7HDiw78fcUiM2BWn/arcgis/rest/services/AK_Parcels/FeatureServer/0",
+      "estimated_total_parcels": 410000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "AZ": {
+      "name": "Arizona",
+      "total_counties": 15,
+      "status": "partial",
+      "completeness_pct": 40,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_az_cochise",
+        "parcels_az_maricopa",
+        "parcels_az_pima",
+        "parcels_az_pinal",
+        "parcels_az_yavapai",
+        "parcels_az_yuma"
+      ],
+      "files": [
+        "parcels_az",
+        "parcels_az_cochise",
+        "parcels_az_maricopa",
+        "parcels_az_pima",
+        "parcels_az_pinal",
+        "parcels_az_yavapai",
+        "parcels_az_yuma"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "AR": {
+      "name": "Arkansas",
+      "total_counties": 75,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_ar_statewide",
+      "county_files": [
+        "parcels_ar_washington"
+      ],
+      "files": [
+        "parcels_ar_statewide",
+        "parcels_ar_washington"
+      ],
+      "missing_counties": [],
+      "data_source": "https://gis.arkansas.gov",
+      "estimated_total_parcels": 2100000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "CA": {
+      "name": "California",
+      "total_counties": 58,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_ca_statewide",
+      "county_files": [
+        "parcels_ca_fresno",
+        "parcels_ca_los_angeles_v2",
+        "parcels_ca_orange",
+        "parcels_ca_orange_v2",
+        "parcels_ca_riverside",
+        "parcels_ca_sacramento",
+        "parcels_ca_sacramento_v2",
+        "parcels_ca_san_diego",
+        "parcels_ca_san_francisco",
+        "parcels_ca_sonoma"
+      ],
+      "files": [
+        "parcels_ca",
+        "parcels_ca_fresno",
+        "parcels_ca_los_angeles_v2",
+        "parcels_ca_orange",
+        "parcels_ca_orange_v2",
+        "parcels_ca_riverside",
+        "parcels_ca_sacramento",
+        "parcels_ca_sacramento_v2",
+        "parcels_ca_san_diego",
+        "parcels_ca_san_francisco",
+        "parcels_ca_sonoma",
+        "parcels_ca_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "CO": {
+      "name": "Colorado",
+      "total_counties": 64,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_co_statewide",
+      "county_files": [
+        "parcels_co_el_paso_v2"
+      ],
+      "files": [
+        "parcels_co",
+        "parcels_co_el_paso_v2",
+        "parcels_co_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://coloradogeo.org",
+      "estimated_total_parcels": 2500000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "CT": {
+      "name": "Connecticut",
+      "total_counties": 8,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_ct_statewide_v2",
+      "county_files": [],
+      "files": [
+        "parcels_ct",
+        "parcels_ct_statewide",
+        "parcels_ct_statewide_v2"
+      ],
+      "missing_counties": [],
+      "data_source": "https://ct.gov/gis",
+      "estimated_total_parcels": 1200000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "DE": {
+      "name": "Delaware",
+      "total_counties": 3,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_de_statewide",
+      "county_files": [],
+      "files": [
+        "parcels_de",
+        "parcels_de_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://firstmap.delaware.gov",
+      "estimated_total_parcels": 350000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "DC": {
+      "name": "District of Columbia",
+      "total_counties": 1,
+      "status": "mostly_complete",
+      "completeness_pct": 100,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_dc_owner_polygons"
+      ],
+      "files": [
+        "parcels_dc",
+        "parcels_dc_owner_polygons"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "FL": {
+      "name": "Florida",
+      "total_counties": 67,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_fl_statewide",
+      "county_files": [
+        "parcels_fl_orange"
+      ],
+      "files": [
+        "parcels_fl_orange",
+        "parcels_fl_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://services9.arcgis.com/Gh9awoU677aKree0/arcgis/rest/services/Florida_Statewide_Cadastral/FeatureServer/0",
+      "estimated_total_parcels": 10800000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "GA": {
+      "name": "Georgia",
+      "total_counties": 159,
+      "status": "partial",
+      "completeness_pct": 6,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_ga_bibb",
+        "parcels_ga_chatham",
+        "parcels_ga_clarke",
+        "parcels_ga_cobb",
+        "parcels_ga_columbia",
+        "parcels_ga_dekalb",
+        "parcels_ga_forsyth",
+        "parcels_ga_fulton",
+        "parcels_ga_gwinnett",
+        "parcels_ga_gwinnett_v2",
+        "parcels_ga_richmond"
+      ],
+      "files": [
+        "parcels_ga",
+        "parcels_ga_bibb",
+        "parcels_ga_chatham",
+        "parcels_ga_clarke",
+        "parcels_ga_cobb",
+        "parcels_ga_columbia",
+        "parcels_ga_dekalb",
+        "parcels_ga_forsyth",
+        "parcels_ga_fulton",
+        "parcels_ga_gwinnett",
+        "parcels_ga_gwinnett_v2",
+        "parcels_ga_richmond"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "HI": {
+      "name": "Hawaii",
+      "total_counties": 5,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_hi_statewide",
+      "county_files": [
+        "parcels_hi_honolulu",
+        "parcels_hi_maui"
+      ],
+      "files": [
+        "parcels_hi",
+        "parcels_hi_honolulu",
+        "parcels_hi_maui",
+        "parcels_hi_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://geoportal.hawaii.gov",
+      "estimated_total_parcels": 400000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "ID": {
+      "name": "Idaho",
+      "total_counties": 44,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_id_statewide",
+      "county_files": [
+        "parcels_id_ada_meridian"
+      ],
+      "files": [
+        "parcels_id",
+        "parcels_id_ada_meridian",
+        "parcels_id_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://services1.arcgis.com/CNPdEkvnGl65jCX8/arcgis/rest/services/Public_Idaho_Parcels/FeatureServer/0",
+      "estimated_total_parcels": 381000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "IL": {
+      "name": "Illinois",
+      "total_counties": 102,
+      "status": "partial",
+      "completeness_pct": 10,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_il_cook",
+        "parcels_il_cook_county",
+        "parcels_il_dupage",
+        "parcels_il_dupage_v2",
+        "parcels_il_kane",
+        "parcels_il_lake",
+        "parcels_il_mchenry",
+        "parcels_il_peoria",
+        "parcels_il_st_clair",
+        "parcels_il_will",
+        "parcels_il_winnebago"
+      ],
+      "files": [
+        "parcels_il",
+        "parcels_il_cook",
+        "parcels_il_cook_county",
+        "parcels_il_dupage",
+        "parcels_il_dupage_v2",
+        "parcels_il_kane",
+        "parcels_il_lake",
+        "parcels_il_mchenry",
+        "parcels_il_peoria",
+        "parcels_il_st_clair",
+        "parcels_il_will",
+        "parcels_il_winnebago"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "IN": {
+      "name": "Indiana",
+      "total_counties": 92,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_in_statewide",
+      "county_files": [
+        "parcels_in_marion"
+      ],
+      "files": [
+        "parcels_in_marion",
+        "parcels_in_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://gis.in.gov",
+      "estimated_total_parcels": 3200000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "IA": {
+      "name": "Iowa",
+      "total_counties": 99,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_ia_statewide",
+      "county_files": [
+        "parcels_ia_johnson"
+      ],
+      "files": [
+        "parcels_ia",
+        "parcels_ia_johnson",
+        "parcels_ia_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://geodata.iowa.gov",
+      "estimated_total_parcels": 1500000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "KS": {
+      "name": "Kansas",
+      "total_counties": 105,
+      "status": "partial",
+      "completeness_pct": 1,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_ks_douglas",
+        "parcels_ks_sedgwick"
+      ],
+      "files": [
+        "parcels_ks",
+        "parcels_ks_douglas",
+        "parcels_ks_sedgwick"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "KY": {
+      "name": "Kentucky",
+      "total_counties": 120,
+      "status": "partial",
+      "completeness_pct": 5,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_ky_boone",
+        "parcels_ky_daviess",
+        "parcels_ky_fayette",
+        "parcels_ky_jefferson",
+        "parcels_ky_kenton",
+        "parcels_ky_warren"
+      ],
+      "files": [
+        "parcels_ky",
+        "parcels_ky_boone",
+        "parcels_ky_daviess",
+        "parcels_ky_fayette",
+        "parcels_ky_jefferson",
+        "parcels_ky_kenton",
+        "parcels_ky_warren"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "LA": {
+      "name": "Louisiana",
+      "total_counties": 64,
+      "status": "partial",
+      "completeness_pct": 10,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_la_caddo",
+        "parcels_la_calcasieu",
+        "parcels_la_east_baton_rouge",
+        "parcels_la_jefferson_v2",
+        "parcels_la_lafayette",
+        "parcels_la_orleans_v2",
+        "parcels_la_terrebonne"
+      ],
+      "files": [
+        "parcels_la",
+        "parcels_la_caddo",
+        "parcels_la_calcasieu",
+        "parcels_la_east_baton_rouge",
+        "parcels_la_jefferson_v2",
+        "parcels_la_lafayette",
+        "parcels_la_orleans_v2",
+        "parcels_la_terrebonne"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "ME": {
+      "name": "Maine",
+      "total_counties": 16,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_me_statewide",
+      "county_files": [
+        "parcels_me_bangor",
+        "parcels_me_portland"
+      ],
+      "files": [
+        "parcels_me_bangor",
+        "parcels_me_portland",
+        "parcels_me_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://maine.gov/geolib",
+      "estimated_total_parcels": 700000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "MD": {
+      "name": "Maryland",
+      "total_counties": 24,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_md_statewide",
+      "county_files": [],
+      "files": [
+        "parcels_md_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://imap.maryland.gov",
+      "estimated_total_parcels": 2400000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "MA": {
+      "name": "Massachusetts",
+      "total_counties": 14,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_ma_statewide",
+      "county_files": [],
+      "files": [
+        "parcels_ma",
+        "parcels_ma_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://massgis.maps.arcgis.com",
+      "estimated_total_parcels": 2100000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "MI": {
+      "name": "Michigan",
+      "total_counties": 83,
+      "status": "partial",
+      "completeness_pct": 13,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_mi_arenac",
+        "parcels_mi_kent",
+        "parcels_mi_kent_v2",
+        "parcels_mi_macomb",
+        "parcels_mi_midland",
+        "parcels_mi_monroe",
+        "parcels_mi_muskegon",
+        "parcels_mi_oakland",
+        "parcels_mi_oakland_v2",
+        "parcels_mi_ottawa",
+        "parcels_mi_wayne"
+      ],
+      "files": [
+        "parcels_mi",
+        "parcels_mi_arenac",
+        "parcels_mi_kent",
+        "parcels_mi_kent_v2",
+        "parcels_mi_macomb",
+        "parcels_mi_midland",
+        "parcels_mi_monroe",
+        "parcels_mi_muskegon",
+        "parcels_mi_oakland",
+        "parcels_mi_oakland_v2",
+        "parcels_mi_ottawa",
+        "parcels_mi_wayne"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "MN": {
+      "name": "Minnesota",
+      "total_counties": 87,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_mn_statewide",
+      "county_files": [
+        "parcels_mn_anoka",
+        "parcels_mn_dakota",
+        "parcels_mn_hennepin",
+        "parcels_mn_ramsey"
+      ],
+      "files": [
+        "parcels_mn",
+        "parcels_mn_anoka",
+        "parcels_mn_dakota",
+        "parcels_mn_hennepin",
+        "parcels_mn_ramsey",
+        "parcels_mn_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "MS": {
+      "name": "Mississippi",
+      "total_counties": 82,
+      "status": "partial",
+      "completeness_pct": 7,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_ms_desoto",
+        "parcels_ms_east",
+        "parcels_ms_harrison",
+        "parcels_ms_hinds",
+        "parcels_ms_rankin",
+        "parcels_ms_west"
+      ],
+      "files": [
+        "parcels_ms",
+        "parcels_ms_desoto",
+        "parcels_ms_east",
+        "parcels_ms_harrison",
+        "parcels_ms_hinds",
+        "parcels_ms_rankin",
+        "parcels_ms_west"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "MO": {
+      "name": "Missouri",
+      "total_counties": 115,
+      "status": "partial",
+      "completeness_pct": 10,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_mo_boone",
+        "parcels_mo_christian",
+        "parcels_mo_clay",
+        "parcels_mo_clay_v2",
+        "parcels_mo_jackson",
+        "parcels_mo_kansas_city",
+        "parcels_mo_springfield",
+        "parcels_mo_st_charles",
+        "parcels_mo_st_charles_v2",
+        "parcels_mo_st_charles_v3",
+        "parcels_mo_stlouis_city",
+        "parcels_mo_stlouis_county"
+      ],
+      "files": [
+        "parcels_mo",
+        "parcels_mo_boone",
+        "parcels_mo_christian",
+        "parcels_mo_clay",
+        "parcels_mo_clay_v2",
+        "parcels_mo_jackson",
+        "parcels_mo_kansas_city",
+        "parcels_mo_springfield",
+        "parcels_mo_st_charles",
+        "parcels_mo_st_charles_v2",
+        "parcels_mo_st_charles_v3",
+        "parcels_mo_stlouis_city",
+        "parcels_mo_stlouis_county"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "MT": {
+      "name": "Montana",
+      "total_counties": 56,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_mt_statewide",
+      "county_files": [],
+      "files": [
+        "parcels_mt_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://services.arcgis.com/iTQUx5ZpNUh47Geb/arcgis/rest/services/Montana_Parcel_Earliest_Build_Year/FeatureServer/0",
+      "estimated_total_parcels": 607000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "NE": {
+      "name": "Nebraska",
+      "total_counties": 93,
+      "status": "partial",
+      "completeness_pct": 2,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_ne_douglas",
+        "parcels_ne_lancaster"
+      ],
+      "files": [
+        "parcels_ne",
+        "parcels_ne_douglas",
+        "parcels_ne_lancaster"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "NV": {
+      "name": "Nevada",
+      "total_counties": 17,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_nv_statewide",
+      "county_files": [
+        "parcels_nv_washoe"
+      ],
+      "files": [
+        "parcels_nv",
+        "parcels_nv_statewide",
+        "parcels_nv_washoe"
+      ],
+      "missing_counties": [],
+      "data_source": "https://arcgis.water.nv.gov/arcgis/rest/services/BaseLayers/County_Parcels_in_Nevada/MapServer/0",
+      "estimated_total_parcels": 1400000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "NH": {
+      "name": "New Hampshire",
+      "total_counties": 10,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_nh_statewide",
+      "county_files": [],
+      "files": [
+        "parcels_nh",
+        "parcels_nh_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://granit.unh.edu",
+      "estimated_total_parcels": 500000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "NJ": {
+      "name": "New Jersey",
+      "total_counties": 21,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_nj_statewide_v2",
+      "county_files": [
+        "parcels_nj_bergen",
+        "parcels_nj_passaic"
+      ],
+      "files": [
+        "parcels_nj_bergen",
+        "parcels_nj_passaic",
+        "parcels_nj_statewide_v2"
+      ],
+      "missing_counties": [],
+      "data_source": "https://njgin.nj.gov",
+      "estimated_total_parcels": 2800000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "NM": {
+      "name": "New Mexico",
+      "total_counties": 33,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_nm_statewide_v2",
+      "county_files": [],
+      "files": [
+        "parcels_nm",
+        "parcels_nm_statewide_v2"
+      ],
+      "missing_counties": [],
+      "data_source": "https://rgis.unm.edu",
+      "estimated_total_parcels": 1100000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "NY": {
+      "name": "New York",
+      "total_counties": 62,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_ny_statewide_v2",
+      "county_files": [
+        "parcels_ny_centroids"
+      ],
+      "files": [
+        "parcels_ny_centroids",
+        "parcels_ny_statewide",
+        "parcels_ny_statewide_v2"
+      ],
+      "missing_counties": [],
+      "data_source": "https://gis.ny.gov",
+      "estimated_total_parcels": 9000000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "NC": {
+      "name": "North Carolina",
+      "total_counties": 100,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_nc_statewide_wgs84",
+      "county_files": [
+        "parcels_nc_durham",
+        "parcels_nc_durham_wgs84",
+        "parcels_nc_forsyth",
+        "parcels_nc_forsyth_wgs84",
+        "parcels_nc_guilford",
+        "parcels_nc_guilford_wgs84",
+        "parcels_nc_mecklenburg",
+        "parcels_nc_mecklenburg_wgs84",
+        "parcels_nc_wake",
+        "parcels_nc_wake_wgs84"
+      ],
+      "files": [
+        "parcels_nc_durham",
+        "parcels_nc_durham_wgs84",
+        "parcels_nc_forsyth",
+        "parcels_nc_forsyth_wgs84",
+        "parcels_nc_guilford",
+        "parcels_nc_guilford_wgs84",
+        "parcels_nc_mecklenburg",
+        "parcels_nc_mecklenburg_wgs84",
+        "parcels_nc_statewide",
+        "parcels_nc_statewide_wgs84",
+        "parcels_nc_wake",
+        "parcels_nc_wake_wgs84"
+      ],
+      "missing_counties": [],
+      "data_source": "https://ncgis.maps.arcgis.com",
+      "estimated_total_parcels": 4500000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "ND": {
+      "name": "North Dakota",
+      "total_counties": 53,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_nd_statewide",
+      "county_files": [
+        "parcels_nd_cass"
+      ],
+      "files": [
+        "parcels_nd",
+        "parcels_nd_cass",
+        "parcels_nd_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://ndgishub.nd.gov",
+      "estimated_total_parcels": 745000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "OH": {
+      "name": "Ohio",
+      "total_counties": 88,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_oh_statewide",
+      "county_files": [
+        "parcels_oh_cuyahoga",
+        "parcels_oh_franklin",
+        "parcels_oh_hamilton",
+        "parcels_oh_montgomery",
+        "parcels_oh_summit_v2"
+      ],
+      "files": [
+        "parcels_oh_cuyahoga",
+        "parcels_oh_franklin",
+        "parcels_oh_hamilton",
+        "parcels_oh_montgomery",
+        "parcels_oh_statewide",
+        "parcels_oh_summit_v2"
+      ],
+      "missing_counties": [],
+      "data_source": "https://gis.ohio.gov",
+      "estimated_total_parcels": 6300000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "OK": {
+      "name": "Oklahoma",
+      "total_counties": 77,
+      "status": "partial",
+      "completeness_pct": 5,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_ok_cleveland",
+        "parcels_ok_comanche",
+        "parcels_ok_oklahoma",
+        "parcels_ok_tulsa"
+      ],
+      "files": [
+        "parcels_ok_cleveland",
+        "parcels_ok_comanche",
+        "parcels_ok_oklahoma",
+        "parcels_ok_tulsa"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "OR": {
+      "name": "Oregon",
+      "total_counties": 36,
+      "status": "partial",
+      "completeness_pct": 8,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_or_lane",
+        "parcels_or_multnomah_v2",
+        "parcels_or_washington"
+      ],
+      "files": [
+        "parcels_or_lane",
+        "parcels_or_multnomah_v2",
+        "parcels_or_washington"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "PA": {
+      "name": "Pennsylvania",
+      "total_counties": 67,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_pa_statewide",
+      "county_files": [
+        "parcels_pa_allegheny",
+        "parcels_pa_delaware",
+        "parcels_pa_lackawanna",
+        "parcels_pa_lancaster_v2"
+      ],
+      "files": [
+        "parcels_pa_allegheny",
+        "parcels_pa_delaware",
+        "parcels_pa_lackawanna",
+        "parcels_pa_lancaster_v2",
+        "parcels_pa_pasda_statewide",
+        "parcels_pa_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://pasda.psu.edu",
+      "estimated_total_parcels": 5600000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "RI": {
+      "name": "Rhode Island",
+      "total_counties": 5,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_ri_statewide",
+      "county_files": [],
+      "files": [
+        "parcels_ri_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://rigis.org",
+      "estimated_total_parcels": 400000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "SC": {
+      "name": "South Carolina",
+      "total_counties": 46,
+      "status": "partial",
+      "completeness_pct": 10,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_sc_charleston",
+        "parcels_sc_greenville",
+        "parcels_sc_lexington",
+        "parcels_sc_spartanburg",
+        "parcels_sc_york"
+      ],
+      "files": [
+        "parcels_sc_charleston",
+        "parcels_sc_greenville",
+        "parcels_sc_lexington",
+        "parcels_sc_spartanburg",
+        "parcels_sc_york"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "SD": {
+      "name": "South Dakota",
+      "total_counties": 66,
+      "status": "partial",
+      "completeness_pct": 10,
+      "has_statewide": false,
+      "statewide_file": null,
+      "county_files": [
+        "parcels_sd_beadle",
+        "parcels_sd_beadle_wgs84",
+        "parcels_sd_codington",
+        "parcels_sd_codington_wgs84",
+        "parcels_sd_lincoln",
+        "parcels_sd_minnehaha",
+        "parcels_sd_pennington"
+      ],
+      "files": [
+        "parcels_sd_beadle",
+        "parcels_sd_beadle_wgs84",
+        "parcels_sd_codington",
+        "parcels_sd_codington_wgs84",
+        "parcels_sd_lincoln",
+        "parcels_sd_minnehaha",
+        "parcels_sd_pennington"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    },
+    "TN": {
+      "name": "Tennessee",
+      "total_counties": 95,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_tn_statewide",
+      "county_files": [
+        "parcels_tn_davidson",
+        "parcels_tn_hamilton",
+        "parcels_tn_montgomery",
+        "parcels_tn_nashville",
+        "parcels_tn_shelby",
+        "parcels_tn_williamson"
+      ],
+      "files": [
+        "parcels_tn",
+        "parcels_tn_davidson",
+        "parcels_tn_hamilton",
+        "parcels_tn_montgomery",
+        "parcels_tn_nashville",
+        "parcels_tn_shelby",
+        "parcels_tn_statewide",
+        "parcels_tn_williamson"
+      ],
+      "missing_counties": [],
+      "data_source": "https://tn.gov/gis",
+      "estimated_total_parcels": 3000000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "TX": {
+      "name": "Texas",
+      "total_counties": 254,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_tx_statewide_recent",
+      "county_files": [
+        "parcels_tx_bexar",
+        "parcels_tx_dallas",
+        "parcels_tx_denton",
+        "parcels_tx_harris",
+        "parcels_tx_harris_new",
+        "parcels_tx_harris_v2",
+        "parcels_tx_tarrant",
+        "parcels_tx_tarrant_v2",
+        "parcels_tx_travis",
+        "parcels_tx_travis_v2",
+        "parcels_tx_williamson_v2"
+      ],
+      "files": [
+        "parcels_tx",
+        "parcels_tx_bexar",
+        "parcels_tx_dallas",
+        "parcels_tx_denton",
+        "parcels_tx_harris",
+        "parcels_tx_harris_new",
+        "parcels_tx_harris_v2",
+        "parcels_tx_statewide",
+        "parcels_tx_statewide_recent",
+        "parcels_tx_tarrant",
+        "parcels_tx_tarrant_v2",
+        "parcels_tx_travis",
+        "parcels_tx_travis_v2",
+        "parcels_tx_williamson_v2"
+      ],
+      "missing_counties": [],
+      "data_source": "https://tnris.org/stratmap/",
+      "estimated_total_parcels": 28000000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "UT": {
+      "name": "Utah",
+      "total_counties": 29,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_ut_statewide",
+      "county_files": [],
+      "files": [
+        "parcels_ut",
+        "parcels_ut_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://gis.utah.gov",
+      "estimated_total_parcels": 1100000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "VT": {
+      "name": "Vermont",
+      "total_counties": 14,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_vt_statewide",
+      "county_files": [],
+      "files": [
+        "parcels_vt_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://services1.arcgis.com/BkFxaEFNwHqX3tAw/arcgis/rest/services/",
+      "estimated_total_parcels": 344000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "VA": {
+      "name": "Virginia",
+      "total_counties": 133,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_va_statewide_v2",
+      "county_files": [
+        "parcels_va_counties",
+        "parcels_va_loudoun_v2",
+        "parcels_va_prince_william_v2"
+      ],
+      "files": [
+        "parcels_va",
+        "parcels_va_counties",
+        "parcels_va_loudoun_v2",
+        "parcels_va_prince_william_v2",
+        "parcels_va_statewide",
+        "parcels_va_statewide_v2"
+      ],
+      "missing_counties": [],
+      "data_source": "https://vgin.vdem.virginia.gov",
+      "estimated_total_parcels": 4100000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "WA": {
+      "name": "Washington",
+      "total_counties": 39,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_wa_statewide",
+      "county_files": [
+        "parcels_wa_king",
+        "parcels_wa_king_wgs84",
+        "parcels_wa_spokane",
+        "parcels_wa_spokane_wgs84"
+      ],
+      "files": [
+        "parcels_wa_king",
+        "parcels_wa_king_wgs84",
+        "parcels_wa_spokane",
+        "parcels_wa_spokane_wgs84",
+        "parcels_wa_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://geo.wa.gov",
+      "estimated_total_parcels": 3200000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "WV": {
+      "name": "West Virginia",
+      "total_counties": 55,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_wv_statewide",
+      "county_files": [],
+      "files": [
+        "parcels_wv",
+        "parcels_wv_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "https://wvgis.wvu.edu",
+      "estimated_total_parcels": 1000000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "WI": {
+      "name": "Wisconsin",
+      "total_counties": 72,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_wi_statewide",
+      "county_files": [
+        "parcels_wi_brown",
+        "parcels_wi_kenosha",
+        "parcels_wi_milwaukee",
+        "parcels_wi_milwaukee_v2",
+        "parcels_wi_racine",
+        "parcels_wi_waukesha"
+      ],
+      "files": [
+        "parcels_wi",
+        "parcels_wi_brown",
+        "parcels_wi_kenosha",
+        "parcels_wi_milwaukee",
+        "parcels_wi_milwaukee_v2",
+        "parcels_wi_racine",
+        "parcels_wi_statewide",
+        "parcels_wi_waukesha"
+      ],
+      "missing_counties": [],
+      "data_source": "https://sco.wisc.edu",
+      "estimated_total_parcels": 3500000,
+      "last_updated": null,
+      "notes": ""
+    },
+    "WY": {
+      "name": "Wyoming",
+      "total_counties": 23,
+      "status": "complete",
+      "completeness_pct": 100,
+      "has_statewide": true,
+      "statewide_file": "parcels_wy_statewide",
+      "county_files": [
+        "parcels_wy_campbell"
+      ],
+      "files": [
+        "parcels_wy",
+        "parcels_wy_campbell",
+        "parcels_wy_statewide"
+      ],
+      "missing_counties": [],
+      "data_source": "Unknown",
+      "estimated_total_parcels": 0,
+      "last_updated": null,
+      "notes": ""
+    }
+  },
+  "priority_actions": [
+    {
+      "priority": 2,
+      "state": "AL",
+      "action": "Expand Alabama coverage (5% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "AZ",
+      "action": "Expand Arizona coverage (40% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "GA",
+      "action": "Expand Georgia coverage (6% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "IL",
+      "action": "Expand Illinois coverage (10% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "KS",
+      "action": "Expand Kansas coverage (1% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "KY",
+      "action": "Expand Kentucky coverage (5% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "LA",
+      "action": "Expand Louisiana coverage (10% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "MI",
+      "action": "Expand Michigan coverage (13% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "MS",
+      "action": "Expand Mississippi coverage (7% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "MO",
+      "action": "Expand Missouri coverage (10% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "NE",
+      "action": "Expand Nebraska coverage (2% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "OK",
+      "action": "Expand Oklahoma coverage (5% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "OR",
+      "action": "Expand Oregon coverage (8% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "SC",
+      "action": "Expand South Carolina coverage (10% complete)",
+      "estimated_parcels": 0
+    },
+    {
+      "priority": 2,
+      "state": "SD",
+      "action": "Expand South Dakota coverage (10% complete)",
+      "estimated_parcels": 0
+    }
+  ]
+}

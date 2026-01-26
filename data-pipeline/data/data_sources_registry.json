@@ -1,0 +1,1433 @@
+{
+  "metadata": {
+    "description": "Master registry of ALL data sources - what we have AND what we could get",
+    "last_updated": "2026-01-25",
+    "maintainer": "HITD Maps Team"
+  },
+  "parcels": {
+    "AL": {
+      "name": "Alabama",
+      "statewide": {
+        "name": "Alabama Statewide Parcels",
+        "url": "https://open.alabama.gov/",
+        "api_url": null,
+        "format": "unknown",
+        "update_frequency": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_al",
+          "parcels_al_madison_v2",
+          "parcels_al_mobile",
+          "parcels_al_montgomery"
+        ],
+        "notes": "Have 4 county files, no statewide source found yet"
+      }
+    },
+    "AK": {
+      "name": "Alaska",
+      "statewide": {
+        "name": "Alaska Statewide Parcels",
+        "url": "https://gis.data.alaska.gov/",
+        "api_url": "https://services1.arcgis.com/7HDiw78fcUiM2BWn/arcgis/rest/services/AK_Parcels/FeatureServer/0",
+        "format": "ArcGIS REST",
+        "update_frequency": "annual",
+        "total_records": 410000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_ak",
+          "parcels_ak_statewide"
+        ],
+        "our_last_updated": "2026-01-18",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "AZ": {
+      "name": "Arizona",
+      "statewide": {
+        "name": "Arizona State Land Department",
+        "url": "https://azgeo.az.gov/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_az",
+          "parcels_az_maricopa",
+          "parcels_az_pima",
+          "parcels_az_pinal",
+          "parcels_az_yavapai"
+        ],
+        "notes": "Have 6/15 counties (40% coverage): Maricopa, Pima, Pinal, Yavapai, Yuma, Cochise"
+      },
+      "counties": {
+        "yuma": {
+          "name": "Yuma County",
+          "url": "https://arcgis.yumacountyaz.gov/webgis/rest/services/YC_Parcels/MapServer/0",
+          "format": "ArcGIS REST",
+          "total_records": 96848,
+          "our_status": "have",
+          "our_file": "parcels_az_yuma",
+          "deployed_date": "2026-01-25",
+          "notes": "Border county, agricultural hub"
+        },
+        "cochise": {
+          "name": "Cochise County",
+          "url": "https://services6.arcgis.com/Yxem0VOcqSy8T6TE/ArcGIS/rest/services/Cad_Parcel_Geometry/FeatureServer/0",
+          "format": "ArcGIS REST",
+          "total_records": 62910,
+          "our_status": "have",
+          "our_file": "parcels_az_cochise",
+          "deployed_date": "2026-01-25",
+          "notes": "Sierra Vista, Fort Huachuca - received 62K of 124K advertised records"
+        }
+      }
+    },
+    "AR": {
+      "name": "Arkansas",
+      "statewide": {
+        "name": "Arkansas GIS Office",
+        "url": "https://gis.arkansas.gov/",
+        "api_url": "https://services.arcgis.com/PwY9ZuZRDiI5nXUB/arcgis/rest/services/Arkansas_Parcels/FeatureServer/0",
+        "format": "ArcGIS REST",
+        "update_frequency": "annual",
+        "total_records": 2100000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_ar_statewide",
+          "parcels_ar_washington"
+        ],
+        "our_last_updated": "2026-01-15",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "CA": {
+      "name": "California",
+      "statewide": {
+        "name": "California State Geoportal",
+        "url": "https://gis.data.ca.gov/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_ca",
+          "parcels_ca_fresno",
+          "parcels_ca_los_angeles_v2",
+          "parcels_ca_orange",
+          "parcels_ca_orange_v2",
+          "parcels_ca_sacramento",
+          "parcels_ca_sacramento_v2",
+          "parcels_ca_san_francisco",
+          "parcels_ca_sonoma"
+        ],
+        "notes": "Major cities only - need statewide source. Check county assessors."
+      },
+      "priority_counties": {
+        "san_diego": {
+          "status": "missing",
+          "population": 3300000
+        },
+        "riverside": {
+          "status": "missing",
+          "population": 2400000
+        },
+        "san_bernardino": {
+          "status": "missing",
+          "population": 2200000
+        },
+        "alameda": {
+          "status": "missing",
+          "population": 1600000
+        },
+        "santa_clara": {
+          "status": "missing",
+          "population": 1900000
+        }
+      }
+    },
+    "CO": {
+      "name": "Colorado",
+      "statewide": {
+        "name": "Colorado GeoLibrary",
+        "url": "https://geodata.co.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 2500000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_co",
+          "parcels_co_el_paso_v2",
+          "parcels_co_statewide"
+        ],
+        "our_last_updated": "2026-01-10",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "CT": {
+      "name": "Connecticut",
+      "statewide": {
+        "name": "CT DEEP GIS",
+        "url": "https://ct.gov/deep/gis",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 1200000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_ct",
+          "parcels_ct_statewide"
+        ],
+        "our_last_updated": "2026-01-12",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "DE": {
+      "name": "Delaware",
+      "statewide": {
+        "name": "FirstMap Delaware",
+        "url": "https://firstmap.delaware.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 350000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_de",
+          "parcels_de_statewide"
+        ],
+        "our_last_updated": "2026-01-12",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "DC": {
+      "name": "District of Columbia",
+      "statewide": {
+        "name": "DC Open Data",
+        "url": "https://opendata.dc.gov/",
+        "api_url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Property_and_Land_WebMercator/MapServer/53",
+        "format": "ArcGIS REST",
+        "update_frequency": "quarterly",
+        "total_records": 200000,
+        "our_status": "have",
+        "our_files": [
+          "parcels_dc"
+        ],
+        "our_last_updated": "2026-01-15",
+        "notes": "Complete coverage"
+      }
+    },
+    "FL": {
+      "name": "Florida",
+      "statewide": {
+        "name": "Florida DEP Cadastral",
+        "url": "https://geodata.dep.state.fl.us/",
+        "api_url": "https://services9.arcgis.com/Gh9awoU677aKree0/arcgis/rest/services/Florida_Statewide_Cadastral/FeatureServer/0",
+        "format": "ArcGIS REST",
+        "update_frequency": "annual",
+        "total_records": 10800000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_fl_orange",
+          "parcels_fl_statewide"
+        ],
+        "our_last_updated": "2026-01-18",
+        "notes": "Complete statewide - large dataset (10.8M features)"
+      }
+    },
+    "GA": {
+      "name": "Georgia",
+      "statewide": {
+        "name": "Georgia GIS Clearinghouse",
+        "url": "https://gis.georgia.gov/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_ga",
+          "parcels_ga_chatham",
+          "parcels_ga_cobb",
+          "parcels_ga_dekalb",
+          "parcels_ga_gwinnett",
+          "parcels_ga_gwinnett_v2",
+          "parcels_ga_richmond"
+        ],
+        "notes": "Have Atlanta metro counties, need more coverage"
+      },
+      "priority_counties": {
+        "fulton": {
+          "status": "missing",
+          "population": 1000000,
+          "notes": "Downtown Atlanta"
+        },
+        "clayton": {
+          "status": "missing",
+          "population": 300000
+        }
+      }
+    },
+    "HI": {
+      "name": "Hawaii",
+      "statewide": {
+        "name": "Hawaii Statewide GIS",
+        "url": "https://geoportal.hawaii.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 400000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_hi",
+          "parcels_hi_honolulu",
+          "parcels_hi_maui",
+          "parcels_hi_statewide"
+        ],
+        "our_last_updated": "2026-01-15",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "ID": {
+      "name": "Idaho",
+      "statewide": {
+        "name": "Idaho Geospatial Office",
+        "url": "https://gis.idaho.gov/",
+        "api_url": "https://services1.arcgis.com/CNPdEkvnGl65jCX8/arcgis/rest/services/Public_Idaho_Parcels/FeatureServer/0",
+        "format": "ArcGIS REST",
+        "update_frequency": "annual",
+        "total_records": 381000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_id",
+          "parcels_id_ada_meridian",
+          "parcels_id_statewide"
+        ],
+        "our_last_updated": "2026-01-18",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "IL": {
+      "name": "Illinois",
+      "statewide": {
+        "name": "Illinois State Geological Survey",
+        "url": "https://clearinghouse.isgs.illinois.edu/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_il",
+          "parcels_il_cook",
+          "parcels_il_cook_county",
+          "parcels_il_dupage",
+          "parcels_il_dupage_v2",
+          "parcels_il_kane",
+          "parcels_il_lake",
+          "parcels_il_mchenry",
+          "parcels_il_will",
+          "parcels_il_winnebago"
+        ],
+        "notes": "Have Chicago metro, Rockford area. Need statewide"
+      },
+      "priority_counties": {
+        "kane": {
+          "status": "have",
+          "population": 530000,
+          "source": "https://utility.arcgis.com/usrsvcs/servers/70e0fc5c3f304b38b8e3466247818b5b/rest/services/Kane_Parcels/FeatureServer/0",
+          "our_file": "parcels_il_kane",
+          "last_updated": "2026-01-25",
+          "notes": "Accessed via ArcGIS Online (requires Referer header). 185K parcels."
+        },
+        "winnebago": {
+          "status": "have",
+          "population": 285000,
+          "source": "WinGIS PropertySearch MapServer",
+          "api_url": "https://maps.wingis.org/public/rest/services/PropertySearch/MapServer/11",
+          "total_records": 120310,
+          "our_file": "parcels_il_winnebago",
+          "last_updated": "2026-01-25",
+          "notes": "Winnebago County (Rockford area) - 120K parcels from WinGIS MapServer layer 11"
+        }
+      }
+    },
+    "IN": {
+      "name": "Indiana",
+      "statewide": {
+        "name": "IndianaMAP",
+        "url": "https://www.indianamap.org/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 3200000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_in_marion",
+          "parcels_in_statewide"
+        ],
+        "our_last_updated": "2026-01-12",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "IA": {
+      "name": "Iowa",
+      "statewide": {
+        "name": "Iowa Geodata",
+        "url": "https://geodata.iowa.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 1500000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_ia",
+          "parcels_ia_statewide"
+        ],
+        "our_last_updated": "2026-01-10",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "KS": {
+      "name": "Kansas",
+      "statewide": {
+        "name": "Kansas Data Access & Support Center",
+        "url": "https://www.kansasgis.org/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_ks",
+          "parcels_ks_douglas",
+          "parcels_ks_sedgwick"
+        ],
+        "notes": "Have 2 counties, need statewide source"
+      }
+    },
+    "KY": {
+      "name": "Kentucky",
+      "statewide": {
+        "name": "Kentucky Geography Network",
+        "url": "https://kygeonet.ky.gov/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_ky",
+          "parcels_ky_boone",
+          "parcels_ky_jefferson",
+          "parcels_ky_kenton"
+        ],
+        "notes": "Have Louisville/Cincinnati metros"
+      },
+      "counties": {
+        "daviess": {
+          "name": "Daviess County (Owensboro)",
+          "population": 102000,
+          "url": "https://iompc.org/online-zoning-maps/",
+          "api_url": "https://gis.owensboro.org/arcgis/rest/services/OMPC/OMPC/MapServer/2",
+          "format": "ArcGIS REST MapServer",
+          "update_frequency": "unknown",
+          "total_records": 47923,
+          "our_status": "have_county",
+          "our_files": [
+            "parcels_ky_daviess"
+          ],
+          "our_last_updated": "2026-01-25",
+          "notes": "Complete Daviess County coverage via Owensboro Metro Planning Commission (OMPC)"
+        }
+      },
+      "our_files": [
+        "parcels_ky",
+        "parcels_ky_boone",
+        "parcels_ky_daviess",
+        "parcels_ky_fayette",
+        "parcels_ky_jefferson",
+        "parcels_ky_kenton",
+        "parcels_ky_warren"
+      ],
+      "notes": "Have Louisville/Cincinnati metros + Owensboro. 6/120 counties (5%)"
+    },
+    "LA": {
+      "name": "Louisiana",
+      "statewide": {
+        "name": "Louisiana GIS",
+        "url": "https://www.gis.la.gov/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_la",
+          "parcels_la_caddo",
+          "parcels_la_calcasieu",
+          "parcels_la_east_baton_rouge",
+          "parcels_la_jefferson_v2",
+          "parcels_la_lafayette",
+          "parcels_la_orleans_v2",
+          "parcels_la_terrebonne"
+        ],
+        "notes": "7/64 parishes (11%). NO statewide database. Each parish uses proprietary systems."
+      },
+      "priority_parishes": {
+        "st_tammany": {
+          "name": "St. Tammany Parish (North Shore)",
+          "population": 265000,
+          "status": "missing - proprietary portal",
+          "url": "https://stpao.org/all-tech/",
+          "portal": "https://atlas.geoportalmaps.com/st_tammany",
+          "api_url": "https://atlas.stpgov.org/server/rest/services/STPAO_Parcels/MapServer/1",
+          "format": "Proprietary web portal - NO public REST API",
+          "estimated_records": 131134,
+          "notes": "PRIORITY 1 (hunting area). Atlas/GeoPortal Maps proprietary system. No standard ArcGIS REST access. May require manual contact with assessor.",
+          "assessor": "St. Tammany Parish Assessor's Office"
+        },
+        "livingston": {
+          "name": "Livingston Parish",
+          "population": 142000,
+          "status": "missing - proprietary portal",
+          "url": "https://www.livingstonassessor.com/mapping",
+          "portal": "https://atlas.geoportalmaps.com/livingston",
+          "api_url": null,
+          "format": "Proprietary web portal - NO public REST API",
+          "estimated_records": 79559,
+          "notes": "PRIORITY 2 (hunting area). Atlas/GeoPortal Maps proprietary system. No standard REST access.",
+          "assessor": "Livingston Parish Assessor, 20400 Government Blvd., Livingston, LA 70754"
+        },
+        "tangipahoa": {
+          "name": "Tangipahoa Parish",
+          "population": 133000,
+          "status": "missing - proprietary portal",
+          "url": "https://tangiassessor.com/gis-mapping",
+          "portal": "https://tangipahoa.org/residents/gis-mapping/tangis/",
+          "api_url": null,
+          "format": "Proprietary web portal - NO public REST API",
+          "estimated_records": 81479,
+          "notes": "PRIORITY 3 (hunting area). Custom GIS department portal. No standard REST access.",
+          "assessor": "Tangipahoa Parish Assessor"
+        },
+        "rapides": {
+          "name": "Rapides Parish (Alexandria)",
+          "population": 130000,
+          "status": "missing - proprietary portal",
+          "url": "http://www.rapidesassessor.org/",
+          "portal": "https://rapcgis.rapc.info/portal/apps/webappviewer/index.html",
+          "api_url": null,
+          "format": "Proprietary web portal - NO public REST API",
+          "estimated_records": null,
+          "notes": "PRIORITY 4. Rapides Area Planning Commission (RAPC) GIS. No standard REST access.",
+          "assessor": "Rapides Parish Assessor"
+        },
+        "bossier": {
+          "name": "Bossier Parish",
+          "population": 128000,
+          "status": "missing - proprietary portal",
+          "url": "https://www.bossierparishla.gov/police-jury/divisions/geographic-information-system-(gis)/maps",
+          "portal": "https://atlas.geoportalmaps.com/bossier_public/",
+          "api_url": null,
+          "format": "Proprietary web portal - NO public REST API",
+          "estimated_records": null,
+          "notes": "PRIORITY 5. Atlas/GeoPortal Maps proprietary system. No standard REST access.",
+          "assessor": "Bossier Parish Assessor"
+        }
+      }
+    },
+    "ME": {
+      "name": "Maine",
+      "statewide": {
+        "name": "Maine GeoLibrary",
+        "url": "https://www.maine.gov/geolib/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 700000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_me_bangor",
+          "parcels_me_portland",
+          "parcels_me_statewide"
+        ],
+        "our_last_updated": "2026-01-15",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "MD": {
+      "name": "Maryland",
+      "statewide": {
+        "name": "Maryland iMAP",
+        "url": "https://imap.maryland.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 2400000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_md_statewide"
+        ],
+        "our_last_updated": "2026-01-10",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "MA": {
+      "name": "Massachusetts",
+      "statewide": {
+        "name": "MassGIS",
+        "url": "https://www.mass.gov/orgs/massgis-bureau-of-geographic-information",
+        "api_url": "https://massgis.maps.arcgis.com/",
+        "format": "ArcGIS REST",
+        "update_frequency": "annual",
+        "total_records": 2100000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_ma",
+          "parcels_ma_statewide"
+        ],
+        "our_last_updated": "2026-01-12",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "MI": {
+      "name": "Michigan",
+      "statewide": {
+        "name": "Michigan Open Data Portal",
+        "url": "https://gis-michigan.opendata.arcgis.com/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_mi",
+          "parcels_mi_arenac",
+          "parcels_mi_kent",
+          "parcels_mi_kent_v2",
+          "parcels_mi_macomb",
+          "parcels_mi_midland",
+          "parcels_mi_monroe",
+          "parcels_mi_muskegon",
+          "parcels_mi_oakland",
+          "parcels_mi_oakland_v2",
+          "parcels_mi_ottawa",
+          "parcels_mi_wayne"
+        ],
+        "notes": "Have Detroit metro, Grand Rapids area, Monroe. Priority missing: Ingham (Lansing), Saginaw, Berrien, Bay, Jackson"
+      },
+      "priority_counties": {
+        "monroe": {
+          "name": "Monroe County",
+          "population": 154000,
+          "status": "have",
+          "url": "https://gis.monroemi.gov/portal",
+          "api_url": "https://gis.monroemi.gov/server/rest/services/Hosted/Parcels_V2/FeatureServer/0",
+          "format": "ArcGIS FeatureServer",
+          "total_records": 7731,
+          "our_file": "parcels_mi_monroe",
+          "deployed_date": "2026-01-25",
+          "notes": "Complete Monroe County - 7,731 parcels, 3.5MB PMTiles. DEPLOYED."
+        },
+        "ingham": {
+          "name": "Ingham County (Lansing)",
+          "population": 284000,
+          "status": "endpoint_needed",
+          "url": "https://ingham-equalization.rsgis.msu.edu/",
+          "api_url": "TBD",
+          "notes": "MSU RS&GIS hosted, endpoint not discovered. Ingham folder exists but empty."
+        },
+        "saginaw": {
+          "name": "Saginaw County",
+          "population": 190000,
+          "status": "endpoint_needed",
+          "url": "https://www.sagagis.org/",
+          "api_url": "TBD",
+          "notes": "Uses SAGA GIS/FetchGIS viewer, backend endpoint not discovered"
+        },
+        "jackson": {
+          "name": "Jackson County",
+          "population": 160000,
+          "status": "endpoint_found",
+          "url": "https://gis.mijackson.org/",
+          "api_url": "https://gis.mijackson.org/countygis/rest/services/RealEstate/RealEstateParcels/MapServer/0",
+          "format": "ArcGIS MapServer",
+          "notes": "MapServer (not FeatureServer) - requires different query approach"
+        },
+        "berrien": {
+          "name": "Berrien County",
+          "population": 154000,
+          "status": "endpoint_needed",
+          "url": "https://beacon.schneidercorp.com/Application.aspx?AppID=346",
+          "api_url": "TBD",
+          "notes": "Uses Beacon/Schneider system, may need proprietary API approach"
+        },
+        "bay": {
+          "name": "Bay County",
+          "population": 103000,
+          "status": "endpoint_needed",
+          "url": "https://data-baycountygis.opendata.arcgis.com/",
+          "api_url": "TBD",
+          "notes": "Has ArcGIS Open Data portal, parcel FeatureServer not yet identified"
+        }
+      }
+    },
+    "MN": {
+      "name": "Minnesota",
+      "statewide": {
+        "name": "Minnesota Geospatial Commons",
+        "url": "https://gisdata.mn.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_mn",
+          "parcels_mn_anoka",
+          "parcels_mn_dakota",
+          "parcels_mn_hennepin",
+          "parcels_mn_ramsey"
+        ],
+        "notes": "Have Twin Cities metro"
+      }
+    },
+    "MS": {
+      "name": "Mississippi",
+      "statewide": {
+        "name": "Mississippi Geospatial Clearinghouse",
+        "url": "https://www.maris.state.ms.us/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_ms",
+          "parcels_ms_desoto",
+          "parcels_ms_hinds"
+        ],
+        "notes": "Have Jackson area and Memphis suburbs"
+      }
+    },
+    "MO": {
+      "name": "Missouri",
+      "statewide": {
+        "name": "Missouri Spatial Data Information Service",
+        "url": "https://msdis.missouri.edu/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_mo",
+          "parcels_mo_christian",
+          "parcels_mo_clay",
+          "parcels_mo_jackson",
+          "parcels_mo_kansas_city",
+          "parcels_mo_st_charles",
+          "parcels_mo_st_charles_v2",
+          "parcels_mo_stlouis_city",
+          "parcels_mo_stlouis_county"
+        ],
+        "notes": "Have Kansas City, St. Louis metro, and Springfield areas"
+      },
+      "priority_counties": {
+        "st_louis_county": {
+          "name": "St. Louis County",
+          "population": 989000,
+          "status": "have",
+          "api_url": "https://maps.stlouisco.com/hosting/rest/services/Maps/AGS_Parcels/MapServer/0",
+          "total_records": 401471,
+          "our_file": "parcels_mo_stlouis_county",
+          "our_last_updated": "2026-01-25",
+          "notes": "St. Louis metro area (NOT St. Louis City which is separate)"
+        },
+        "greene": {
+          "name": "Greene County (Springfield)",
+          "population": 300000,
+          "status": "have",
+          "our_file": "parcels_mo_springfield"
+        }
+      }
+    },
+    "MT": {
+      "name": "Montana",
+      "statewide": {
+        "name": "Montana State Library MSDI",
+        "url": "https://msl.mt.gov/geoinfo/msdi/",
+        "api_url": "https://services.arcgis.com/iTQUx5ZpNUh47Geb/arcgis/rest/services/Montana_Parcel_Earliest_Build_Year/FeatureServer/0",
+        "format": "ArcGIS REST",
+        "update_frequency": "annual",
+        "total_records": 607000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_mt_statewide"
+        ],
+        "our_last_updated": "2026-01-18",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "NE": {
+      "name": "Nebraska",
+      "statewide": {
+        "name": "Nebraska GIS",
+        "url": "https://www.nebraskamap.gov/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_ne",
+          "parcels_ne_douglas",
+          "parcels_ne_lancaster"
+        ],
+        "notes": "Have Douglas (Omaha) and Lancaster (Lincoln) counties"
+      },
+      "counties": {
+        "Lancaster": {
+          "name": "Lancaster County (Lincoln - state capital)",
+          "population": 322000,
+          "url": "https://gis.lancova.com/",
+          "api_url": "https://gis.lincoln.ne.gov/public/rest/services/Assessor/ParcelLinesAerial/MapServer/0",
+          "format": "ArcGIS REST",
+          "update_frequency": "quarterly",
+          "total_records": 121851,
+          "our_status": "have_county",
+          "our_files": [
+            "parcels_ne_lancaster"
+          ],
+          "our_last_updated": "2026-01-25",
+          "notes": "Complete Lancaster County coverage - state capital"
+        }
+      }
+    },
+    "NV": {
+      "name": "Nevada",
+      "statewide": {
+        "name": "Nevada GIS Clearinghouse",
+        "url": "https://www.nbmg.unr.edu/",
+        "api_url": "https://arcgis.water.nv.gov/arcgis/rest/services/BaseLayers/County_Parcels_in_Nevada/MapServer/0",
+        "format": "ArcGIS REST",
+        "update_frequency": "annual",
+        "total_records": 1400000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_nv",
+          "parcels_nv_statewide"
+        ],
+        "our_last_updated": "2026-01-18",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "NH": {
+      "name": "New Hampshire",
+      "statewide": {
+        "name": "NH GRANIT",
+        "url": "https://granit.unh.edu/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 500000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_nh",
+          "parcels_nh_statewide"
+        ],
+        "our_last_updated": "2026-01-12",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "NJ": {
+      "name": "New Jersey",
+      "statewide": {
+        "name": "NJ Geographic Information Network",
+        "url": "https://njgin.nj.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 2800000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_nj_bergen",
+          "parcels_nj_passaic",
+          "parcels_nj_statewide_v2"
+        ],
+        "our_last_updated": "2026-01-10",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "NM": {
+      "name": "New Mexico",
+      "statewide": {
+        "name": "NM Resource Geographic Information System",
+        "url": "https://rgis.unm.edu/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 1100000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_nm",
+          "parcels_nm_statewide_v2"
+        ],
+        "our_last_updated": "2026-01-15",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "NY": {
+      "name": "New York",
+      "statewide": {
+        "name": "NYS GIS Clearinghouse",
+        "url": "https://gis.ny.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 9000000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_ny_centroids",
+          "parcels_ny_statewide",
+          "parcels_ny_statewide_v2"
+        ],
+        "our_last_updated": "2026-01-10",
+        "notes": "Complete statewide coverage - large dataset"
+      }
+    },
+    "NC": {
+      "name": "North Carolina",
+      "statewide": {
+        "name": "NC OneMap",
+        "url": "https://www.nconemap.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 4500000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_nc_durham",
+          "parcels_nc_durham_wgs84",
+          "parcels_nc_forsyth",
+          "parcels_nc_forsyth_wgs84",
+          "parcels_nc_guilford",
+          "parcels_nc_guilford_wgs84",
+          "parcels_nc_mecklenburg",
+          "parcels_nc_mecklenburg_wgs84",
+          "parcels_nc_statewide",
+          "parcels_nc_statewide_wgs84",
+          "parcels_nc_wake",
+          "parcels_nc_wake_wgs84"
+        ],
+        "our_last_updated": "2026-01-12",
+        "notes": "Complete statewide coverage with multiple projections"
+      }
+    },
+    "ND": {
+      "name": "North Dakota",
+      "statewide": {
+        "name": "ND GIS Hub",
+        "url": "https://gishubdata.nd.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 745000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_nd",
+          "parcels_nd_cass",
+          "parcels_nd_statewide"
+        ],
+        "our_last_updated": "2026-01-10",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "OH": {
+      "name": "Ohio",
+      "statewide": {
+        "name": "OGRIP",
+        "url": "https://ogrip.oit.ohio.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 6300000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_oh_cuyahoga",
+          "parcels_oh_franklin",
+          "parcels_oh_hamilton",
+          "parcels_oh_montgomery",
+          "parcels_oh_statewide",
+          "parcels_oh_summit_v2"
+        ],
+        "our_last_updated": "2026-01-12",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "OK": {
+      "name": "Oklahoma",
+      "statewide": {
+        "name": "Oklahoma GIS Council",
+        "url": "https://www.okmaps.gov/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_ok_cleveland",
+          "parcels_ok_comanche"
+        ],
+        "notes": "Have 2 counties, need statewide"
+      }
+    },
+    "OR": {
+      "name": "Oregon",
+      "statewide": {
+        "name": "Oregon Spatial Data Library",
+        "url": "https://spatialdata.oregonexplorer.info/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_or_lane",
+          "parcels_or_multnomah_v2",
+          "parcels_or_washington"
+        ],
+        "notes": "Have Portland and Eugene areas"
+      },
+      "counties": {
+        "Washington": {
+          "name": "Washington County, Oregon",
+          "url": "https://gisdata.washcowisco.gov/",
+          "api_url": "https://gispub.co.washington.or.us/server/rest/services/Washington_County_Taxlots/FeatureServer/0",
+          "format": "ArcGIS REST",
+          "update_frequency": "unknown",
+          "total_records": 200221,
+          "our_status": "have_county",
+          "our_files": [
+            "parcels_or_washington"
+          ],
+          "our_last_updated": "2026-01-25",
+          "notes": "Complete Washington County coverage. 606K population. Self-signed SSL cert."
+        }
+      }
+    },
+    "PA": {
+      "name": "Pennsylvania",
+      "statewide": {
+        "name": "PASDA",
+        "url": "https://www.pasda.psu.edu/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 5600000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_pa_allegheny",
+          "parcels_pa_delaware",
+          "parcels_pa_lackawanna",
+          "parcels_pa_lancaster_v2",
+          "parcels_pa_pasda_statewide",
+          "parcels_pa_statewide"
+        ],
+        "our_last_updated": "2026-01-10",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "RI": {
+      "name": "Rhode Island",
+      "statewide": {
+        "name": "RIGIS",
+        "url": "https://www.rigis.org/",
+        "api_url": null,
+        "format": "unknown",
+        "update_frequency": "unknown",
+        "total_records": 400000,
+        "our_status": "MISSING",
+        "our_files": [],
+        "notes": "PRIORITY: Need to discover API endpoint. Check rigis.org"
+      }
+    },
+    "SC": {
+      "name": "South Carolina",
+      "statewide": {
+        "name": "SC Revenue and Fiscal Affairs",
+        "url": "https://rfa.sc.gov/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_sc_charleston",
+          "parcels_sc_greenville",
+          "parcels_sc_spartanburg"
+        ],
+        "notes": "Have 3 counties, need statewide"
+      },
+      "counties": {
+        "york": {
+          "name": "York County",
+          "url": "https://opendata-yorkcosc.hub.arcgis.com/",
+          "api_url": "https://services1.arcgis.com/2AGLxyiJoNiVHKwq/ArcGIS/rest/services/Parcels/FeatureServer/0",
+          "format": "ArcGIS REST",
+          "total_records": 133186,
+          "our_status": "have",
+          "our_file": "parcels_sc_york",
+          "deployed_date": "2026-01-25",
+          "notes": "York County - 282K population. Rock Hill area."
+        },
+        "lexington": {
+          "name": "Lexington County",
+          "url": "https://maps-lexco-gis.hub.arcgis.com/",
+          "api_url": "https://maps.lex-co.com/agstserver/rest/services/Property/MapServer/4",
+          "format": "ArcGIS MapServer",
+          "total_records": 145575,
+          "our_status": "have",
+          "our_file": "parcels_sc_lexington",
+          "deployed_date": "2026-01-25",
+          "notes": "Lexington County - 296K population. Columbia metro area."
+        }
+      },
+      "our_files": [
+        "parcels_sc_charleston",
+        "parcels_sc_greenville",
+        "parcels_sc_lexington",
+        "parcels_sc_spartanburg",
+        "parcels_sc_york"
+      ],
+      "our_status": "partial",
+      "notes": "Have 5 counties (10% coverage): Charleston, Greenville, Spartanburg, York, Lexington"
+    },
+    "SD": {
+      "name": "South Dakota",
+      "statewide": {
+        "name": "SD GIS Hub",
+        "url": "https://opendata2017-09-18t192802468z-sdbit.opendata.arcgis.com/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_sd_beadle",
+          "parcels_sd_beadle_wgs84",
+          "parcels_sd_codington",
+          "parcels_sd_codington_wgs84",
+          "parcels_sd_pennington"
+        ],
+        "notes": "Have 3 counties including Rapid City"
+      }
+    },
+    "TN": {
+      "name": "Tennessee",
+      "statewide": {
+        "name": "TN GIS",
+        "url": "https://www.tn.gov/finance/sts-gis/gis.html",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 3000000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_tn",
+          "parcels_tn_davidson",
+          "parcels_tn_hamilton",
+          "parcels_tn_montgomery",
+          "parcels_tn_nashville",
+          "parcels_tn_shelby",
+          "parcels_tn_statewide",
+          "parcels_tn_williamson"
+        ],
+        "our_last_updated": "2026-01-12",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "TX": {
+      "name": "Texas",
+      "statewide": {
+        "name": "TNRIS StratMap",
+        "url": "https://tnris.org/stratmap/",
+        "api_url": "https://feature.stratmap.tnris.org/arcgis/rest/services/Parcels/StratMap_Parcels_Statewide/FeatureServer/0",
+        "format": "ArcGIS REST",
+        "update_frequency": "annual",
+        "typical_update_month": "March",
+        "total_records": 28000000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_tx",
+          "parcels_tx_bexar",
+          "parcels_tx_dallas",
+          "parcels_tx_denton",
+          "parcels_tx_harris",
+          "parcels_tx_harris_new",
+          "parcels_tx_statewide",
+          "parcels_tx_statewide_recent",
+          "parcels_tx_tarrant",
+          "parcels_tx_travis",
+          "parcels_tx_williamson_v2"
+        ],
+        "our_last_updated": "2026-01-18",
+        "notes": "Have statewide but county-level extraction is partial"
+      },
+      "priority_counties": {
+        "montgomery": {
+          "name": "Montgomery County (The Woodlands)",
+          "population": 620000,
+          "status": "missing",
+          "known_source": "https://www.mcad-tx.org/",
+          "notes": "The Woodlands, Conroe area - HIGH PRIORITY"
+        },
+        "brazos": {
+          "name": "Brazos County (Bryan/College Station)",
+          "population": 233000,
+          "status": "missing",
+          "known_source": "https://www.brazoscad.org/",
+          "notes": "College Station, Texas A&M area"
+        },
+        "liberty": {
+          "name": "Liberty County (Cleveland)",
+          "population": 91000,
+          "status": "missing",
+          "notes": "Cleveland, TX area"
+        },
+        "galveston": {
+          "name": "Galveston County",
+          "population": 350000,
+          "status": "missing",
+          "notes": "Galveston Island, League City"
+        },
+        "collin": {
+          "name": "Collin County (Plano, Frisco)",
+          "population": 1100000,
+          "status": "missing",
+          "notes": "Fast-growing DFW suburb"
+        }
+      }
+    },
+    "UT": {
+      "name": "Utah",
+      "statewide": {
+        "name": "Utah AGRC",
+        "url": "https://gis.utah.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 1100000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_ut",
+          "parcels_ut_statewide"
+        ],
+        "our_last_updated": "2026-01-10",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "VT": {
+      "name": "Vermont",
+      "statewide": {
+        "name": "VCGI",
+        "url": "https://vcgi.vermont.gov/",
+        "api_url": "https://services1.arcgis.com/BkFxaEFNwHqX3tAw/arcgis/rest/services/FS_VCGI_OPENDATA_Cadastral_VTPARCELS_poly_standardized_parcels_SP_v1/FeatureServer/0",
+        "format": "ArcGIS REST",
+        "update_frequency": "annual",
+        "total_records": 344000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_vt_statewide"
+        ],
+        "our_last_updated": "2026-01-18",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "VA": {
+      "name": "Virginia",
+      "statewide": {
+        "name": "VGIN",
+        "url": "https://vgin.vdem.virginia.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 4100000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_va",
+          "parcels_va_counties",
+          "parcels_va_loudoun_v2",
+          "parcels_va_prince_william_v2",
+          "parcels_va_statewide",
+          "parcels_va_statewide_v2"
+        ],
+        "our_last_updated": "2026-01-12",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "WA": {
+      "name": "Washington",
+      "statewide": {
+        "name": "WA Geospatial Open Data",
+        "url": "https://geo.wa.gov/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 3200000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_wa_king",
+          "parcels_wa_king_wgs84",
+          "parcels_wa_spokane",
+          "parcels_wa_spokane_wgs84",
+          "parcels_wa_statewide"
+        ],
+        "our_last_updated": "2026-01-15",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "WV": {
+      "name": "West Virginia",
+      "statewide": {
+        "name": "WV GIS Technical Center",
+        "url": "https://wvgis.wvu.edu/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 1000000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_wv",
+          "parcels_wv_statewide"
+        ],
+        "our_last_updated": "2026-01-12",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "WI": {
+      "name": "Wisconsin",
+      "statewide": {
+        "name": "WI State Cartographer",
+        "url": "https://www.sco.wisc.edu/",
+        "api_url": null,
+        "format": "File Download",
+        "update_frequency": "annual",
+        "total_records": 3500000,
+        "our_status": "have_statewide",
+        "our_files": [
+          "parcels_wi",
+          "parcels_wi_kenosha",
+          "parcels_wi_milwaukee",
+          "parcels_wi_milwaukee_v2",
+          "parcels_wi_racine",
+          "parcels_wi_statewide",
+          "parcels_wi_waukesha"
+        ],
+        "our_last_updated": "2026-01-10",
+        "notes": "Complete statewide coverage"
+      }
+    },
+    "WY": {
+      "name": "Wyoming",
+      "statewide": {
+        "name": "Wyoming SGID",
+        "url": "https://wyogeo.wyogisc.org/",
+        "api_url": null,
+        "format": "unknown",
+        "our_status": "partial",
+        "our_files": [
+          "parcels_wy",
+          "parcels_wy_campbell"
+        ],
+        "notes": "Have Campbell County, need statewide"
+      }
+    }
+  },
+  "enrichment": {
+    "pad_us": {
+      "name": "PAD-US (Protected Areas Database)",
+      "provider": "USGS GAP",
+      "url": "https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-download",
+      "format": "GeoPackage/Shapefile",
+      "update_frequency": "annual",
+      "typical_update_month": "November",
+      "our_status": "have",
+      "our_last_updated": "2025-12-01",
+      "notes": "Public lands, parks, wilderness areas, conservation easements"
+    },
+    "nwi": {
+      "name": "National Wetlands Inventory",
+      "provider": "USFWS",
+      "url": "https://www.fws.gov/program/national-wetlands-inventory/wetlands-data",
+      "format": "GeoDatabase",
+      "update_frequency": "continuous",
+      "our_status": "have",
+      "our_last_updated": "2025-11-15",
+      "notes": "Wetlands delineations for entire USA"
+    },
+    "nhd": {
+      "name": "National Hydrography Dataset",
+      "provider": "USGS",
+      "url": "https://www.usgs.gov/national-hydrography/access-national-hydrography-products",
+      "format": "GeoPackage",
+      "update_frequency": "continuous",
+      "our_status": "have",
+      "our_last_updated": "2025-10-01",
+      "notes": "Rivers, streams, lakes, watersheds"
+    },
+    "hifld": {
+      "name": "HIFLD Facilities",
+      "provider": "DHS/CISA",
+      "url": "https://hifld-geoplatform.opendata.arcgis.com/",
+      "format": "Various",
+      "update_frequency": "quarterly",
+      "our_status": "have",
+      "our_last_updated": "2025-10-01",
+      "notes": "Fire stations, police, hospitals, schools, etc."
+    },
+    "fema_flood": {
+      "name": "FEMA Flood Zones",
+      "provider": "FEMA",
+      "url": "https://msc.fema.gov/portal/advanceSearch",
+      "format": "Shapefile",
+      "update_frequency": "varies",
+      "our_status": "partial",
+      "notes": "National Flood Hazard Layer - coverage varies by county"
+    },
+    "nlcd": {
+      "name": "National Land Cover Database",
+      "provider": "USGS",
+      "url": "https://www.mrlc.gov/data",
+      "format": "GeoTIFF",
+      "update_frequency": "2-3 years",
+      "our_status": "have",
+      "our_last_updated": "2025-06-01",
+      "notes": "Land use/land cover classification"
+    },
+    "ssurgo": {
+      "name": "SSURGO Soils",
+      "provider": "USDA NRCS",
+      "url": "https://websoilsurvey.nrcs.usda.gov/",
+      "format": "GeoDatabase",
+      "update_frequency": "continuous",
+      "our_status": "partial",
+      "notes": "Detailed soil survey data"
+    }
+  },
+  "basemap": {
+    "protomaps_planet": {
+      "name": "Protomaps Planet",
+      "provider": "Protomaps",
+      "url": "https://protomaps.com/",
+      "format": "PMTiles",
+      "update_frequency": "monthly",
+      "our_status": "have",
+      "our_version": "2026-01-01",
+      "our_file": "basemap/protomaps_planet.pmtiles",
+      "size_gb": 109,
+      "notes": "Full OSM-based global basemap"
+    },
+    "terrain": {
+      "name": "AWS Terrain Tiles",
+      "provider": "AWS/Mapzen",
+      "url": "https://registry.opendata.aws/terrain-tiles/",
+      "format": "PNG Terrarium",
+      "update_frequency": "stable",
+      "our_status": "have",
+      "our_file": "terrain/",
+      "notes": "Elevation data for 3D terrain"
+    }
+  },
+  "poi": {
+    "osm_addresses": {
+      "name": "OpenStreetMap Addresses",
+      "provider": "OpenStreetMap",
+      "url": "https://download.geofabrik.de/",
+      "format": "PBF",
+      "update_frequency": "daily",
+      "our_status": "have",
+      "notes": "Address points from OSM"
+    },
+    "overture_places": {
+      "name": "Overture Maps Places",
+      "provider": "Overture Maps Foundation",
+      "url": "https://overturemaps.org/",
+      "format": "Parquet",
+      "update_frequency": "monthly",
+      "our_status": "have",
+      "notes": "POI data from multiple sources"
+    }
+  }
+}
