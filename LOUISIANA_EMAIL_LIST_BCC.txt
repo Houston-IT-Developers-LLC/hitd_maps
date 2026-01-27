@@ -1,0 +1,76 @@
+# COPY THIS INTO YOUR BCC FIELD (Comma-separated)
+
+## HIGH PRIORITY PARISHES (15 emails - Top population/impact)
+
+acadiaassessor@gmail.com, assessor@avoyellesparish.org, assessor@beauparish.org, assessor@lafourche.org, assessor@natchitoches.org, assessor@ouachitala.com, assessor@rapides.org, lschexnayder@stcharlesgov.net, assessor@sjbparish.com, assessor@stmartinparish.org, assessor@stmaryparish.gov, dkramer@stpgov.org, assessor@vermilionparish.gov, assessor@websterparishla.org, assessor@wbrcouncil.org
+
+## ALTERNATIVE: REGIONAL PLANNING COMMISSIONS (8 emails - Higher success rate)
+
+info@norpc.org, director@scpdc.org, staff@apcla.org, gis@planswla.com, info@nwlpc.org, info@cenlaplanningdistrict.com, info@norddelta.org, info@crpcla.org
+
+## INSTRUCTIONS
+
+1. Download full directory for remaining 35+ parishes:
+   https://www.louisianaassessors.org/wp-content/uploads/2024/05/Directory-File-2024-For-Website.pdf
+
+2. Extract emails for parishes NOT in this list (already have):
+   ❌ Ascension, Bossier, Caddo, Calcasieu, East Baton Rouge, Iberville
+   ❌ Jefferson, Lafayette, Livingston, Orleans, Plaquemines
+   ❌ St. Bernard, Tangipahoa, Terrebonne
+
+3. Add extracted emails to the list above (comma-separated, no spaces after commas)
+
+4. Copy entire list into BCC field of your email
+
+5. Use template from: LOUISIANA_BULK_EMAIL_TEMPLATE.md
+
+## INDIVIDUAL PARISH LIST (For reference)
+
+Parish | Email | Population | Priority
+-------|-------|------------|----------
+St. Tammany | dkramer@stpgov.org | 265K | WAIT FOR FEB 15!
+Ouachita | assessor@ouachitala.com | 156K | High
+Rapides | assessor@rapides.org | 131K | High
+Lafourche | assessor@lafourche.org | 97K | High
+Vermilion | assessor@vermilionparish.gov | 60K | High (hunting)
+Acadia | acadiaassessor@gmail.com | 58K | High
+St. Charles | lschexnayder@stcharlesgov.net | 53K | Medium
+St. Martin | assessor@stmartinparish.org | 52K | Medium
+St. Mary | assessor@stmaryparish.gov | 49K | Check migration
+St. John Baptist | assessor@sjbparish.com | 43K | Medium
+Natchitoches | assessor@natchitoches.org | 38K | Medium (hunting)
+Webster | assessor@websterparishla.org | 39K | Medium (hunting)
+Avoyelles | assessor@avoyellesparish.org | 39K | Medium
+Beauregard | assessor@beauparish.org | 37K | Medium
+West Baton Rouge | assessor@wbrcouncil.org | 27K | Medium
+
+## ADDITIONAL EMAILS TO ADD (Extract from PDF)
+
+You need approximately 35 more parish emails. Download the PDF and add emails for:
+
+Allen, Assumption, Bienville, Caldwell, Cameron, Catahoula, Claiborne, Concordia,
+DeSoto, East Carroll, East Feliciana, Evangeline, Franklin, Grant, Iberia,
+Jackson, Jefferson Davis, LaSalle, Lincoln, Madison, Morehouse, Pointe Coupee,
+Red River, Richland, Sabine, St. Helena, St. James, St. Landry, Tangipahoa,
+Tensas, Union, Vernon, Washington, West Carroll, West Feliciana, Winn
+
+Format: assessor@[parishname].org or similar (found in PDF)
+
+## GMAIL BCC LIMIT
+
+Gmail allows 500 recipients in BCC field. You have ~50 parishes, so you're well within limits.
+
+## BEST TIME TO SEND
+
+Tuesday-Thursday, 9:00-11:00 AM CST (Central Standard Time)
+Avoid Monday mornings and Friday afternoons for best response rates.
+
+## EXPECTED RESPONSES
+
+Week 1: 15-20 responses (30-40%)
+Week 2: 5-10 more responses after follow-up
+Week 3-4: 3-5 more responses after second follow-up
+Total datasets received: 8-13 parishes (16-26% success rate)
+
+Cost: $0-$200 (occasional processing fees)
+Time: 23 minutes to send + 4 hours to process responses over 4 weeks
