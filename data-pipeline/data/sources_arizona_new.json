@@ -1,0 +1,18 @@
+{
+  "az_yuma": {
+    "name": "Yuma County, Arizona",
+    "url": "https://arcgis.yumacountyaz.gov/webgis/rest/services/YC_Parcels/MapServer/0",
+    "format": "ArcGIS REST",
+    "total_records": 96848,
+    "status": "ready_to_deploy",
+    "verified": "2026-01-25"
+  },
+  "az_cochise": {
+    "name": "Cochise County, Arizona",
+    "url": "https://services6.arcgis.com/Yxem0VOcqSy8T6TE/ArcGIS/rest/services/Cad_Parcel_Geometry/FeatureServer/0",
+    "format": "ArcGIS REST",
+    "total_records": 124910,
+    "status": "ready_to_deploy",
+    "verified": "2026-01-25"
+  }
+}

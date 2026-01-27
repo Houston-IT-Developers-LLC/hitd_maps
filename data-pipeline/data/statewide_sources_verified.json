@@ -1,0 +1,205 @@
+{
+  "description": "Verified statewide parcel sources for partial coverage states",
+  "last_updated": "2026-01-24",
+  "sources": {
+    "GA": {
+      "name": "Georgia - GIS Clearinghouse",
+      "state": "Georgia",
+      "priority": 1,
+      "urls_to_check": [
+        "https://services1.arcgis.com/XdEiuCuJe2Pxhh7o/arcgis/rest/services/GARS_Statewide_Parcels/FeatureServer/0",
+        "https://data.georgiaspatial.org/",
+        "https://gis.doa.ga.gov/"
+      ],
+      "estimated_records": 4800000,
+      "estimated_size_gb": 12,
+      "verified": false,
+      "notes": "Need to verify which endpoint has complete coverage"
+    },
+    "IL": {
+      "name": "Illinois - State GIS",
+      "state": "Illinois",
+      "priority": 1,
+      "urls_to_check": [
+        "https://clearinghouse.isgs.illinois.edu/",
+        "https://gis.illinois.gov/",
+        "https://webservices.isgs.illinois.edu/arcgis/rest/services/"
+      ],
+      "estimated_records": 5500000,
+      "estimated_size_gb": 14,
+      "verified": false,
+      "notes": "Illinois may not have unified statewide - might need county aggregation"
+    },
+    "MI": {
+      "name": "Michigan - Geographic Framework",
+      "state": "Michigan",
+      "priority": 1,
+      "urls_to_check": [
+        "https://gis-michigan.opendata.arcgis.com/",
+        "https://services3.arcgis.com/Jdnp1TjADvSDxMAX/arcgis/rest/services/",
+        "https://www.mcgi.state.mi.us/"
+      ],
+      "estimated_records": 4200000,
+      "estimated_size_gb": 11,
+      "verified": false,
+      "notes": "Michigan Framework v17 may have statewide parcels"
+    },
+    "MO": {
+      "name": "Missouri - Spatial Data Information Service",
+      "state": "Missouri",
+      "priority": 2,
+      "urls_to_check": [
+        "https://msdis.missouri.edu/",
+        "https://services6.arcgis.com/zG7mcPIrzL6Xbrau/arcgis/rest/services/"
+      ],
+      "estimated_records": 3200000,
+      "estimated_size_gb": 8,
+      "verified": false,
+      "notes": "MSDIS coordinates county data"
+    },
+    "AL": {
+      "name": "Alabama - Open Data",
+      "state": "Alabama",
+      "priority": 2,
+      "urls_to_check": [
+        "https://open.alabama.gov/",
+        "https://gis.alabama.gov/"
+      ],
+      "estimated_records": 2400000,
+      "estimated_size_gb": 6,
+      "verified": false,
+      "notes": "May not have statewide - county-level only"
+    },
+    "LA": {
+      "name": "Louisiana - Atlas",
+      "state": "Louisiana",
+      "priority": 2,
+      "urls_to_check": [
+        "https://atlas.ga.lsu.edu/",
+        "https://lagis.lsu.edu/",
+        "https://services5.arcgis.com/KW0OYUbdJaIQYR7F/arcgis/rest/services/"
+      ],
+      "estimated_records": 2100000,
+      "estimated_size_gb": 5.5,
+      "verified": false,
+      "notes": "LSU maintains statewide GIS data"
+    },
+    "OK": {
+      "name": "Oklahoma - GIS Council",
+      "state": "Oklahoma",
+      "priority": 2,
+      "urls_to_check": [
+        "https://oklahoma.gov/omes/services/gis.html",
+        "https://data.ok.gov/"
+      ],
+      "estimated_records": 1800000,
+      "estimated_size_gb": 4.5,
+      "verified": false,
+      "notes": "Check Oklahoma Tax Commission for parcel data"
+    },
+    "OR": {
+      "name": "Oregon - Spatial Data Library",
+      "state": "Oregon",
+      "priority": 2,
+      "urls_to_check": [
+        "https://spatialdata.oregonexplorer.info/",
+        "https://www.oregon.gov/geo/pages/index.aspx",
+        "https://gis.dogami.oregon.gov/"
+      ],
+      "estimated_records": 1900000,
+      "estimated_size_gb": 5,
+      "verified": false,
+      "notes": "Oregon Explorer has extensive GIS data"
+    },
+    "SC": {
+      "name": "South Carolina - GIS",
+      "state": "South Carolina",
+      "priority": 2,
+      "urls_to_check": [
+        "https://www.sc.gov/business/GIS/Pages/default.aspx",
+        "https://services2.arcgis.com/Iu7TiYXQJpZJIXRJ/arcgis/rest/services/"
+      ],
+      "estimated_records": 2300000,
+      "estimated_size_gb": 6,
+      "verified": false,
+      "notes": "SC GIS maintains statewide data layers"
+    },
+    "AZ": {
+      "name": "Arizona - State Land Department",
+      "state": "Arizona",
+      "priority": 3,
+      "urls_to_check": [
+        "https://azgeo.az.gov/",
+        "https://gis.azland.gov/",
+        "https://services.azgeo.az.gov/arcgis/rest/services/"
+      ],
+      "estimated_records": 3100000,
+      "estimated_size_gb": 8,
+      "verified": false,
+      "notes": "AZGeo hub aggregates county assessor data"
+    },
+    "KS": {
+      "name": "Kansas - Data Access & Support Center",
+      "state": "Kansas",
+      "priority": 3,
+      "urls_to_check": [
+        "https://www.kansasgis.org/",
+        "http://www.kansasgis.org/catalog/index.cfm"
+      ],
+      "estimated_records": 1500000,
+      "estimated_size_gb": 4,
+      "verified": false,
+      "notes": "DASC coordinates GIS for Kansas"
+    },
+    "KY": {
+      "name": "Kentucky - Geography Network",
+      "state": "Kentucky",
+      "priority": 3,
+      "urls_to_check": [
+        "https://kygeonet.ky.gov/",
+        "https://kygeoportal.ky.gov/"
+      ],
+      "estimated_records": 2100000,
+      "estimated_size_gb": 5.5,
+      "verified": false,
+      "notes": "KyGovMAP has extensive parcel data"
+    },
+    "MS": {
+      "name": "Mississippi - Automated Resource Information System",
+      "state": "Mississippi",
+      "priority": 3,
+      "urls_to_check": [
+        "https://www.maris.state.ms.us/",
+        "https://services.maris.state.ms.us/arcgis/rest/services/"
+      ],
+      "estimated_records": 1600000,
+      "estimated_size_gb": 4,
+      "verified": false,
+      "notes": "MARIS coordinates statewide GIS"
+    },
+    "SD": {
+      "name": "South Dakota - GIS",
+      "state": "South Dakota",
+      "priority": 3,
+      "urls_to_check": [
+        "https://sdbit.sd.gov/",
+        "https://opendata2017-09-18t192802468z-sdbit.opendata.arcgis.com/"
+      ],
+      "estimated_records": 520000,
+      "estimated_size_gb": 1.5,
+      "verified": false,
+      "notes": "SD BIT maintains GIS infrastructure"
+    }
+  },
+  "deployment_strategy": {
+    "phase_1_high_priority": ["GA", "IL", "MI"],
+    "phase_2_medium_priority": ["MO", "AL", "LA", "OK", "OR", "SC"],
+    "phase_3_low_priority": ["AZ", "KS", "KY", "MS", "SD"],
+    "parallel_workers": {
+      "download": 24,
+      "process": 16,
+      "upload": 8
+    },
+    "estimated_total_time": "8-12 hours for all states"
+  }
+}

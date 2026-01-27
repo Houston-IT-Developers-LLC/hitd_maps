@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-01-25T05:47:45.362090",
+  "generated_at": "2026-01-27T00:08:10.095355",
   "summary": {
     "total_states": 51,
-    "complete_states": 36,
-    "partial_states": 15,
+    "complete_states": 37,
+    "partial_states": 14,
     "missing_states": 0,
-    "total_files": 255,
-    "coverage_pct": 70.6
+    "total_files": 271,
+    "coverage_pct": 72.5
   },
   "states": {
     "AL": {
@@ -56,24 +56,42 @@
     "AZ": {
       "name": "Arizona",
       "total_counties": 15,
-      "status": "partial",
-      "completeness_pct": 40,
+      "status": "mostly_complete",
+      "completeness_pct": 100,
       "has_statewide": false,
       "statewide_file": null,
       "county_files": [
+        "parcels_az_apache",
         "parcels_az_cochise",
+        "parcels_az_coconino",
+        "parcels_az_gila",
+        "parcels_az_graham",
+        "parcels_az_greenlee",
+        "parcels_az_la_paz",
         "parcels_az_maricopa",
+        "parcels_az_mohave",
+        "parcels_az_navajo",
         "parcels_az_pima",
         "parcels_az_pinal",
+        "parcels_az_santa_cruz",
         "parcels_az_yavapai",
         "parcels_az_yuma"
       ],
       "files": [
         "parcels_az",
+        "parcels_az_apache",
         "parcels_az_cochise",
+        "parcels_az_coconino",
+        "parcels_az_gila",
+        "parcels_az_graham",
+        "parcels_az_greenlee",
+        "parcels_az_la_paz",
         "parcels_az_maricopa",
+        "parcels_az_mohave",
+        "parcels_az_navajo",
         "parcels_az_pima",
         "parcels_az_pinal",
+        "parcels_az_santa_cruz",
         "parcels_az_yavapai",
         "parcels_az_yuma"
       ],
@@ -461,26 +479,40 @@
       "name": "Louisiana",
       "total_counties": 64,
       "status": "partial",
-      "completeness_pct": 10,
+      "completeness_pct": 21,
       "has_statewide": false,
       "statewide_file": null,
       "county_files": [
+        "parcels_la_ascension",
+        "parcels_la_bossier",
         "parcels_la_caddo",
         "parcels_la_calcasieu",
         "parcels_la_east_baton_rouge",
+        "parcels_la_iberville",
         "parcels_la_jefferson_v2",
         "parcels_la_lafayette",
+        "parcels_la_livingston",
         "parcels_la_orleans_v2",
+        "parcels_la_plaquemines",
+        "parcels_la_st_bernard",
+        "parcels_la_tangipahoa",
         "parcels_la_terrebonne"
       ],
       "files": [
         "parcels_la",
+        "parcels_la_ascension",
+        "parcels_la_bossier",
         "parcels_la_caddo",
         "parcels_la_calcasieu",
         "parcels_la_east_baton_rouge",
+        "parcels_la_iberville",
         "parcels_la_jefferson_v2",
         "parcels_la_lafayette",
+        "parcels_la_livingston",
         "parcels_la_orleans_v2",
+        "parcels_la_plaquemines",
+        "parcels_la_st_bernard",
+        "parcels_la_tangipahoa",
         "parcels_la_terrebonne"
       ],
       "missing_counties": [],
@@ -1302,12 +1334,6 @@
     },
     {
       "priority": 2,
-      "state": "AZ",
-      "action": "Expand Arizona coverage (40% complete)",
-      "estimated_parcels": 0
-    },
-    {
-      "priority": 2,
       "state": "GA",
       "action": "Expand Georgia coverage (6% complete)",
       "estimated_parcels": 0
@@ -1333,7 +1359,7 @@
     {
       "priority": 2,
       "state": "LA",
-      "action": "Expand Louisiana coverage (10% complete)",
+      "action": "Expand Louisiana coverage (21% complete)",
       "estimated_parcels": 0
     },
     {

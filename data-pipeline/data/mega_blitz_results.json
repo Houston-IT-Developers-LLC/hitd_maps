@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-01-24 18:05:51",
+  "total_processed": 3,
+  "deployed": 0,
+  "summary": {
+    "deployed": [],
+    "failed": [],
+    "no_portal": [
+      {
+        "county": "St. Louis County, MO",
+        "status": "no_portal"
+      }
+    ],
+    "no_endpoints": [
+      {
+        "county": "Gwinnett, GA",
+        "status": "no_endpoints"
+      },
+      {
+        "county": "Fulton, GA",
+        "status": "no_endpoints"
+      }
+    ]
+  }
+}

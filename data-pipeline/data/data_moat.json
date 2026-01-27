@@ -1,0 +1,584 @@
+{
+  "generated_at": "2026-01-24T00:20:08.300806",
+  "summary": {
+    "total_files": 187,
+    "valid_files": 117,
+    "invalid_files": 8,
+    "states_covered": 48,
+    "total_tiles": 6951181
+  },
+  "by_state": {
+    "CA": {
+      "name": "California",
+      "files": 2,
+      "tiles": 4175,
+      "file_names": [
+        "parcels_ca_san_francisco",
+        "parcels_ca_los_angeles_v2"
+      ]
+    },
+    "DC": {
+      "name": "District of Columbia",
+      "files": 1,
+      "tiles": 132,
+      "file_names": [
+        "parcels_dc"
+      ]
+    },
+    "CO": {
+      "name": "Colorado",
+      "files": 3,
+      "tiles": 858483,
+      "file_names": [
+        "parcels_co_el_paso_v2",
+        "parcels_co_statewide",
+        "parcels_co"
+      ]
+    },
+    "AL": {
+      "name": "Alabama",
+      "files": 1,
+      "tiles": 114,
+      "file_names": [
+        "parcels_al_mobile"
+      ]
+    },
+    "GA": {
+      "name": "Georgia",
+      "files": 5,
+      "tiles": 4302,
+      "file_names": [
+        "parcels_ga_chatham",
+        "parcels_ga_cobb",
+        "parcels_ga_gwinnett",
+        "parcels_ga_richmond",
+        "parcels_ga_gwinnett_v2"
+      ]
+    },
+    "AR": {
+      "name": "Arkansas",
+      "files": 1,
+      "tiles": 977,
+      "file_names": [
+        "parcels_ar_washington"
+      ]
+    },
+    "DE": {
+      "name": "Delaware",
+      "files": 2,
+      "tiles": 33592,
+      "file_names": [
+        "parcels_de",
+        "parcels_de_statewide"
+      ]
+    },
+    "AK": {
+      "name": "Alaska",
+      "files": 1,
+      "tiles": 9606,
+      "file_names": [
+        "parcels_ak_statewide"
+      ]
+    },
+    "ID": {
+      "name": "Idaho",
+      "files": 1,
+      "tiles": 487,
+      "file_names": [
+        "parcels_id_statewide"
+      ]
+    },
+    "IN": {
+      "name": "Indiana",
+      "files": 1,
+      "tiles": 44,
+      "file_names": [
+        "parcels_in_marion"
+      ]
+    },
+    "HI": {
+      "name": "Hawaii",
+      "files": 1,
+      "tiles": 48194,
+      "file_names": [
+        "parcels_hi"
+      ]
+    },
+    "KS": {
+      "name": "Kansas",
+      "files": 2,
+      "tiles": 19204,
+      "file_names": [
+        "parcels_ks",
+        "parcels_ks_sedgwick"
+      ]
+    },
+    "IL": {
+      "name": "Illinois",
+      "files": 1,
+      "tiles": 31946,
+      "file_names": [
+        "parcels_il"
+      ]
+    },
+    "LA": {
+      "name": "Louisiana",
+      "files": 2,
+      "tiles": 12352,
+      "file_names": [
+        "parcels_la",
+        "parcels_la_orleans_v2"
+      ]
+    },
+    "KY": {
+      "name": "Kentucky",
+      "files": 2,
+      "tiles": 47086,
+      "file_names": [
+        "parcels_ky_boone",
+        "parcels_ky"
+      ]
+    },
+    "ME": {
+      "name": "Maine",
+      "files": 2,
+      "tiles": 314,
+      "file_names": [
+        "parcels_me_bangor",
+        "parcels_me_portland"
+      ]
+    },
+    "MI": {
+      "name": "Michigan",
+      "files": 6,
+      "tiles": 6249,
+      "file_names": [
+        "parcels_mi_kent",
+        "parcels_mi_macomb",
+        "parcels_mi_kent_v2",
+        "parcels_mi_oakland_v2",
+        "parcels_mi_wayne",
+        "parcels_mi_ottawa"
+      ]
+    },
+    "AZ": {
+      "name": "Arizona",
+      "files": 2,
+      "tiles": 299896,
+      "file_names": [
+        "parcels_az_maricopa",
+        "parcels_az"
+      ]
+    },
+    "MN": {
+      "name": "Minnesota",
+      "files": 3,
+      "tiles": 2868,
+      "file_names": [
+        "parcels_mn_hennepin",
+        "parcels_mn_dakota",
+        "parcels_mn_ramsey"
+      ]
+    },
+    "MO": {
+      "name": "Missouri",
+      "files": 6,
+      "tiles": 3703,
+      "file_names": [
+        "parcels_mo_christian",
+        "parcels_mo_jackson",
+        "parcels_mo_st_charles",
+        "parcels_mo_st_charles_v2",
+        "parcels_mo_clay",
+        "parcels_mo_kansas_city"
+      ]
+    },
+    "NC": {
+      "name": "North Carolina",
+      "files": 6,
+      "tiles": 71644,
+      "file_names": [
+        "parcels_nc_forsyth",
+        "parcels_nc_forsyth_wgs84",
+        "parcels_nc_durham",
+        "parcels_nc_guilford",
+        "parcels_nc_wake",
+        "parcels_nc_statewide"
+      ]
+    },
+    "MT": {
+      "name": "Montana",
+      "files": 1,
+      "tiles": 9454,
+      "file_names": [
+        "parcels_mt_statewide"
+      ]
+    },
+    "MS": {
+      "name": "Mississippi",
+      "files": 1,
+      "tiles": 262,
+      "file_names": [
+        "parcels_ms_hinds"
+      ]
+    },
+    "ND": {
+      "name": "North Dakota",
+      "files": 3,
+      "tiles": 1494675,
+      "file_names": [
+        "parcels_nd_cass",
+        "parcels_nd_statewide",
+        "parcels_nd"
+      ]
+    },
+    "CT": {
+      "name": "Connecticut",
+      "files": 2,
+      "tiles": 89261,
+      "file_names": [
+        "parcels_ct",
+        "parcels_ct_statewide"
+      ]
+    },
+    "NE": {
+      "name": "Nebraska",
+      "files": 1,
+      "tiles": 13998,
+      "file_names": [
+        "parcels_ne"
+      ]
+    },
+    "NY": {
+      "name": "New York",
+      "files": 3,
+      "tiles": 69570,
+      "file_names": [
+        "parcels_ny_centroids",
+        "parcels_ny_statewide",
+        "parcels_ny_statewide_v2"
+      ]
+    },
+    "OH": {
+      "name": "Ohio",
+      "files": 4,
+      "tiles": 4344,
+      "file_names": [
+        "parcels_oh_cuyahoga",
+        "parcels_oh_hamilton",
+        "parcels_oh_statewide",
+        "parcels_oh_summit_v2"
+      ]
+    },
+    "OK": {
+      "name": "Oklahoma",
+      "files": 1,
+      "tiles": 304,
+      "file_names": [
+        "parcels_ok_comanche"
+      ]
+    },
+    "NM": {
+      "name": "New Mexico",
+      "files": 1,
+      "tiles": 14909,
+      "file_names": [
+        "parcels_nm"
+      ]
+    },
+    "NH": {
+      "name": "New Hampshire",
+      "files": 1,
+      "tiles": 142230,
+      "file_names": [
+        "parcels_nh"
+      ]
+    },
+    "PA": {
+      "name": "Pennsylvania",
+      "files": 6,
+      "tiles": 18549,
+      "file_names": [
+        "parcels_pa_delaware",
+        "parcels_pa_statewide",
+        "parcels_pa_lackawanna",
+        "parcels_pa_pasda_statewide",
+        "parcels_pa_allegheny",
+        "parcels_pa_lancaster_v2"
+      ]
+    },
+    "OR": {
+      "name": "Oregon",
+      "files": 1,
+      "tiles": 2434,
+      "file_names": [
+        "parcels_or_multnomah_v2"
+      ]
+    },
+    "TN": {
+      "name": "Tennessee",
+      "files": 7,
+      "tiles": 136617,
+      "file_names": [
+        "parcels_tn_davidson",
+        "parcels_tn_hamilton",
+        "parcels_tn_shelby",
+        "parcels_tn_statewide",
+        "parcels_tn_williamson",
+        "parcels_tn_nashville",
+        "parcels_tn"
+      ]
+    },
+    "SD": {
+      "name": "South Dakota",
+      "files": 1,
+      "tiles": 93,
+      "file_names": [
+        "parcels_sd_pennington"
+      ]
+    },
+    "IA": {
+      "name": "Iowa",
+      "files": 2,
+      "tiles": 1184409,
+      "file_names": [
+        "parcels_ia",
+        "parcels_ia_statewide"
+      ]
+    },
+    "TX": {
+      "name": "Texas",
+      "files": 10,
+      "tiles": 79322,
+      "file_names": [
+        "parcels_tx_bexar",
+        "parcels_tx_denton",
+        "parcels_tx_statewide",
+        "parcels_tx_tarrant",
+        "parcels_tx_dallas",
+        "parcels_tx_travis",
+        "parcels_tx_williamson_v2",
+        "parcels_tx_harris",
+        "parcels_tx_statewide_recent",
+        "parcels_tx_harris_new"
+      ]
+    },
+    "SC": {
+      "name": "South Carolina",
+      "files": 2,
+      "tiles": 29876,
+      "file_names": [
+        "parcels_sc_charleston",
+        "parcels_sc_greenville"
+      ]
+    },
+    "UT": {
+      "name": "Utah",
+      "files": 2,
+      "tiles": 602975,
+      "file_names": [
+        "parcels_ut_statewide",
+        "parcels_ut"
+      ]
+    },
+    "VT": {
+      "name": "Vermont",
+      "files": 1,
+      "tiles": 7299,
+      "file_names": [
+        "parcels_vt_statewide"
+      ]
+    },
+    "WA": {
+      "name": "Washington",
+      "files": 2,
+      "tiles": 20443,
+      "file_names": [
+        "parcels_wa_spokane",
+        "parcels_wa_king"
+      ]
+    },
+    "WI": {
+      "name": "Wisconsin",
+      "files": 5,
+      "tiles": 208553,
+      "file_names": [
+        "parcels_wi_kenosha",
+        "parcels_wi_milwaukee",
+        "parcels_wi_racine",
+        "parcels_wi_waukesha",
+        "parcels_wi"
+      ]
+    },
+    "WY": {
+      "name": "Wyoming",
+      "files": 1,
+      "tiles": 131,
+      "file_names": [
+        "parcels_wy_campbell"
+      ]
+    },
+    "VA": {
+      "name": "Virginia",
+      "files": 2,
+      "tiles": 564978,
+      "file_names": [
+        "parcels_va_statewide",
+        "parcels_va"
+      ]
+    },
+    "NJ": {
+      "name": "New Jersey",
+      "files": 1,
+      "tiles": 77959,
+      "file_names": [
+        "parcels_nj_statewide_v2"
+      ]
+    },
+    "MA": {
+      "name": "Massachusetts",
+      "files": 2,
+      "tiles": 148566,
+      "file_names": [
+        "parcels_ma",
+        "parcels_ma_statewide"
+      ]
+    },
+    "MD": {
+      "name": "Maryland",
+      "files": 1,
+      "tiles": 198021,
+      "file_names": [
+        "parcels_md_statewide"
+      ]
+    },
+    "WV": {
+      "name": "West Virginia",
+      "files": 2,
+      "tiles": 376581,
+      "file_names": [
+        "parcels_wv_statewide",
+        "parcels_wv"
+      ]
+    }
+  },
+  "valid_files": [
+    "parcels_ak_statewide",
+    "parcels_al_mobile",
+    "parcels_ar_washington",
+    "parcels_az",
+    "parcels_az_maricopa",
+    "parcels_ca_los_angeles_v2",
+    "parcels_ca_san_francisco",
+    "parcels_co",
+    "parcels_co_el_paso_v2",
+    "parcels_co_statewide",
+    "parcels_ct",
+    "parcels_ct_statewide",
+    "parcels_dc",
+    "parcels_de",
+    "parcels_de_statewide",
+    "parcels_ga_chatham",
+    "parcels_ga_cobb",
+    "parcels_ga_gwinnett",
+    "parcels_ga_gwinnett_v2",
+    "parcels_ga_richmond",
+    "parcels_hi",
+    "parcels_ia",
+    "parcels_ia_statewide",
+    "parcels_id_statewide",
+    "parcels_il",
+    "parcels_in_marion",
+    "parcels_ks",
+    "parcels_ks_sedgwick",
+    "parcels_ky",
+    "parcels_ky_boone",
+    "parcels_la",
+    "parcels_la_orleans_v2",
+    "parcels_ma",
+    "parcels_ma_statewide",
+    "parcels_md_statewide",
+    "parcels_me_bangor",
+    "parcels_me_portland",
+    "parcels_mi_kent",
+    "parcels_mi_kent_v2",
+    "parcels_mi_macomb",
+    "parcels_mi_oakland_v2",
+    "parcels_mi_ottawa",
+    "parcels_mi_wayne",
+    "parcels_mn_dakota",
+    "parcels_mn_hennepin",
+    "parcels_mn_ramsey",
+    "parcels_mo_christian",
+    "parcels_mo_clay",
+    "parcels_mo_jackson",
+    "parcels_mo_kansas_city",
+    "parcels_mo_st_charles",
+    "parcels_mo_st_charles_v2",
+    "parcels_ms_hinds",
+    "parcels_mt_statewide",
+    "parcels_nc_durham",
+    "parcels_nc_forsyth",
+    "parcels_nc_forsyth_wgs84",
+    "parcels_nc_guilford",
+    "parcels_nc_statewide",
+    "parcels_nc_wake",
+    "parcels_nd",
+    "parcels_nd_cass",
+    "parcels_nd_statewide",
+    "parcels_ne",
+    "parcels_nh",
+    "parcels_nj_statewide_v2",
+    "parcels_nm",
+    "parcels_ny_centroids",
+    "parcels_ny_statewide",
+    "parcels_ny_statewide_v2",
+    "parcels_oh_cuyahoga",
+    "parcels_oh_hamilton",
+    "parcels_oh_statewide",
+    "parcels_oh_summit_v2",
+    "parcels_ok_comanche",
+    "parcels_or_multnomah_v2",
+    "parcels_pa_allegheny",
+    "parcels_pa_delaware",
+    "parcels_pa_lackawanna",
+    "parcels_pa_lancaster_v2",
+    "parcels_pa_pasda_statewide",
+    "parcels_pa_statewide",
+    "parcels_sc_charleston",
+    "parcels_sc_greenville",
+    "parcels_sd_pennington",
+    "parcels_tn",
+    "parcels_tn_davidson",
+    "parcels_tn_hamilton",
+    "parcels_tn_nashville",
+    "parcels_tn_shelby",
+    "parcels_tn_statewide",
+    "parcels_tn_williamson",
+    "parcels_tx_bexar",
+    "parcels_tx_dallas",
+    "parcels_tx_denton",
+    "parcels_tx_harris",
+    "parcels_tx_harris_new",
+    "parcels_tx_statewide",
+    "parcels_tx_statewide_recent",
+    "parcels_tx_tarrant",
+    "parcels_tx_travis",
+    "parcels_tx_williamson_v2",
+    "parcels_ut",
+    "parcels_ut_statewide",
+    "parcels_va",
+    "parcels_va_statewide",
+    "parcels_vt_statewide",
+    "parcels_wa_king",
+    "parcels_wa_spokane",
+    "parcels_wi",
+    "parcels_wi_kenosha",
+    "parcels_wi_milwaukee",
+    "parcels_wi_racine",
+    "parcels_wi_waukesha",
+    "parcels_wv",
+    "parcels_wv_statewide",
+    "parcels_wy_campbell"
+  ]
+}

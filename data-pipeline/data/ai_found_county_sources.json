@@ -1,0 +1,38 @@
+{
+  "found_at": "2026-01-24T06:36:37.074230",
+  "total_counties": 5,
+  "sources": {
+    "SD": {
+      "Minnehaha": {
+        "found": true,
+        "api_url": "https://maps.minnehahacounty.sd.gov/arcgis/rest/services/Parcels/FeatureServer/0",
+        "confidence": "high",
+        "estimated_records": 50000
+      },
+      "Pennington": {
+        "found": true,
+        "api_url": "https://maps.penningtonco.sd.gov/arcgis/rest/services/Parcels/FeatureServer/0",
+        "confidence": "high",
+        "estimated_records": 45000
+      },
+      "Lincoln": {
+        "found": true,
+        "api_url": "https://maps.lincolnco.sd.gov/arcgis/rest/services/Parcels/FeatureServer/0",
+        "confidence": "high",
+        "estimated_records": 25000
+      },
+      "Brown": {
+        "found": true,
+        "api_url": "https://maps.brownco.sd.gov/arcgis/rest/services/Parcels/FeatureServer/0",
+        "confidence": "high",
+        "estimated_records": 25000
+      },
+      "Brookings": {
+        "found": true,
+        "api_url": "https://maps.brookingsco.sd.gov/arcgis/rest/services/Parcels/FeatureServer/0",
+        "confidence": "high",
+        "estimated_records": 20000
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "st_charles": {
+    "name": "St. Charles Parish (Hahnville)",
+    "population": 53000,
+    "status": "BLOCKED - no public API",
+    "url": "https://www.stcharlesparish.gov/departments/geographic-information-systems-gis",
+    "portal": "https://atlas.geoportalmaps.com/stcharles",
+    "new_portal": "https://stcharles.geosync.io/",
+    "api_url": null,
+    "format": "QGIS Server (internal network) + geosync.io (proprietary)",
+    "estimated_records": 45505,
+    "last_attempted": "2026-01-26",
+    "failure_reason": "Parish uses QGIS MapServer on internal network (192.168.60.130) not publicly accessible. Migrated to geosync.io platform (Jan 2026) which is React SPA with proprietary backend, no standard ArcGIS REST API.",
+    "notes": "NO PUBLIC API. Uses QGIS Server at http://192.168.60.130:8001/cgi-bin/qgis_mapserv.fcgi.exe (internal only). New geosync.io platform launched but no public REST endpoints found. Port of South Louisiana GIS covers area but also no public API. Contact GIS Office for public records request or use commercial provider (Regrid, Dynamo Spatial).",
+    "assessor": "St. Charles Parish Assessor's Office",
+    "gis_contact": "St. Charles Parish GIS Office",
+    "alternative_access": "Submit public records request to GIS Office, use commercial provider (Regrid ~45,505 parcels available), or monitor geosync.io for future API access",
+    "technical_details": {
+      "current_system": "QGIS Server",
+      "qgis_endpoint": "http://192.168.60.130:8001/cgi-bin/qgis_mapserv.fcgi.exe",
+      "geoportal_backend": "QGIS WMS/WFS (internal network)",
+      "new_platform": "geosync.io (React SPA, proprietary API)",
+      "tested_urls": [
+        "https://gis.stcharlesparish.la.gov/arcgis/rest/services - DNS not found",
+        "https://stcharles.geosync.io/arcgis/rest/services - Returns HTML (no REST API)",
+        "https://gisportsl.com/arcgis/rest/services - 404",
+        "Port of South Louisiana servers - 404/500 errors"
+      ]
+    }
+  }
+}

@@ -1,0 +1,512 @@
+{
+  "AK": {
+    "name": "Alaska",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "AL": {
+    "name": "Alabama",
+    "total_files": 3,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "AR": {
+    "name": "Arkansas",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "AZ": {
+    "name": "Arizona",
+    "total_files": 2,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "CA": {
+    "name": "California",
+    "total_files": 7,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "CO": {
+    "name": "Colorado",
+    "total_files": 3,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "CT": {
+    "name": "Connecticut",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "DC": {
+    "name": "District of Columbia",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "DE": {
+    "name": "Delaware",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "FL": {
+    "name": "Florida",
+    "total_files": 3,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "GA": {
+    "name": "Georgia",
+    "total_files": 6,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "HI": {
+    "name": "Hawaii",
+    "total_files": 4,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "IA": {
+    "name": "Iowa",
+    "total_files": 3,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "ID": {
+    "name": "Idaho",
+    "total_files": 3,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "IL": {
+    "name": "Illinois",
+    "total_files": 3,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "IN": {
+    "name": "Indiana",
+    "total_files": 2,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "KS": {
+    "name": "Kansas",
+    "total_files": 3,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "KY": {
+    "name": "Kentucky",
+    "total_files": 3,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "LA": {
+    "name": "Louisiana",
+    "total_files": 5,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "MA": {
+    "name": "Massachusetts",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "MD": {
+    "name": "Maryland",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "ME": {
+    "name": "Maine",
+    "total_files": 3,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "MI": {
+    "name": "Michigan",
+    "total_files": 9,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "MN": {
+    "name": "Minnesota",
+    "total_files": 5,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "MO": {
+    "name": "Missouri",
+    "total_files": 7,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "MS": {
+    "name": "Mississippi",
+    "total_files": 2,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "MT": {
+    "name": "Montana",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "NC": {
+    "name": "North Carolina",
+    "total_files": 12,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "ND": {
+    "name": "North Dakota",
+    "total_files": 2,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "NE": {
+    "name": "Nebraska",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "NH": {
+    "name": "New Hampshire",
+    "total_files": 2,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "NJ": {
+    "name": "New Jersey",
+    "total_files": 3,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "NM": {
+    "name": "New Mexico",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "NV": {
+    "name": "Nevada",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "NY": {
+    "name": "New York",
+    "total_files": 3,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "OH": {
+    "name": "Ohio",
+    "total_files": 6,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "OK": {
+    "name": "Oklahoma",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "OR": {
+    "name": "Oregon",
+    "total_files": 2,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "PA": {
+    "name": "Pennsylvania",
+    "total_files": 6,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "RI": {
+    "name": "Rhode Island",
+    "total_files": 0,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "SC": {
+    "name": "South Carolina",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "SD": {
+    "name": "South Dakota",
+    "total_files": 4,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "TN": {
+    "name": "Tennessee",
+    "total_files": 8,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "TX": {
+    "name": "Texas",
+    "total_files": 11,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "UT": {
+    "name": "Utah",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "VA": {
+    "name": "Virginia",
+    "total_files": 4,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "VT": {
+    "name": "Vermont",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "WA": {
+    "name": "Washington",
+    "total_files": 4,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "WI": {
+    "name": "Wisconsin",
+    "total_files": 7,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "WV": {
+    "name": "West Virginia",
+    "total_files": 2,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  },
+  "WY": {
+    "name": "Wyoming",
+    "total_files": 1,
+    "valid_files": 0,
+    "total_size_mb": 0.0,
+    "counties_covered": 0,
+    "average_quality": 0,
+    "has_statewide": false,
+    "files": []
+  }
+}

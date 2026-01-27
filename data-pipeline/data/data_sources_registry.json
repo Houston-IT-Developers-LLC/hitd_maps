@@ -1,7 +1,7 @@
 {
   "metadata": {
     "description": "Master registry of ALL data sources - what we have AND what we could get",
-    "last_updated": "2026-01-25",
+    "last_updated": "2026-01-27",
     "maintainer": "HITD Maps Team"
   },
   "parcels": {
@@ -51,14 +51,43 @@
         "our_status": "partial",
         "our_files": [
           "parcels_az",
+          "parcels_az_apache",
+          "parcels_az_cochise",
+          "parcels_az_coconino",
+          "parcels_az_gila",
+          "parcels_az_graham",
+          "parcels_az_greenlee",
+          "parcels_az_la_paz",
           "parcels_az_maricopa",
+          "parcels_az_navajo",
           "parcels_az_pima",
           "parcels_az_pinal",
-          "parcels_az_yavapai"
+          "parcels_az_yavapai",
+          "parcels_az_yuma"
         ],
-        "notes": "Have 6/15 counties (40% coverage): Maricopa, Pima, Pinal, Yavapai, Yuma, Cochise"
+        "notes": "Have 12/15 counties (80% coverage): Maricopa, Pima, Pinal, Yavapai, Yuma, Cochise, La Paz, Greenlee, Graham, Gila, Apache, Santa Cruz"
       },
       "counties": {
+        "apache": {
+          "name": "Apache County",
+          "url": "https://azwatermaps.azwater.gov/arcgis/rest/services/General/Parcels_for_TEST/FeatureServer/0",
+          "format": "ArcGIS REST",
+          "total_records": 58031,
+          "our_status": "have",
+          "our_file": "parcels_az_apache",
+          "deployed_date": "2026-01-26",
+          "notes": "Via Arizona Department of Water Resources, NAD83 UTM Zone 12N (EPSG:26912)"
+        },
+        "navajo": {
+          "name": "Navajo County",
+          "url": "https://services.arcgis.com/cghC2lEIpJ2TRrs5/arcgis/rest/services/Parcels/FeatureServer/0",
+          "format": "ArcGIS REST",
+          "total_records": 86745,
+          "our_status": "have",
+          "our_file": "parcels_az_navajo",
+          "deployed_date": "2026-01-26",
+          "notes": "Navajo County parcels - population ~108,000. Includes Holbrook, Show Low, and Winslow areas."
+        },
         "yuma": {
           "name": "Yuma County",
           "url": "https://arcgis.yumacountyaz.gov/webgis/rest/services/YC_Parcels/MapServer/0",
@@ -78,8 +107,98 @@
           "our_file": "parcels_az_cochise",
           "deployed_date": "2026-01-25",
           "notes": "Sierra Vista, Fort Huachuca - received 62K of 124K advertised records"
+        },
+        "coconino": {
+          "name": "Coconino County",
+          "url": "https://azwatermaps.azwater.gov/arcgis/rest/services/General/Parcels/MapServer/2",
+          "format": "ArcGIS REST MapServer",
+          "total_records": 78368,
+          "our_status": "have",
+          "our_file": "parcels_az_coconino",
+          "deployed_date": "2026-01-26",
+          "notes": "Northern Arizona county (population ~145K), includes Flagstaff and Grand Canyon"
+        },
+        "la_paz": {
+          "name": "La Paz County",
+          "url": "https://azwatermaps.azwater.gov/arcgis/rest/services/General/Parcels_for_TEST/MapServer/4",
+          "format": "ArcGIS REST MapServer",
+          "total_records": 16176,
+          "our_status": "have",
+          "our_file": "parcels_az_la_paz",
+          "deployed_date": "2026-01-26",
+          "notes": "Western Arizona county (population ~20K), borders California and Colorado River"
+        },
+        "greenlee": {
+          "name": "Greenlee County",
+          "url": "https://azwatermaps.azwater.gov/arcgis/rest/services/General/Parcels_for_TEST/FeatureServer/3",
+          "format": "ArcGIS REST FeatureServer",
+          "total_records": 4706,
+          "our_status": "have",
+          "our_file": "parcels_az_greenlee",
+          "deployed_date": "2026-01-26",
+          "notes": "Eastern Arizona county (population ~10K), smallest AZ county by population, includes Clifton and Morenci"
+        },
+        "graham": {
+          "name": "Graham County",
+          "url": "https://graham.az.gov/229/Geographic-Information-Systems-GIS",
+          "api_url": "https://azwatermaps.azwater.gov/arcgis/rest/services/General/Parcels_for_TEST/FeatureServer/2",
+          "format": "ArcGIS REST",
+          "update_frequency": "unknown",
+          "total_records": 18744,
+          "our_status": "have",
+          "our_files": [
+            "parcels_az_graham"
+          ],
+          "our_last_updated": "2026-01-26",
+          "notes": "Downloaded from Arizona Department of Water Resources portal. Data last updated from November 2023 source."
+        },
+        "gila": {
+          "name": "Gila County",
+          "url": "https://gis.gilacountyaz.gov/arcgis/rest/services/Assessor/ParcelsTyler/MapServer/0",
+          "format": "ArcGIS REST MapServer",
+          "total_records": 33558,
+          "our_status": "have",
+          "our_file": "parcels_az_gila",
+          "deployed_date": "2026-01-26",
+          "notes": "Central Arizona county (population ~54K), includes Globe and Payson"
+        },
+        "santa_cruz": {
+          "name": "Santa Cruz County",
+          "url": "https://mapservices.santacruzcountyaz.gov/wagis01/rest/services/ParcelSearch/Parcels/MapServer/0",
+          "format": "ArcGIS REST MapServer",
+          "total_records": 43184,
+          "our_status": "have",
+          "our_file": "parcels_az_santa_cruz",
+          "deployed_date": "2026-01-26",
+          "notes": "Southern Arizona county (population ~47K), includes Nogales. Daily updates per assessor."
+        },
+        "mohave": {
+          "name": "Mohave County",
+          "url": "https://mcgis.mohave.gov/arcgis/rest/services/Mohave/MapServer/38",
+          "format": "ArcGIS REST MapServer",
+          "total_records": 266330,
+          "our_status": "have",
+          "our_file": "parcels_az_mohave",
+          "deployed_date": "2026-01-26",
+          "notes": "Northwestern Arizona county (population ~213K), includes Lake Havasu City and Kingman"
         }
-      }
+      },
+      "our_files": [
+        "parcels_az",
+        "parcels_az_apache",
+        "parcels_az_cochise",
+        "parcels_az_gila",
+        "parcels_az_graham",
+        "parcels_az_greenlee",
+        "parcels_az_la_paz",
+        "parcels_az_maricopa",
+        "parcels_az_mohave",
+        "parcels_az_pima",
+        "parcels_az_pinal",
+        "parcels_az_yavapai",
+        "parcels_az_yuma"
+      ],
+      "notes": "Have 12/15 counties (80% coverage): Maricopa, Pima, Pinal, Yavapai, Yuma, Cochise, La Paz, Greenlee, Graham, Gila, Apache, Mohave"
     },
     "AR": {
       "name": "Arkansas",
@@ -452,51 +571,78 @@
         "our_status": "partial",
         "our_files": [
           "parcels_la",
+          "parcels_la_ascension",
+          "parcels_la_bossier",
           "parcels_la_caddo",
           "parcels_la_calcasieu",
           "parcels_la_east_baton_rouge",
+          "parcels_la_iberville",
           "parcels_la_jefferson_v2",
           "parcels_la_lafayette",
+          "parcels_la_livingston",
           "parcels_la_orleans_v2",
+          "parcels_la_plaquemines",
+          "parcels_la_st_bernard",
+          "parcels_la_tangipahoa",
           "parcels_la_terrebonne"
         ],
-        "notes": "7/64 parishes (11%). NO statewide database. Each parish uses proprietary systems."
+        "notes": "14/64 parishes (21.9%). NO statewide database. Each parish uses proprietary systems."
       },
       "priority_parishes": {
+        "ascension": {
+          "name": "Ascension Parish (Gonzales area)",
+          "population": 126000,
+          "status": "have",
+          "url": "https://gis.ascensionparishla.gov/",
+          "api_url": "https://gis.ascensionparishla.gov/server/rest/services/AssessorData/Assessor_Parcels/FeatureServer/317",
+          "format": "ArcGIS REST FeatureServer",
+          "total_records": 59778,
+          "our_file": "parcels_la_ascension",
+          "deployed_date": "2026-01-26",
+          "notes": "Complete parish coverage. Data in Louisiana State Plane South (EPSG:3452/102682). Includes Gonzales area.",
+          "assessor": "Ascension Parish Data Analytics Department"
+        },
         "st_tammany": {
           "name": "St. Tammany Parish (North Shore)",
           "population": 265000,
-          "status": "missing - proprietary portal",
+          "status": "BLOCKED - firewall/authentication required",
           "url": "https://stpao.org/all-tech/",
           "portal": "https://atlas.geoportalmaps.com/st_tammany",
           "api_url": "https://atlas.stpgov.org/server/rest/services/STPAO_Parcels/MapServer/1",
-          "format": "Proprietary web portal - NO public REST API",
+          "format": "ArcGIS MapServer (ACCESS BLOCKED)",
           "estimated_records": 131134,
-          "notes": "PRIORITY 1 (hunting area). Atlas/GeoPortal Maps proprietary system. No standard ArcGIS REST access. May require manual contact with assessor.",
-          "assessor": "St. Tammany Parish Assessor's Office"
+          "last_attempted": "2026-01-26",
+          "failure_reason": "All connection attempts timeout (15-30s). Endpoint exists but blocked by firewall/IP restrictions. Requires parish network access or authentication.",
+          "notes": "BLOCKED - PRIORITY 1 (hunting area). Endpoint confirmed but unreachable. Atlas/GeoPortal Maps system. Server migrating to geosync.io Feb 2026. Contact: mmcneil@stpao.org, gis@stpgov.org for bulk data export.",
+          "assessor": "St. Tammany Parish Assessor's Office",
+          "alternative_access": "Email GIS contacts for bulk export, wait for geosync.io migration (Feb 15, 2026), or use commercial provider (Regrid)"
         },
         "livingston": {
           "name": "Livingston Parish",
           "population": 142000,
-          "status": "missing - proprietary portal",
+          "status": "have",
           "url": "https://www.livingstonassessor.com/mapping",
           "portal": "https://atlas.geoportalmaps.com/livingston",
-          "api_url": null,
-          "format": "Proprietary web portal - NO public REST API",
-          "estimated_records": 79559,
-          "notes": "PRIORITY 2 (hunting area). Atlas/GeoPortal Maps proprietary system. No standard REST access.",
+          "api_url": "https://utility.arcgis.com/usrsvcs/servers/0e5f5ffb59b745f7bb82abb3d428da88/rest/services/Assessor/Parcels_SMARTCAMA/MapServer/8",
+          "format": "ArcGIS MapServer",
+          "total_records": 84692,
+          "our_file": "parcels_la_livingston",
+          "deployed_date": "2026-01-26",
+          "notes": "DEPLOYED! Atlas/GeoPortal Maps hosted via utility.arcgis.com MapServer. API returns WGS84 directly. Priority hunting area. 84,692 parcels, 53MB PMTiles.",
           "assessor": "Livingston Parish Assessor, 20400 Government Blvd., Livingston, LA 70754"
         },
         "tangipahoa": {
-          "name": "Tangipahoa Parish",
+          "name": "Tangipahoa Parish (Hammond)",
           "population": 133000,
-          "status": "missing - proprietary portal",
-          "url": "https://tangiassessor.com/gis-mapping",
-          "portal": "https://tangipahoa.org/residents/gis-mapping/tangis/",
-          "api_url": null,
-          "format": "Proprietary web portal - NO public REST API",
-          "estimated_records": 81479,
-          "notes": "PRIORITY 3 (hunting area). Custom GIS department portal. No standard REST access.",
+          "status": "have",
+          "url": "https://tangipahoa.org/residents/gis-mapping/tangis/",
+          "api_url": "https://tangis.tangipahoa.org/server/rest/services/Cadastral/TaxParcel_A/FeatureServer/0",
+          "format": "ArcGIS FeatureServer",
+          "update_frequency": "Every 3 weeks",
+          "total_records": 75919,
+          "our_file": "parcels_la_tangipahoa",
+          "deployed_date": "2026-01-26",
+          "notes": "Hammond area. Data updated every 3 weeks. TanGIS parish ArcGIS server. 75,919 parcels, 31MB PMTiles.",
           "assessor": "Tangipahoa Parish Assessor"
         },
         "rapides": {
@@ -512,16 +658,183 @@
           "assessor": "Rapides Parish Assessor"
         },
         "bossier": {
-          "name": "Bossier Parish",
+          "name": "Bossier Parish (Bossier City)",
           "population": 128000,
-          "status": "missing - proprietary portal",
+          "status": "have",
           "url": "https://www.bossierparishla.gov/police-jury/divisions/geographic-information-system-(gis)/maps",
           "portal": "https://atlas.geoportalmaps.com/bossier_public/",
-          "api_url": null,
-          "format": "Proprietary web portal - NO public REST API",
-          "estimated_records": null,
-          "notes": "PRIORITY 5. Atlas/GeoPortal Maps proprietary system. No standard REST access.",
+          "api_url": "https://bpagis.bossierparish.org/server/rest/services/Parcels/BossierParcels_Public_Es2/MapServer/0",
+          "format": "ArcGIS REST MapServer",
+          "total_records": 78556,
+          "our_file": "parcels_la_bossier",
+          "deployed_date": "2026-01-26",
+          "notes": "Discovered working MapServer endpoint behind GeoPortal Maps interface. Data in Web Mercator (EPSG:3857).",
           "assessor": "Bossier Parish Assessor"
+        },
+        "natchitoches": {
+          "name": "Natchitoches Parish",
+          "population": 38000,
+          "status": "BLOCKED - QGIS backend (not ArcGIS)",
+          "url": "https://www.natchitochesassessor.org/",
+          "portal": "https://atlas.geoportalmaps.com/natch",
+          "api_url": null,
+          "backend_type": "QGIS MapServer (internal: 192.168.60.130:8001)",
+          "format": "QGIS WMS/WFS - NO public REST API",
+          "estimated_records": 24345,
+          "last_attempted": "2026-01-26",
+          "failure_reason": "Parish uses QGIS backend (not ArcGIS). Internal server at 192.168.60.130 not publicly accessible. GeoPortal Maps interface is frontend only. No REST API available.",
+          "notes": "INCOMPATIBLE BACKEND. Uses QGIS MapServer instead of ArcGIS. Cannot be downloaded via REST API. Contact assessor at (318) 352-2377 for bulk data export. Alternative: Purchase from Regrid (~$200-500).",
+          "assessor": "Natchitoches Parish Assessor - Dollie C. Mahoney, CLA",
+          "assessor_phone": "(318) 352-2377",
+          "assessor_address": "P O Box 201, Natchitoches, LA 71458-0201",
+          "alternative_access": "Contact assessor directly for bulk export, or purchase from Regrid",
+          "investigation_report": "docs/NATCHITOCHES_PARISH_INVESTIGATION.md"
+        },
+        "beauregard": {
+          "name": "Beauregard Parish (DeRidder)",
+          "population": 37000,
+          "status": "missing - no public API",
+          "url": "http://www.bpassessor.com",
+          "portal": "https://atlas.geoportalmaps.com/beauregard",
+          "api_url": null,
+          "format": "Unknown - No public REST API found",
+          "estimated_records": 26778,
+          "last_attempted": "2026-01-26",
+          "failure_reason": "Extensive search found no working ArcGIS REST API endpoint. Atlas GeoPortal Maps portal exists but backend API not accessible. Assessor website has limited public GIS access.",
+          "notes": "NO PUBLIC API FOUND. Commercial providers (Regrid, Mapping Solutions GIS) have data, indicating it exists but not publicly accessible. Likely uses proprietary system (possibly Qpublic.net) or requires authentication. Contact assessor for bulk data request.",
+          "assessor": "Beauregard Parish Assessor, 214 West 2nd Street, DeRidder LA 70634, Phone: 337-463-8945",
+          "alternative_access": "Contact assessor directly for bulk shapefile/geodatabase export, or purchase from commercial provider (Regrid, etc)"
+        },
+        "iberville": {
+          "name": "Iberville Parish (Plaquemine)",
+          "population": 31000,
+          "status": "have",
+          "url": "https://ibervilleassessor.org/maps/",
+          "portal": "https://atlas.geoportalmaps.com/IBERVILLE",
+          "api_url": "https://services6.arcgis.com/1fGAZVgZnPx4zcNH/arcgis/rest/services/Iberville_Parish_Parcels/FeatureServer/0",
+          "format": "ArcGIS REST FeatureServer",
+          "update_frequency": "unknown",
+          "total_records": 17471,
+          "our_file": "parcels_la_iberville",
+          "deployed_date": "2026-01-26",
+          "notes": "Complete parish coverage via CSRS Engineering FeatureServer. Data returned in WGS84. River parishes area between Baton Rouge and New Orleans. 17,471 parcels, 30.3MB PMTiles.",
+          "assessor": "Iberville Parish Assessor's Office"
+        },
+        "st_mary": {
+          "name": "St. Mary Parish (Morgan City)",
+          "population": 49000,
+          "status": "PENDING - platform migration",
+          "url": "https://smpassessor.net",
+          "portal": "https://atlas.geoportalmaps.com/stmary",
+          "viewpro_portal": "https://map.viewprogis.com/ecp/smp-la/",
+          "api_url": null,
+          "format": "ViewPro GIS (no public REST API found)",
+          "estimated_records": 49168,
+          "last_attempted": "2026-01-26",
+          "failure_reason": "Extensive search found no working ArcGIS REST API endpoint. Uses ViewPro GIS and Atlas GeoPortal Maps viewers, but backend REST APIs not publicly accessible.",
+          "migration_date": "2026-02-01",
+          "migration_platform": "geosync.io",
+          "notes": "PENDING MIGRATION - Assessor migrating to geosync.io platform on February 1, 2026. Modern platforms typically provide REST API access. Check back after migration for new API endpoints. ViewPro GIS viewer exists but no public REST API discovered. Commercial providers (Regrid) have data.",
+          "assessor": "St. Mary Parish Assessor, Phone: 337-828-4100",
+          "alternative_access": "WAIT for geosync.io migration (Feb 1, 2026), contact assessor for bulk export, or purchase from commercial provider (Regrid)",
+          "retry_after": "2026-02-01"
+        },
+        "st_martin": {
+          "name": "St. Martin Parish (Breaux Bridge/St. Martinville)",
+          "population": 52000,
+          "status": "BLOCKED - no public API",
+          "url": "https://www.stmartinassessor.org/",
+          "portal": "https://atlas.geoportalmaps.com/stmartin",
+          "api_url": null,
+          "format": "GeoPortal Maps (no public REST API found)",
+          "estimated_records": 42937,
+          "last_attempted": "2026-01-27",
+          "failure_reason": "Extensive investigation found no working ArcGIS REST API endpoint. Parish uses Atlas GeoPortal Maps platform (hosted on services.geoportalmaps.com), but the MapServer endpoint 'StMartin_Public' returns 404. Discovered utility.arcgis.com server ID (0317e854a601d41dcca5b60102028004) but it contains no services. Backend API is either restricted, requires authentication, or uses non-standard system.",
+          "notes": "NO PUBLIC API FOUND. GeoPortal Maps interactive portal exists with nightly updates of tax roll records and parcel graphics. Commercial providers (Regrid, Dynamo Spatial) have data (42,937 properties), indicating data exists but is not publicly accessible via REST API. Contact assessor's office for bulk shapefile/geodatabase export.",
+          "assessor": "St. Martin Parish Assessor's Office, 415 Saint Martin Street, St. Martinville, LA 70582",
+          "assessor_phone": "(337) 394-2208",
+          "alternative_access": "Contact assessor directly for bulk shapefile/geodatabase export, or purchase from commercial provider (Regrid, Dynamo Spatial)",
+          "commercial_sources": {
+            "regrid": "https://app.regrid.com/store/us/la/st-martin",
+            "dynamo_spatial": "https://www.dynamospatial.com/c/st-martin-parish-la/parcel-data"
+          },
+          "investigation_details": {
+            "portal_confirmed": "https://atlas.geoportalmaps.com/stmartin",
+            "attempted_endpoint": "https://services.geoportalmaps.com/arcgis/rest/services/StMartin_Public/MapServer",
+            "utility_server_id": "0317e854a601d41dcca5b60102028004",
+            "result": "All endpoints return 404 or empty services"
+          }
+        },
+        "plaquemines": {
+          "name": "Plaquemines Parish (Belle Chasse area)",
+          "population": 23000,
+          "status": "have",
+          "url": "https://plaqueminesparishmaps.azurewebsites.net",
+          "api_url": "https://services1.arcgis.com/fe3XWHMASK948q2c/ArcGIS/rest/services/PlaqueminesParcelLayer/FeatureServer/0",
+          "format": "ArcGIS REST FeatureServer",
+          "update_frequency": "unknown",
+          "total_records": 18265,
+          "our_file": "parcels_la_plaquemines",
+          "deployed_date": "2026-01-27",
+          "notes": "Complete parish coverage via GDIT-hosted FeatureServer. Data in Louisiana State Plane South (EPSG:3452/102682), API returns WGS84 on request. Southernmost Louisiana parish along Mississippi River delta. 18,265 parcels, 9.9MB PMTiles. Discovered via ArcGIS Online search.",
+          "assessor": "Plaquemines Parish Assessor"
+        },
+        "webster": {
+          "name": "Webster Parish (Minden)",
+          "population": 39000,
+          "status": "missing - no public API",
+          "url": "https://www.websterassessor.org/",
+          "portal": "https://atlas.geoportalmaps.com/webster_public",
+          "api_url": null,
+          "format": "QGIS MapServer (internal network only)",
+          "estimated_records": 61084,
+          "last_attempted": "2026-01-27",
+          "failure_reason": "Portal uses internal QGIS MapServer on 192.168.x.x network (not publicly accessible). GeoPortal Maps/GCT platform with backend on private network. No ArcGIS REST API found after extensive search.",
+          "notes": "NO PUBLIC API - Uses GeoPortal Maps (GCT/Geosync) platform with QGIS MapServer backend on internal network. Similar to Beauregard Parish pattern. Commercial providers (Regrid, Dynamo Spatial) have data (~61K parcels), indicating data exists but not publicly accessible. Contact assessor for bulk shapefile/GeoJSON export.",
+          "assessor": "Webster Parish Assessor, websterassessor.org/contact-us",
+          "alternative_access": "Contact assessor directly for bulk data export, or purchase from commercial provider (Regrid ~$500, Dynamo Spatial)",
+          "commercial_sources": {
+            "regrid": "https://app.regrid.com/store/us/la/webster",
+            "dynamo_spatial": "https://www.dynamospatial.com/c/webster-parish-la/parcel-data"
+          },
+          "checked_date": "2026-01-27"
+        },
+        "evangeline": {
+          "name": "Evangeline Parish (Ville Platte)",
+          "population": 32000,
+          "status": "blocked - no public API",
+          "url": "https://evangelineparishpolicejury.com/gis-map/",
+          "assessor_url": "https://www.evangelineassessor.com/",
+          "api_url": null,
+          "format": "Proprietary (no public REST API found)",
+          "estimated_records": 30373,
+          "last_attempted": "2026-01-27",
+          "failure_reason": "Extensive search found no working ArcGIS REST API endpoint. Parish GIS service shows 'Coming Soon'. Qpublic portal returns 404. Commercial providers (Regrid) have data, indicating it exists but not publicly accessible via REST API.",
+          "notes": "NO PUBLIC API FOUND. Parish GIS service launching soon. Commercial data available via Regrid (~30K parcels). Contact assessor for bulk export or wait for public GIS launch (Q2 2026).",
+          "assessor": "Chris Guillory, Assessor, 200 Court Street, Ville Platte LA 70586, Phone: 337-363-4310",
+          "alternative_access": "Contact assessor for bulk export, purchase from Regrid (~$200-500), or wait for GIS service launch (Q2 2026)"
+        }
+      },
+      "counties": {
+        "West Baton Rouge": {
+          "name": "West Baton Rouge Parish",
+          "population": 27000,
+          "url": "https://wbrcouncil.org/1049/GIS",
+          "assessor_url": "https://www.wbrassessor.org/assessments/digital-maps/",
+          "map_viewer": "http://pa.totaland.com/WestBatonRouge",
+          "api_url": null,
+          "format": "Proprietary (Total Land Solutions)",
+          "update_frequency": "unknown",
+          "our_status": "blocked",
+          "our_files": [],
+          "access_method": "proprietary_viewer",
+          "notes": "Uses Total Land Solutions proprietary mapping platform. No public ArcGIS REST API or downloadable data. Options: (1) Contact parish at 225-383-4755, (2) Purchase from Regrid, (3) Manual export if available",
+          "commercial_source": {
+            "provider": "Regrid",
+            "url": "https://app.regrid.com/store/us/la/west-baton-rouge",
+            "cost": "paid"
+          },
+          "checked_date": "2026-01-27"
         }
       }
     },

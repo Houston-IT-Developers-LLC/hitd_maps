@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-01-24 18:07:14",
+  "total": 2,
+  "deployed": 0,
+  "skipped": 0,
+  "failed": 2,
+  "details": {
+    "deployed": [],
+    "skipped": [],
+    "failed": [
+      {
+        "county": "St. Louis County, MO",
+        "status": "no_endpoint"
+      },
+      {
+        "county": "Fulton, GA",
+        "status": "no_endpoint"
+      }
+    ]
+  }
+}

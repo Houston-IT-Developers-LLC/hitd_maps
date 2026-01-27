@@ -1,0 +1,273 @@
+{
+  "timestamp": "2026-01-24 21:31:07",
+  "total": 65,
+  "success": 0,
+  "skipped": 0,
+  "failed": 65,
+  "details": {
+    "success": [],
+    "failed": [
+      {
+        "status": "not_found",
+        "county": "Rapides, LA"
+      },
+      {
+        "status": "not_found",
+        "county": "Clackamas, OR"
+      },
+      {
+        "status": "not_found",
+        "county": "DeSoto, MS"
+      },
+      {
+        "status": "not_found",
+        "county": "Cleveland, OK"
+      },
+      {
+        "status": "not_found",
+        "county": "St. Tammany, LA"
+      },
+      {
+        "status": "not_found",
+        "county": "Jefferson, MO"
+      },
+      {
+        "status": "not_found",
+        "county": "St. Clair, IL"
+      },
+      {
+        "status": "not_found",
+        "county": "Hinds, MS"
+      },
+      {
+        "status": "not_found",
+        "county": "Washington, OR"
+      },
+      {
+        "status": "not_found",
+        "county": "Ingham, MI"
+      },
+      {
+        "status": "not_found",
+        "county": "Warren, KY"
+      },
+      {
+        "status": "not_found",
+        "county": "Shawnee, KS"
+      },
+      {
+        "status": "not_found",
+        "county": "Bartow, GA"
+      },
+      {
+        "status": "not_found",
+        "county": "Madison, AL"
+      },
+      {
+        "status": "not_found",
+        "county": "Bossier, LA"
+      },
+      {
+        "status": "not_found",
+        "county": "Comanche, OK"
+      },
+      {
+        "status": "not_found",
+        "county": "St. Charles, MO"
+      },
+      {
+        "status": "not_found",
+        "county": "Franklin, MO"
+      },
+      {
+        "status": "not_found",
+        "county": "Douglas, KS"
+      },
+      {
+        "status": "not_found",
+        "county": "Columbia, GA"
+      },
+      {
+        "status": "not_found",
+        "county": "Canadian, OK"
+      },
+      {
+        "status": "not_found",
+        "county": "Champaign, IL"
+      },
+      {
+        "status": "not_found",
+        "county": "Shelby, AL"
+      },
+      {
+        "status": "not_found",
+        "county": "Muscogee, GA"
+      },
+      {
+        "status": "not_found",
+        "county": "Madison, IL"
+      },
+      {
+        "status": "not_found",
+        "county": "Tangipahoa, LA"
+      },
+      {
+        "status": "not_found",
+        "county": "Berrien, MI"
+      },
+      {
+        "status": "not_found",
+        "county": "Horry, SC"
+      },
+      {
+        "status": "not_found",
+        "county": "Clay, MO"
+      },
+      {
+        "status": "not_found",
+        "county": "Clayton, GA"
+      },
+      {
+        "status": "not_found",
+        "county": "Hall, GA"
+      },
+      {
+        "status": "not_found",
+        "county": "Charleston, SC"
+      },
+      {
+        "status": "not_found",
+        "county": "Cass, MO"
+      },
+      {
+        "status": "not_found",
+        "county": "Platte, MO"
+      },
+      {
+        "status": "not_found",
+        "county": "Houston, GA"
+      },
+      {
+        "status": "not_found",
+        "county": "Clarke, GA"
+      },
+      {
+        "status": "not_found",
+        "county": "Kane, IL"
+      },
+      {
+        "status": "not_found",
+        "county": "Marion, OR"
+      },
+      {
+        "status": "not_found",
+        "county": "Montgomery, AL"
+      },
+      {
+        "status": "not_found",
+        "county": "Kenton, KY"
+      },
+      {
+        "status": "not_found",
+        "county": "St. Louis, MO"
+      },
+      {
+        "status": "not_found",
+        "county": "Lane, OR"
+      },
+      {
+        "status": "not_found",
+        "county": "Rankin, MS"
+      },
+      {
+        "status": "not_found",
+        "county": "Winnebago, IL"
+      },
+      {
+        "status": "not_found",
+        "county": "Livingston, LA"
+      },
+      {
+        "status": "not_found",
+        "county": "Bay, MI"
+      },
+      {
+        "status": "not_found",
+        "county": "Wyandotte, KS"
+      },
+      {
+        "status": "not_found",
+        "county": "Sarpy, NE"
+      },
+      {
+        "status": "not_found",
+        "county": "Cochise, AZ"
+      },
+      {
+        "status": "not_found",
+        "county": "Navajo, AZ"
+      },
+      {
+        "status": "not_found",
+        "county": "Daviess, KY"
+      },
+      {
+        "status": "not_found",
+        "county": "Saginaw, MI"
+      },
+      {
+        "status": "not_found",
+        "county": "Harrison, MS"
+      },
+      {
+        "status": "not_found",
+        "county": "Jackson, MI"
+      },
+      {
+        "status": "not_found",
+        "county": "Madison, MS"
+      },
+      {
+        "status": "not_found",
+        "county": "Yuma, AZ"
+      },
+      {
+        "status": "not_found",
+        "county": "Lowndes, GA"
+      },
+      {
+        "status": "not_found",
+        "county": "Johnson, KS"
+      },
+      {
+        "status": "not_found",
+        "county": "Hardin, KY"
+      },
+      {
+        "status": "not_found",
+        "county": "Lancaster, NE"
+      },
+      {
+        "status": "not_found",
+        "county": "Richland, SC"
+      },
+      {
+        "status": "not_found",
+        "county": "Bibb, GA"
+      },
+      {
+        "status": "not_found",
+        "county": "Boone, KY"
+      },
+      {
+        "status": "not_found",
+        "county": "Mohave, AZ"
+      },
+      {
+        "status": "not_found",
+        "county": "Spartanburg, SC"
+      }
+    ],
+    "skipped": []
+  }
+}
