@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Header } from '@/components/marketing/header'
 import { Footer } from '@/components/marketing/footer'
+import { MapPreview } from '@/components/marketing/map-preview'
 import {
   MapPin,
   ArrowRight,
@@ -104,37 +105,9 @@ map.on('click', 'parcels', (e) => {
             </div>
           </div>
 
-          {/* Map Preview - Static Image with CTA */}
+          {/* Interactive Map Preview */}
           <div className="mt-16 relative max-w-5xl mx-auto">
-            <Link href="/map" className="block group">
-              <div className="rounded-xl overflow-hidden shadow-2xl border bg-gradient-to-br from-blue-100 to-indigo-100 aspect-[16/9] relative">
-                {/* Decorative map illustration */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/30 transition-colors">
-                      <MapPin className="h-12 w-12 text-primary" />
-                    </div>
-                    <p className="text-xl font-semibold text-gray-800">Interactive Live Map</p>
-                    <p className="text-muted-foreground mt-2">Query 167M+ records in real-time</p>
-                    <div className="mt-4 inline-flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all">
-                      Explore Live Map
-                      <ArrowRight className="h-5 w-5" />
-                    </div>
-                  </div>
-                </div>
-                {/* Decorative grid pattern */}
-                <div className="absolute inset-0 opacity-10">
-                  <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1"/>
-                      </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#grid)" />
-                  </svg>
-                </div>
-              </div>
-            </Link>
+            <MapPreview />
             {/* Feature badges */}
             <div className="flex flex-wrap justify-center gap-3 mt-6">
               <span className="inline-flex items-center gap-1.5 bg-white border rounded-full px-4 py-2 text-sm font-medium shadow-sm">

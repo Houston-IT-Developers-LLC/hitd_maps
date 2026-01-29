@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-01-27T00:08:10.095355",
+  "generated_at": "2026-01-27T03:41:34.903629",
   "summary": {
     "total_states": 51,
     "complete_states": 37,
     "partial_states": 14,
     "missing_states": 0,
-    "total_files": 271,
+    "total_files": 263,
     "coverage_pct": 72.5
   },
   "states": {
@@ -168,10 +168,14 @@
       "has_statewide": true,
       "statewide_file": "parcels_co_statewide",
       "county_files": [
+        "parcels_co_adams_v2",
+        "parcels_co_arapahoe_v2",
         "parcels_co_el_paso_v2"
       ],
       "files": [
         "parcels_co",
+        "parcels_co_adams_v2",
+        "parcels_co_arapahoe_v2",
         "parcels_co_el_paso_v2",
         "parcels_co_statewide"
       ],
@@ -262,15 +266,12 @@
       "name": "Georgia",
       "total_counties": 159,
       "status": "partial",
-      "completeness_pct": 6,
+      "completeness_pct": 5,
       "has_statewide": false,
       "statewide_file": null,
       "county_files": [
-        "parcels_ga_bibb",
         "parcels_ga_chatham",
-        "parcels_ga_clarke",
         "parcels_ga_cobb",
-        "parcels_ga_columbia",
         "parcels_ga_dekalb",
         "parcels_ga_forsyth",
         "parcels_ga_fulton",
@@ -280,11 +281,8 @@
       ],
       "files": [
         "parcels_ga",
-        "parcels_ga_bibb",
         "parcels_ga_chatham",
-        "parcels_ga_clarke",
         "parcels_ga_cobb",
-        "parcels_ga_columbia",
         "parcels_ga_dekalb",
         "parcels_ga_forsyth",
         "parcels_ga_fulton",
@@ -479,39 +477,33 @@
       "name": "Louisiana",
       "total_counties": 64,
       "status": "partial",
-      "completeness_pct": 21,
+      "completeness_pct": 17,
       "has_statewide": false,
       "statewide_file": null,
       "county_files": [
-        "parcels_la_ascension",
-        "parcels_la_bossier",
         "parcels_la_caddo",
         "parcels_la_calcasieu",
         "parcels_la_east_baton_rouge",
-        "parcels_la_iberville",
         "parcels_la_jefferson_v2",
         "parcels_la_lafayette",
         "parcels_la_livingston",
+        "parcels_la_orleans",
         "parcels_la_orleans_v2",
         "parcels_la_plaquemines",
-        "parcels_la_st_bernard",
         "parcels_la_tangipahoa",
         "parcels_la_terrebonne"
       ],
       "files": [
         "parcels_la",
-        "parcels_la_ascension",
-        "parcels_la_bossier",
         "parcels_la_caddo",
         "parcels_la_calcasieu",
         "parcels_la_east_baton_rouge",
-        "parcels_la_iberville",
         "parcels_la_jefferson_v2",
         "parcels_la_lafayette",
         "parcels_la_livingston",
+        "parcels_la_orleans",
         "parcels_la_orleans_v2",
         "parcels_la_plaquemines",
-        "parcels_la_st_bernard",
         "parcels_la_tangipahoa",
         "parcels_la_terrebonne"
       ],
@@ -582,7 +574,7 @@
       "name": "Michigan",
       "total_counties": 83,
       "status": "partial",
-      "completeness_pct": 13,
+      "completeness_pct": 12,
       "has_statewide": false,
       "statewide_file": null,
       "county_files": [
@@ -591,7 +583,6 @@
         "parcels_mi_kent_v2",
         "parcels_mi_macomb",
         "parcels_mi_midland",
-        "parcels_mi_monroe",
         "parcels_mi_muskegon",
         "parcels_mi_oakland",
         "parcels_mi_oakland_v2",
@@ -605,7 +596,6 @@
         "parcels_mi_kent_v2",
         "parcels_mi_macomb",
         "parcels_mi_midland",
-        "parcels_mi_monroe",
         "parcels_mi_muskegon",
         "parcels_mi_oakland",
         "parcels_mi_oakland_v2",
@@ -723,10 +713,11 @@
       "status": "complete",
       "completeness_pct": 100,
       "has_statewide": true,
-      "statewide_file": "parcels_mt_statewide",
+      "statewide_file": "parcels_mt_statewide_v2",
       "county_files": [],
       "files": [
-        "parcels_mt_statewide"
+        "parcels_mt_statewide",
+        "parcels_mt_statewide_v2"
       ],
       "missing_counties": [],
       "data_source": "https://services.arcgis.com/iTQUx5ZpNUh47Geb/arcgis/rest/services/Montana_Parcel_Earliest_Build_Year/FeatureServer/0",
@@ -862,7 +853,7 @@
       "status": "complete",
       "completeness_pct": 100,
       "has_statewide": true,
-      "statewide_file": "parcels_nc_statewide_wgs84",
+      "statewide_file": "parcels_nc_statewide",
       "county_files": [
         "parcels_nc_durham",
         "parcels_nc_durham_wgs84",
@@ -872,8 +863,7 @@
         "parcels_nc_guilford_wgs84",
         "parcels_nc_mecklenburg",
         "parcels_nc_mecklenburg_wgs84",
-        "parcels_nc_wake",
-        "parcels_nc_wake_wgs84"
+        "parcels_nc_wake"
       ],
       "files": [
         "parcels_nc_durham",
@@ -885,9 +875,7 @@
         "parcels_nc_mecklenburg",
         "parcels_nc_mecklenburg_wgs84",
         "parcels_nc_statewide",
-        "parcels_nc_statewide_wgs84",
-        "parcels_nc_wake",
-        "parcels_nc_wake_wgs84"
+        "parcels_nc_wake"
       ],
       "missing_counties": [],
       "data_source": "https://ncgis.maps.arcgis.com",
@@ -973,18 +961,16 @@
       "name": "Oregon",
       "total_counties": 36,
       "status": "partial",
-      "completeness_pct": 8,
+      "completeness_pct": 5,
       "has_statewide": false,
       "statewide_file": null,
       "county_files": [
         "parcels_or_lane",
-        "parcels_or_multnomah_v2",
-        "parcels_or_washington"
+        "parcels_or_multnomah_v2"
       ],
       "files": [
         "parcels_or_lane",
-        "parcels_or_multnomah_v2",
-        "parcels_or_washington"
+        "parcels_or_multnomah_v2"
       ],
       "missing_counties": [],
       "data_source": "Unknown",
@@ -1128,8 +1114,8 @@
     "TX": {
       "name": "Texas",
       "total_counties": 254,
-      "status": "complete",
-      "completeness_pct": 100,
+      "status": "partial",
+      "completeness_pct": 3,
       "has_statewide": true,
       "statewide_file": "parcels_tx_statewide_recent",
       "county_files": [
@@ -1139,10 +1125,12 @@
         "parcels_tx_harris",
         "parcels_tx_harris_new",
         "parcels_tx_harris_v2",
+        "parcels_tx_montgomery",
         "parcels_tx_tarrant",
         "parcels_tx_tarrant_v2",
         "parcels_tx_travis",
         "parcels_tx_travis_v2",
+        "parcels_tx_williamson",
         "parcels_tx_williamson_v2"
       ],
       "files": [
@@ -1153,19 +1141,33 @@
         "parcels_tx_harris",
         "parcels_tx_harris_new",
         "parcels_tx_harris_v2",
+        "parcels_tx_montgomery",
         "parcels_tx_statewide",
         "parcels_tx_statewide_recent",
         "parcels_tx_tarrant",
         "parcels_tx_tarrant_v2",
         "parcels_tx_travis",
         "parcels_tx_travis_v2",
+        "parcels_tx_williamson",
         "parcels_tx_williamson_v2"
       ],
       "missing_counties": [],
       "data_source": "https://tnris.org/stratmap/",
       "estimated_total_parcels": 28000000,
       "last_updated": null,
-      "notes": ""
+      "notes": "Statewide file (parcels_tx_statewide_recent) is generalized and missing many parcels. Only 8 counties have detailed data. Need individual county downloads for accurate coverage.",
+      "statewide_quality": "low - generalized/incomplete",
+      "counties_with_data": 8,
+      "missing_counties_examples": [
+        "Brazos (Bryan, College Station)",
+        "Lubbock (Lubbock)",
+        "Montgomery (incomplete)",
+        "Collin (Plano, McKinney)",
+        "El Paso",
+        "Fort Bend",
+        "Hidalgo",
+        "...and 246 more"
+      ]
     },
     "UT": {
       "name": "Utah",
@@ -1335,7 +1337,7 @@
     {
       "priority": 2,
       "state": "GA",
-      "action": "Expand Georgia coverage (6% complete)",
+      "action": "Expand Georgia coverage (5% complete)",
       "estimated_parcels": 0
     },
     {
@@ -1359,13 +1361,13 @@
     {
       "priority": 2,
       "state": "LA",
-      "action": "Expand Louisiana coverage (21% complete)",
+      "action": "Expand Louisiana coverage (17% complete)",
       "estimated_parcels": 0
     },
     {
       "priority": 2,
       "state": "MI",
-      "action": "Expand Michigan coverage (13% complete)",
+      "action": "Expand Michigan coverage (12% complete)",
       "estimated_parcels": 0
     },
     {
@@ -1395,7 +1397,7 @@
     {
       "priority": 2,
       "state": "OR",
-      "action": "Expand Oregon coverage (8% complete)",
+      "action": "Expand Oregon coverage (5% complete)",
       "estimated_parcels": 0
     },
     {

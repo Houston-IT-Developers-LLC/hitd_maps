@@ -5,147 +5,276 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { MapPin, Layers, Mountain, Satellite } from 'lucide-react'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import type { LngLatBounds } from 'maplibre-gl'
 
 const CDN = 'https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev'
 const PROTOMAPS_URL = `${CDN}/basemap/protomaps_planet.pmtiles`
 const ESRI_SATELLITE = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
 const AWS_TERRAIN = 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
 
-// Minimum zoom level before loading parcels (neighborhood level)
-const PARCEL_LOAD_ZOOM = 8
+// Progressive loading strategy
+const PARCEL_LOAD_ZOOM = 8 // Start loading parcels
+const COUNTY_LOAD_ZOOM = 11 // Load county-level detail
+const VIEWPORT_BUFFER = 0.5 // degrees buffer around viewport
 
-// All verified USA parcel files (198 files covering 50 states + DC)
-const PARCELS = [
-  // Alaska
-  'parcels_ak', 'parcels_ak_statewide',
-  // Alabama
-  'parcels_al', 'parcels_al_madison_v2', 'parcels_al_mobile', 'parcels_al_montgomery',
-  // Arkansas
-  'parcels_ar_statewide', 'parcels_ar_washington',
-  // Arizona
-  'parcels_az', 'parcels_az_maricopa', 'parcels_az_pima', 'parcels_az_pinal', 'parcels_az_yavapai',
-  // California
-  'parcels_ca', 'parcels_ca_fresno', 'parcels_ca_los_angeles_v2', 'parcels_ca_orange', 'parcels_ca_orange_v2',
-  'parcels_ca_sacramento', 'parcels_ca_sacramento_v2', 'parcels_ca_san_francisco', 'parcels_ca_sonoma',
-  // Colorado
-  'parcels_co', 'parcels_co_el_paso_v2', 'parcels_co_statewide',
-  // Connecticut
-  'parcels_ct', 'parcels_ct_statewide',
-  // DC
-  'parcels_dc',
-  // Delaware
-  'parcels_de', 'parcels_de_statewide',
-  // Florida
-  'parcels_fl_orange', 'parcels_fl_statewide',
-  // Georgia
-  'parcels_ga', 'parcels_ga_chatham', 'parcels_ga_cobb', 'parcels_ga_dekalb', 'parcels_ga_gwinnett', 'parcels_ga_gwinnett_v2', 'parcels_ga_richmond',
-  // Hawaii
-  'parcels_hi', 'parcels_hi_honolulu', 'parcels_hi_maui', 'parcels_hi_statewide',
-  // Iowa
-  'parcels_ia', 'parcels_ia_statewide',
-  // Idaho
-  'parcels_id', 'parcels_id_ada_meridian', 'parcels_id_statewide',
-  // Illinois
-  'parcels_il', 'parcels_il_cook', 'parcels_il_cook_county', 'parcels_il_dupage', 'parcels_il_dupage_v2', 'parcels_il_lake', 'parcels_il_will',
-  // Indiana
-  'parcels_in_marion', 'parcels_in_statewide',
-  // Kansas
-  'parcels_ks', 'parcels_ks_douglas', 'parcels_ks_sedgwick',
-  // Kentucky
-  'parcels_ky', 'parcels_ky_boone', 'parcels_ky_jefferson', 'parcels_ky_kenton',
-  // Louisiana
-  'parcels_la', 'parcels_la_east_baton_rouge', 'parcels_la_jefferson_v2', 'parcels_la_lafayette', 'parcels_la_orleans_v2',
-  // Massachusetts
-  'parcels_ma', 'parcels_ma_statewide',
-  // Maryland
-  'parcels_md_statewide',
-  // Maine
-  'parcels_me_bangor', 'parcels_me_portland', 'parcels_me_statewide',
-  // Michigan
-  'parcels_mi', 'parcels_mi_kent', 'parcels_mi_kent_v2', 'parcels_mi_macomb', 'parcels_mi_oakland', 'parcels_mi_oakland_v2', 'parcels_mi_ottawa', 'parcels_mi_wayne',
-  // Minnesota
-  'parcels_mn', 'parcels_mn_anoka', 'parcels_mn_dakota', 'parcels_mn_hennepin', 'parcels_mn_ramsey',
-  // Missouri
-  'parcels_mo', 'parcels_mo_christian', 'parcels_mo_clay', 'parcels_mo_jackson', 'parcels_mo_kansas_city', 'parcels_mo_st_charles', 'parcels_mo_st_charles_v2',
-  // Mississippi
-  'parcels_ms', 'parcels_ms_desoto', 'parcels_ms_hinds',
-  // Montana
-  'parcels_mt_statewide',
-  // North Carolina
-  'parcels_nc_durham', 'parcels_nc_durham_wgs84', 'parcels_nc_forsyth', 'parcels_nc_forsyth_wgs84',
-  'parcels_nc_guilford', 'parcels_nc_guilford_wgs84', 'parcels_nc_mecklenburg', 'parcels_nc_mecklenburg_wgs84',
-  'parcels_nc_statewide', 'parcels_nc_statewide_wgs84', 'parcels_nc_wake', 'parcels_nc_wake_wgs84',
-  // North Dakota
-  'parcels_nd', 'parcels_nd_cass', 'parcels_nd_statewide',
-  // Nebraska
-  'parcels_ne',
-  // New Hampshire
-  'parcels_nh', 'parcels_nh_statewide',
-  // New Jersey
-  'parcels_nj_bergen', 'parcels_nj_passaic', 'parcels_nj_statewide_v2',
-  // New Mexico
-  'parcels_nm', 'parcels_nm_statewide_v2',
-  // Nevada
-  'parcels_nv', 'parcels_nv_statewide',
-  // New York
-  'parcels_ny_centroids', 'parcels_ny_statewide', 'parcels_ny_statewide_v2',
-  // Ohio
-  'parcels_oh_cuyahoga', 'parcels_oh_franklin', 'parcels_oh_hamilton', 'parcels_oh_montgomery', 'parcels_oh_statewide', 'parcels_oh_summit_v2',
-  // Oklahoma
-  'parcels_ok_cleveland', 'parcels_ok_comanche',
-  // Oregon
-  'parcels_or_lane', 'parcels_or_multnomah_v2',
-  // Pennsylvania
-  'parcels_pa_allegheny', 'parcels_pa_delaware', 'parcels_pa_lackawanna', 'parcels_pa_lancaster_v2', 'parcels_pa_pasda_statewide', 'parcels_pa_statewide',
-  // South Carolina
-  'parcels_sc_charleston', 'parcels_sc_greenville', 'parcels_sc_spartanburg',
-  // South Dakota
-  'parcels_sd_beadle', 'parcels_sd_beadle_wgs84', 'parcels_sd_codington', 'parcels_sd_codington_wgs84', 'parcels_sd_pennington',
-  // Tennessee
-  'parcels_tn', 'parcels_tn_davidson', 'parcels_tn_hamilton', 'parcels_tn_montgomery', 'parcels_tn_nashville', 'parcels_tn_shelby', 'parcels_tn_statewide', 'parcels_tn_williamson',
-  // Texas
-  'parcels_tx', 'parcels_tx_bexar', 'parcels_tx_dallas', 'parcels_tx_denton', 'parcels_tx_harris', 'parcels_tx_harris_new',
-  'parcels_tx_statewide', 'parcels_tx_statewide_recent', 'parcels_tx_tarrant', 'parcels_tx_travis', 'parcels_tx_williamson_v2',
-  // Utah
-  'parcels_ut', 'parcels_ut_statewide',
-  // Virginia
-  'parcels_va', 'parcels_va_counties', 'parcels_va_loudoun_v2', 'parcels_va_prince_william_v2', 'parcels_va_statewide', 'parcels_va_statewide_v2',
-  // Vermont
-  'parcels_vt_statewide',
-  // Washington
-  'parcels_wa_king', 'parcels_wa_king_wgs84', 'parcels_wa_spokane', 'parcels_wa_spokane_wgs84', 'parcels_wa_statewide',
-  // Wisconsin
-  'parcels_wi', 'parcels_wi_kenosha', 'parcels_wi_milwaukee', 'parcels_wi_milwaukee_v2', 'parcels_wi_racine', 'parcels_wi_statewide', 'parcels_wi_waukesha',
-  // West Virginia
-  'parcels_wv', 'parcels_wv_statewide',
-  // Wyoming
-  'parcels_wy', 'parcels_wy_campbell',
-  // General/Misc
-  'parcels_montgomery'
-]
+// Spatial index for efficient viewport-based loading
+const PARCEL_INDEX = {
+  FL: {
+    bounds: [-87.635, 24.523, -80.031, 31.001],
+    statewide: ['parcels_fl_statewide'],
+    counties: ['parcels_fl_orange']
+  },
+  TX: {
+    bounds: [-106.645, 25.837, -93.508, 36.500],
+    statewide: ['parcels_tx_statewide_recent'],
+    counties: [
+      'parcels_tx_bexar', 'parcels_tx_dallas', 'parcels_tx_denton',
+      'parcels_tx_harris_v2', 'parcels_tx_montgomery',
+      'parcels_tx_tarrant_v2', 'parcels_tx_travis_v2', 'parcels_tx_williamson_v2'
+    ]
+  },
+  CA: {
+    bounds: [-124.482, 32.529, -114.131, 42.009],
+    statewide: ['parcels_ca_statewide'],
+    counties: [
+      'parcels_ca_fresno', 'parcels_ca_los_angeles_v2',
+      'parcels_ca_orange_v2', 'parcels_ca_riverside',
+      'parcels_ca_sacramento_v2', 'parcels_ca_san_diego',
+      'parcels_ca_san_francisco', 'parcels_ca_sonoma'
+    ]
+  },
+  NY: {
+    bounds: [-79.762, 40.496, -71.856, 45.015],
+    statewide: ['parcels_ny_statewide_v2'],
+    counties: []
+  },
+  PA: {
+    bounds: [-80.519, 39.720, -74.690, 42.269],
+    statewide: ['parcels_pa_statewide'],
+    counties: ['parcels_pa_allegheny', 'parcels_pa_delaware', 'parcels_pa_lancaster_v2']
+  },
+  OH: {
+    bounds: [-84.820, 38.403, -80.519, 41.977],
+    statewide: ['parcels_oh_statewide'],
+    counties: ['parcels_oh_cuyahoga', 'parcels_oh_franklin', 'parcels_oh_hamilton']
+  },
+  NC: {
+    bounds: [-84.322, 33.753, -75.401, 36.588],
+    statewide: ['parcels_nc_statewide'],
+    counties: ['parcels_nc_mecklenburg_wgs84', 'parcels_nc_wake', 'parcels_nc_durham_wgs84']
+  },
+  WA: {
+    bounds: [-124.736, 45.544, -116.916, 49.002],
+    statewide: ['parcels_wa_statewide'],
+    counties: ['parcels_wa_king_wgs84', 'parcels_wa_spokane_wgs84']
+  },
+  VA: {
+    bounds: [-83.675, 36.541, -75.243, 39.466],
+    statewide: ['parcels_va_statewide_v2'],
+    counties: ['parcels_va_loudoun_v2', 'parcels_va_prince_william_v2']
+  },
+  WI: {
+    bounds: [-92.889, 42.492, -86.249, 47.309],
+    statewide: ['parcels_wi_statewide'],
+    counties: ['parcels_wi_milwaukee_v2']
+  },
+  TN: {
+    bounds: [-90.310, 34.983, -81.647, 36.678],
+    statewide: ['parcels_tn_statewide'],
+    counties: ['parcels_tn_davidson', 'parcels_tn_shelby']
+  },
+  IN: {
+    bounds: [-88.098, 37.771, -84.784, 41.761],
+    statewide: ['parcels_in_statewide'],
+    counties: []
+  },
+  MN: {
+    bounds: [-97.239, 43.499, -89.483, 49.384],
+    statewide: ['parcels_mn_statewide'],
+    counties: []
+  },
+  AZ: {
+    bounds: [-114.816, 31.332, -109.045, 37.004],
+    statewide: [],
+    counties: ['parcels_az_maricopa', 'parcels_az_pima', 'parcels_az_pinal']
+  },
+  CO: {
+    bounds: [-109.060, 36.992, -102.042, 41.003],
+    statewide: ['parcels_co_statewide'],
+    counties: []
+  },
+  MA: { bounds: [-73.508, 41.238, -69.928, 42.887], statewide: ['parcels_ma_statewide'], counties: [] },
+  MD: { bounds: [-79.487, 37.887, -74.986, 39.723], statewide: ['parcels_md_statewide'], counties: [] },
+  NJ: { bounds: [-75.563, 38.788, -73.894, 41.357], statewide: ['parcels_nj_statewide_v2'], counties: [] },
+  CT: { bounds: [-73.728, 40.950, -71.787, 42.051], statewide: ['parcels_ct_statewide_v2'], counties: [] },
+  IA: { bounds: [-96.639, 40.375, -90.140, 43.501], statewide: ['parcels_ia_statewide'], counties: [] },
+  AR: { bounds: [-94.618, 33.004, -89.644, 36.500], statewide: ['parcels_ar_statewide'], counties: [] },
+  NM: { bounds: [-109.050, 31.332, -103.002, 37.000], statewide: ['parcels_nm_statewide_v2'], counties: [] },
+  NV: { bounds: [-120.006, 35.002, -114.040, 42.002], statewide: ['parcels_nv_statewide'], counties: [] },
+  UT: { bounds: [-114.053, 36.997, -109.041, 42.001], statewide: ['parcels_ut_statewide'], counties: [] },
+  WV: { bounds: [-82.644, 37.202, -77.719, 40.638], statewide: ['parcels_wv_statewide'], counties: [] },
+  HI: { bounds: [-178.338, 18.911, -154.807, 28.402], statewide: ['parcels_hi_statewide'], counties: [] },
+  ID: { bounds: [-117.243, 41.988, -111.043, 49.001], statewide: ['parcels_id_statewide'], counties: [] },
+  ME: { bounds: [-71.084, 42.977, -66.949, 47.459], statewide: ['parcels_me_statewide'], counties: [] },
+  NH: { bounds: [-72.557, 42.697, -70.610, 45.305], statewide: ['parcels_nh_statewide'], counties: [] },
+  RI: { bounds: [-71.907, 41.146, -71.120, 42.019], statewide: ['parcels_ri_statewide'], counties: [] },
+  AK: { bounds: [-179.150, 51.214, -129.980, 71.439], statewide: ['parcels_ak_statewide'], counties: [] },
+  DE: { bounds: [-75.789, 38.451, -74.984, 39.839], statewide: ['parcels_de_statewide'], counties: [] },
+  VT: { bounds: [-73.438, 42.727, -71.465, 45.017], statewide: ['parcels_vt_statewide'], counties: [] },
+  WY: { bounds: [-111.056, 40.995, -104.052, 45.006], statewide: ['parcels_wy_statewide'], counties: [] },
+  MT: { bounds: [-116.050, 44.358, -104.039, 49.001], statewide: ['parcels_mt_statewide_v2'], counties: [] },
+  ND: { bounds: [-104.049, 45.935, -96.554, 49.000], statewide: ['parcels_nd_statewide'], counties: [] },
+}
+
+// Check if two bounding boxes intersect
+function boundsIntersect(
+  bbox1: [number, number, number, number],
+  bbox2: [number, number, number, number]
+): boolean {
+  const [west1, south1, east1, north1] = bbox1
+  const [west2, south2, east2, north2] = bbox2
+
+  return !(east1 < west2 || west1 > east2 || north1 < south2 || south1 > north2)
+}
 
 export default function MapDemoPage() {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const maplibreRef = useRef<any>(null)
-  const parcelsLoadedRef = useRef(false)
-  const parcelsLoadingRef = useRef(false)
+  const loadedSourcesRef = useRef<Set<string>>(new Set())
   const [mapStyle, setMapStyle] = useState<'map' | 'satellite' | 'terrain'>('map')
   const [status, setStatus] = useState('Loading map...')
-  const [parcelsLoaded, setParcelsLoaded] = useState(false)
+  const [loadedCount, setLoadedCount] = useState(0)
   const [layers, setLayers] = useState({
     parcels: true,
     pois: true,
     buildings: true,
   })
 
+  // Get parcels that should be loaded for current viewport and zoom
+  const getParcelsForViewport = (bounds: LngLatBounds, zoom: number): string[] => {
+    const viewportBbox: [number, number, number, number] = [
+      bounds.getWest() - VIEWPORT_BUFFER,
+      bounds.getSouth() - VIEWPORT_BUFFER,
+      bounds.getEast() + VIEWPORT_BUFFER,
+      bounds.getNorth() + VIEWPORT_BUFFER,
+    ]
+
+    const parcelsToLoad: string[] = []
+
+    // Check each state
+    Object.entries(PARCEL_INDEX).forEach(([_state, data]) => {
+      const stateBounds = data.bounds as [number, number, number, number]
+
+      if (boundsIntersect(stateBounds, viewportBbox)) {
+        // Load statewide files at zoom 8+
+        if (zoom >= PARCEL_LOAD_ZOOM) {
+          parcelsToLoad.push(...data.statewide)
+        }
+
+        // Load county files at zoom 11+
+        if (zoom >= COUNTY_LOAD_ZOOM) {
+          parcelsToLoad.push(...data.counties)
+        }
+      }
+    })
+
+    return parcelsToLoad
+  }
+
+  // Load parcel sources in batches
+  const loadParcelSources = async (parcelNames: string[]) => {
+    if (!map.current) return
+
+    const toLoad = parcelNames.filter((p) => !loadedSourcesRef.current.has(p))
+    if (toLoad.length === 0) return
+
+    setStatus(`Loading ${toLoad.length} parcel datasets...`)
+
+    // Load in batches of 5 to avoid overwhelming the browser
+    const BATCH_SIZE = 5
+    for (let i = 0; i < toLoad.length; i += BATCH_SIZE) {
+      const batch = toLoad.slice(i, i + BATCH_SIZE)
+
+      await Promise.all(
+        batch.map(async (p) => {
+          try {
+            if (!map.current || map.current.getSource(p)) return
+
+            map.current.addSource(p, {
+              type: 'vector',
+              url: `pmtiles://${CDN}/parcels/${p}.pmtiles`,
+            })
+
+            map.current.addLayer({
+              id: `${p}-fill`,
+              type: 'fill',
+              source: p,
+              'source-layer': 'parcels',
+              minzoom: 8,
+              paint: {
+                'fill-color': '#e53935',
+                'fill-opacity': [
+                  'interpolate', ['linear'], ['zoom'],
+                  8, 0.01,
+                  10, 0.1,
+                  14, 0.25,
+                ],
+              },
+            })
+
+            map.current.addLayer({
+              id: `${p}-line`,
+              type: 'line',
+              source: p,
+              'source-layer': 'parcels',
+              minzoom: 12,
+              paint: {
+                'line-color': '#b71c1c',
+                'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.3, 16, 1.5],
+              },
+            })
+
+            loadedSourcesRef.current.add(p)
+          } catch (e) {
+            console.warn(`Failed to load parcel: ${p}`, e)
+          }
+        })
+      )
+
+      setLoadedCount(loadedSourcesRef.current.size)
+
+      // Small delay between batches
+      if (i + BATCH_SIZE < toLoad.length) {
+        await new Promise((resolve) => setTimeout(resolve, 100))
+      }
+    }
+
+    setStatus(`Loaded ${loadedSourcesRef.current.size} datasets. Zoom in for details.`)
+  }
+
+  // Update parcels based on viewport
+  const updateParcels = () => {
+    if (!map.current) return
+
+    const zoom = map.current.getZoom()
+    if (zoom < PARCEL_LOAD_ZOOM) {
+      setStatus('Map ready! Zoom in to see parcels.')
+      return
+    }
+
+    const bounds = map.current.getBounds()
+    const parcelsNeeded = getParcelsForViewport(bounds, zoom)
+
+    loadParcelSources(parcelsNeeded)
+  }
+
   // Toggle parcel visibility
   useEffect(() => {
-    if (!map.current || !parcelsLoaded) return
+    if (!map.current || loadedSourcesRef.current.size === 0) return
 
     const visibility = layers.parcels ? 'visible' : 'none'
-    PARCELS.forEach((p) => {
+    loadedSourcesRef.current.forEach((p) => {
       if (map.current?.getLayer(`${p}-fill`)) {
         map.current.setLayoutProperty(`${p}-fill`, 'visibility', visibility)
       }
@@ -153,7 +282,7 @@ export default function MapDemoPage() {
         map.current.setLayoutProperty(`${p}-line`, 'visibility', visibility)
       }
     })
-  }, [layers.parcels, parcelsLoaded])
+  }, [layers.parcels])
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return
@@ -169,7 +298,7 @@ export default function MapDemoPage() {
         const protocol = new pmtiles.Protocol()
         maplibregl.addProtocol('pmtiles', protocol.tile)
 
-        // Build map style with Protomaps
+        // Build map style
         const protomapsLayers = protomapsThemes.layers(
           'protomaps',
           protomapsThemes.namedTheme('light'),
@@ -227,84 +356,26 @@ export default function MapDemoPage() {
 
         setStatus('Initializing map...')
 
-        // Add navigation controls
+        // Add controls
         map.current.addControl(new maplibregl.NavigationControl(), 'top-right')
         map.current.addControl(new maplibregl.ScaleControl(), 'bottom-right')
 
-        // Load parcels function - called when zoom >= PARCEL_LOAD_ZOOM
-        const loadParcels = async () => {
-          if (parcelsLoadedRef.current || parcelsLoadingRef.current || !map.current) return
-          parcelsLoadingRef.current = true
-
-          setStatus('Loading parcels...')
-
-          for (const p of PARCELS) {
-            try {
-              if (map.current?.getSource(p)) continue
-
-              map.current?.addSource(p, {
-                type: 'vector',
-                url: `pmtiles://${CDN}/parcels/${p}.pmtiles`,
-              })
-
-              map.current?.addLayer({
-                id: `${p}-fill`,
-                type: 'fill',
-                source: p,
-                'source-layer': 'parcels',
-                minzoom: 5,
-                paint: {
-                  'fill-color': '#e53935',
-                  'fill-opacity': [
-                    'interpolate', ['linear'], ['zoom'],
-                    5, 0.02,
-                    10, 0.15,
-                    14, 0.3,
-                  ],
-                },
-              })
-
-              map.current?.addLayer({
-                id: `${p}-line`,
-                type: 'line',
-                source: p,
-                'source-layer': 'parcels',
-                minzoom: 11,
-                paint: {
-                  'line-color': '#b71c1c',
-                  'line-width': ['interpolate', ['linear'], ['zoom'], 11, 0.3, 16, 1.5],
-                },
-              })
-            } catch (e) {
-              console.warn(`Failed to load parcel: ${p}`, e)
-            }
-          }
-
-          parcelsLoadedRef.current = true
-          setParcelsLoaded(true)
-          setStatus('Ready! Click any parcel for details.')
-        }
-
-        // Map ready - set up lazy loading
         map.current.on('load', () => {
-          // Force resize in case container dimensions weren't ready during init
           map.current?.resize()
-
           setStatus('Map ready! Zoom in to see parcels.')
 
-          // Single delegated click handler for all parcels (much more efficient)
+          // Single delegated click handler
           map.current?.on('click', (e) => {
-            if (!parcelsLoadedRef.current || !map.current) return
+            if (!map.current) return
 
-            // Get all parcel fill layers that exist
-            const parcelLayers = PARCELS
-              .map(p => `${p}-fill`)
-              .filter(l => map.current?.getLayer(l))
+            const parcelLayers = Array.from(loadedSourcesRef.current)
+              .map((p) => `${p}-fill`)
+              .filter((l) => map.current?.getLayer(l))
 
             if (parcelLayers.length === 0) return
 
             const features = map.current.queryRenderedFeatures(e.point, {
-              layers: parcelLayers
+              layers: parcelLayers,
             })
 
             if (features.length > 0 && maplibreRef.current) {
@@ -317,43 +388,46 @@ export default function MapDemoPage() {
 
               new maplibreRef.current.Popup()
                 .setLngLat(e.lngLat)
-                .setHTML(`<div style="max-height: 250px; overflow-y: auto; font-size: 12px;">${content}</div>`)
+                .setHTML(
+                  `<div style="max-height: 250px; overflow-y: auto; font-size: 12px;">${content}</div>`
+                )
                 .addTo(map.current!)
             }
           })
 
-          // Single mousemove handler for cursor changes
+          // Cursor changes on hover
           map.current?.on('mousemove', (e) => {
-            if (!parcelsLoadedRef.current || !map.current) return
+            if (!map.current) return
 
-            const parcelLayers = PARCELS
-              .map(p => `${p}-fill`)
-              .filter(l => map.current?.getLayer(l))
+            const parcelLayers = Array.from(loadedSourcesRef.current)
+              .map((p) => `${p}-fill`)
+              .filter((l) => map.current?.getLayer(l))
 
             if (parcelLayers.length === 0) return
 
             const features = map.current.queryRenderedFeatures(e.point, {
-              layers: parcelLayers
+              layers: parcelLayers,
             })
 
             map.current.getCanvas().style.cursor = features.length > 0 ? 'pointer' : ''
           })
 
-          // Zoom listener for lazy loading parcels
-          map.current?.on('zoom', () => {
-            if (!map.current) return
-            const zoom = map.current.getZoom()
-
-            if (zoom >= PARCEL_LOAD_ZOOM && !parcelsLoadedRef.current && !parcelsLoadingRef.current) {
-              loadParcels()
-            }
+          // Viewport-based loading on move
+          map.current?.on('moveend', () => {
+            updateParcels()
           })
+
+          // Also update on zoom
+          map.current?.on('zoomend', () => {
+            updateParcels()
+          })
+
+          // Initial load
+          updateParcels()
         })
 
         map.current.on('error', (e) => {
           console.error('Map error:', e)
-          // Don't update status for source errors (parcels loading)
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           if (!(e as any).sourceId) {
             setStatus(`Map error: ${e.error?.message || 'Unknown error'}`)
           }
@@ -369,7 +443,6 @@ export default function MapDemoPage() {
     return () => {
       map.current?.remove()
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Handle map style switching
@@ -378,14 +451,12 @@ export default function MapDemoPage() {
 
     const m = map.current
 
-    // Helper to set layer visibility
     const setLayerVisibility = (layerId: string, visible: boolean) => {
       if (m.getLayer(layerId)) {
         m.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none')
       }
     }
 
-    // Helper to set basemap visibility (protomaps layers)
     const setBasemapVisibility = (visible: boolean) => {
       m.getStyle()?.layers?.forEach((layer) => {
         const layerSource = 'source' in layer ? layer.source : null
@@ -475,7 +546,9 @@ export default function MapDemoPage() {
                 className="rounded"
               />
               <span className="text-sm">Property Parcels</span>
-              <span className="text-xs text-muted-foreground ml-auto">150M+</span>
+              <span className="text-xs text-muted-foreground ml-auto">
+                {loadedCount > 0 ? `${loadedCount} loaded` : '150M+'}
+              </span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
@@ -503,9 +576,7 @@ export default function MapDemoPage() {
           </div>
 
           <div className="mt-4 pt-4 border-t">
-            <p className="text-xs text-muted-foreground">
-              {status}
-            </p>
+            <p className="text-xs text-muted-foreground">{status}</p>
           </div>
         </div>
 
@@ -513,15 +584,13 @@ export default function MapDemoPage() {
         <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur rounded-lg shadow-lg p-4 z-10">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-medium">This is a demo of Maps for Developers</p>
+              <p className="font-medium">Optimized viewport-based loading</p>
               <p className="text-sm text-muted-foreground">
-                680GB of data including 150M+ parcels, 17M+ POIs, terrain, and satellite imagery
+                Only loads parcels visible in your viewport. Zoom 8+ for statewide, 11+ for counties.
               </p>
             </div>
             <Button asChild>
-              <Link href="/signup">
-                Start Building Free
-              </Link>
+              <Link href="/signup">Start Building Free</Link>
             </Button>
           </div>
         </div>

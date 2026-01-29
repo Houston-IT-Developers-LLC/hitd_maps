@@ -102,6 +102,96 @@ SERVICES = {
         'max_per_request': 2000,
         'notes': 'Madison County Mississippi - 109K population'
     },
+    'parcels_tx_montgomery_new': {
+        'url': 'https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/ArcGIS/rest/services/Montgomery_County_Parcels/FeatureServer/0',
+        'state': 'TX',
+        'max_per_request': 1000,
+        'notes': 'Montgomery County TX (The Woodlands) - Replace incomplete 5MB file'
+    },
+    'parcels_tx_lubbock': {
+        'url': 'https://pubgis.ci.lubbock.tx.us/server/rest/services/EgovTest/MapServer/8',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Lubbock County TX - MapServer endpoint'
+    },
+    'parcels_tx_fortbend': {
+        'url': 'https://gisweb.fortbendcountytx.gov/arcgis/rest/services/General/Parcels/MapServer/0',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Fort Bend County TX (Sugar Land) - Top 10 county'
+    },
+    'parcels_tx_hidalgo': {
+        'url': 'https://propaccess.hidalgoad.org/arcgis/rest/services/HidalgoMapSearch/MapServer/0',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Hidalgo County TX (McAllen) - Top 10 county'
+    },
+    'parcels_tx_collin': {
+        'url': 'https://gismaps.cityofallen.org/arcgis/rest/services/ReferenceData/Collin_County_Appraisal_District_Parcels/MapServer/1',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Collin County TX (Plano, McKinney, Frisco) - CCAD Tax Parcels layer 1'
+    },
+    'parcels_tx_jefferson': {
+        'url': 'https://gis.beaumonttexas.gov/arcgis/rest/services/Cityworks/PlanningAndComDev/MapServer/6',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Jefferson County TX (Beaumont) - Parcels layer 6'
+    },
+    'parcels_tx_nueces': {
+        'url': 'https://gis.urbaneng.com/arcgis/rest/services/Nueces_Boundary_2020_EDIT2_09012020/MapServer/6',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Nueces County TX (Corpus Christi) - Corpus Christi Bay parcels'
+    },
+    'parcels_tx_galveston': {
+        'url': 'https://www1.cityofwebster.com/arcgis/rest/services/Landbase/CountyGalveston/MapServer/0',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Galveston County TX - City of Webster endpoint'
+    },
+    'parcels_tx_tarrant_new': {
+        'url': 'https://mapit.tarrantcounty.com/arcgis/rest/services/Dynamic/TADParcelsApp/MapServer/0',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Tarrant County TX (Fort Worth) - TAD Parcels MapServer'
+    },
+    'parcels_tx_mclennan': {
+        'url': 'https://gis.wacotx.gov/server/rest/services/Parcel_2024/FeatureServer/0',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'McLennan County TX (Waco) - City Parcel 2024'
+    },
+    'parcels_tx_cameron': {
+        'url': 'https://services2.arcgis.com/6oaLMZEZlktbQpyi/ArcGIS/rest/services/CCAD_Parcels_View/FeatureServer/0',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Cameron County TX (Brownsville) - CCAD Parcels updated May 2025'
+    },
+    'parcels_tx_williamson': {
+        'url': 'https://gis.wilco.org/arcgis/rest/services/public/county_wcad_parcels/MapServer/0',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Williamson County TX (Round Rock, Georgetown) - WCAD parcels'
+    },
+    'parcels_tx_ector': {
+        'url': 'https://geoint2.odessa-tx.gov/arcgis/rest/services/Appraisal_District/Ector_County_Appraisal_Parcels/MapServer/0',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Ector County TX (Odessa) - Appraisal District parcels'
+    },
+    'parcels_tx_midland': {
+        'url': 'https://maps.midlandtexas.gov/arcgis/rest/services/Energov/Energov/MapServer/1',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Midland County TX - Energov parcels layer 1 (Parcels_energovlink)'
+    },
+    'parcels_tx_brazos': {
+        'url': 'https://bryangis.bryan-county.org/arcgis/rest/services/Parcels/MapServer/0',
+        'state': 'TX',
+        'max_per_request': 2000,
+        'notes': 'Brazos County TX (Bryan, College Station) - Bryan County parcels'
+    },
 }
 
 

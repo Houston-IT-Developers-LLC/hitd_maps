@@ -61,6 +61,97 @@ SERVICES = {
         'max_per_request': 2000,
         'notes': 'Bay County Michigan (103K pop) - Open Data portal'
     },
+    'parcels_mi_genesee': {
+        'url': 'https://gis.gcrc.org/arcgis/rest/services/GCRC/GCRC_Properties_real/FeatureServer/0',
+        'state': 'MI',
+        'county': 'Genesee',
+        'max_per_request': 2000,
+        'notes': 'Genesee County Michigan (402K pop, Flint) - GCRC GIS'
+    },
+    'parcels_mi_washtenaw': {
+        'url': 'https://services.arcgis.com/f4rR7WnIfGBdVYFd/arcgis/rest/services/Parcels/FeatureServer/0',
+        'state': 'MI',
+        'county': 'Washtenaw',
+        'max_per_request': 1000,
+        'notes': 'Washtenaw County Michigan (367K pop, Ann Arbor) - Open Data Portal'
+    },
+    'parcels_mi_kalamazoo': {
+        'url': 'https://gis.kalcounty.com/server/rest/services/Hosted/Parcels__2025_/FeatureServer/0',
+        'state': 'MI',
+        'county': 'Kalamazoo',
+        'max_per_request': 2000,
+        'notes': 'Kalamazoo County Michigan (262K pop) - 2025 parcel data'
+    },
+    'parcels_mi_grand_traverse': {
+        'url': 'https://gis.grandtraverse.org/arcgis/rest/services/Treasurer/Parcel20/FeatureServer/0',
+        'state': 'MI',
+        'county': 'Grand Traverse',
+        'max_per_request': 2000,
+        'notes': 'Grand Traverse County Michigan (95K pop, Traverse City) - VERIFIED'
+    },
+    'parcels_mi_marquette': {
+        'url': 'https://services9.arcgis.com/6EuFgO4fLTqfNOhu/ArcGIS/rest/services/MarquetteParcelData/FeatureServer/0',
+        'state': 'MI',
+        'county': 'Marquette',
+        'max_per_request': 2000,
+        'notes': 'Marquette County Michigan (66K pop) - VERIFIED'
+    },
+    'parcels_mi_arenac': {
+        'url': 'https://services8.arcgis.com/SWvtgOskziun2bFF/arcgis/rest/services/Arenac_Parcel_2026/FeatureServer/0',
+        'state': 'MI',
+        'county': 'Arenac',
+        'max_per_request': 2000,
+        'notes': 'Arenac County Michigan (15K pop) - 2026 parcel data'
+    },
+    'parcels_mi_livingston': {
+        'url': 'https://gis.livgov.com/arcgis/rest/services/BaseData/Parcels/FeatureServer/0',
+        'state': 'MI',
+        'county': 'Livingston',
+        'max_per_request': 2000,
+        'notes': 'Livingston County Michigan (193K pop) - County GIS'
+    },
+    'parcels_mi_st_clair': {
+        'url': 'https://gis.stclaircounty.org/arcgis/rest/services/Parcels/FeatureServer/0',
+        'state': 'MI',
+        'county': 'St. Clair',
+        'max_per_request': 2000,
+        'notes': 'St. Clair County Michigan (160K pop) - County GIS'
+    },
+    'parcels_mi_lenawee': {
+        'url': 'https://services1.arcgis.com/m7djDD6l7d4cGuWe/arcgis/rest/services/Lenawee_Parcels/FeatureServer/0',
+        'state': 'MI',
+        'county': 'Lenawee',
+        'max_per_request': 2000,
+        'notes': 'Lenawee County Michigan (99K pop) - ArcGIS Online'
+    },
+    'parcels_mi_calhoun': {
+        'url': 'https://gis.calhouncountymi.gov/arcgis/rest/services/Parcels/MapServer/0',
+        'state': 'MI',
+        'county': 'Calhoun',
+        'max_per_request': 2000,
+        'notes': 'Calhoun County Michigan (134K pop, Battle Creek) - MapServer'
+    },
+    'parcels_mi_clinton': {
+        'url': 'https://services1.arcgis.com/Hp6G80Pky0om7QvQ/arcgis/rest/services/Parcels/FeatureServer/0',
+        'state': 'MI',
+        'county': 'Clinton',
+        'max_per_request': 2000,
+        'notes': 'Clinton County Michigan (79K pop) - ArcGIS Online'
+    },
+    'parcels_mi_eaton': {
+        'url': 'https://services8.arcgis.com/kSWeZLv5KXVYeave/arcgis/rest/services/Parcels/FeatureServer/0',
+        'state': 'MI',
+        'county': 'Eaton',
+        'max_per_request': 2000,
+        'notes': 'Eaton County Michigan (109K pop, Lansing area) - ArcGIS Online'
+    },
+    'parcels_mi_allegan': {
+        'url': 'https://services6.arcgis.com/FU0UxR6xC00IS3t1/arcgis/rest/services/Parcels/FeatureServer/0',
+        'state': 'MI',
+        'county': 'Allegan',
+        'max_per_request': 2000,
+        'notes': 'Allegan County Michigan (120K pop) - ArcGIS Online'
+    },
 }
 
 

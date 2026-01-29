@@ -1079,6 +1079,18 @@
         "notes": "Have Douglas (Omaha) and Lancaster (Lincoln) counties"
       },
       "counties": {
+        "Hall": {
+          "name": "Hall County (Grand Island)",
+          "population": 63000,
+          "url": "https://hc-cityofgi.hub.arcgis.com/",
+          "api_url": "https://gis.grand-island.com/arcgis/rest/services/County/ParcelOwners/MapServer/0",
+          "format": "ArcGIS REST MapServer",
+          "update_frequency": "unknown",
+          "total_records": null,
+          "our_status": "need",
+          "our_files": [],
+          "notes": "MapServer (not FeatureServer) with 2000 record pagination limit. Part of City of Grand Island & Hall County cooperative GIS."
+        },
         "Lancaster": {
           "name": "Lancaster County (Lincoln - state capital)",
           "population": 322000,
