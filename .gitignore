@@ -35,6 +35,9 @@ web/node_modules/
 web/.next/
 web/.env.local
 
+# Credentials (never commit)
+CREDENTIALS.md
+
 # Symbolication related
 app.*.symbols
 

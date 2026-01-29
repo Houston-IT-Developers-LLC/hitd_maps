@@ -124,25 +124,41 @@ hitd_maps/
 
 ## R2 Configuration
 
+**Credentials are stored securely in environment variables. See [CREDENTIALS.md](CREDENTIALS.md) for setup instructions.**
+
+Configuration is managed through:
+- `data-pipeline/.env` - Data pipeline scripts (R2 upload, processing)
+- `web/.env.local` - Next.js app (CDN URL only, no secrets)
+- Vercel Environment Variables - Production deployment
+
+Required environment variables:
+```bash
+R2_ACCESS_KEY=<your_key>
+R2_SECRET_KEY=<your_secret>
+R2_BUCKET=gspot-tiles
+R2_ENDPOINT=<your_endpoint>
+R2_PUBLIC_URL=<your_cdn_url>
 ```
-Bucket: gspot-tiles
-Endpoint: https://551bf8d24bb6069fbaa10e863a672fd5.r2.cloudflarestorage.com
-CDN: https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev
-AWS_ACCESS_KEY: ecd653afe3300fdc045b9980df0dbb14
-AWS_SECRET_KEY: c115d1780b2d7b8ce22d37f2416306a692ce177364cb320608fb761881c17f35
+
+Quick test:
+```bash
+# Verify R2 credentials are working
+aws s3 ls s3://gspot-tiles --endpoint-url $R2_ENDPOINT
 ```
 
 ---
 
 ## Third-Party Services
 
-| Service | Purpose | Docs |
-|---------|---------|------|
-| Cloudflare R2 | Tile storage & CDN | r2.dev |
-| Vercel | Frontend hosting | vercel.com |
-| Supabase | Auth & database | supabase.com |
-| Stripe | Payments | stripe.com |
-| Ollama | Local AI (10.8.0.1:11434) | ollama.ai |
+**All credentials stored in environment variables - see [CREDENTIALS.md](CREDENTIALS.md) for setup.**
+
+| Service | Purpose | Credentials Location | Docs |
+|---------|---------|---------------------|------|
+| Cloudflare R2 | Tile storage & CDN | `data-pipeline/.env` | r2.dev |
+| Vercel | Frontend hosting | N/A (git deploy) | vercel.com |
+| Supabase | Auth & database | Vercel env vars | supabase.com |
+| Stripe | Payments | Vercel env vars | stripe.com |
+| Ollama | Local AI | `data-pipeline/.env` | ollama.ai |
 
 ## Open Source Stack
 
