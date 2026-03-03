@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
@@ -598,7 +599,11 @@ class OfflineManager {
   int _latToTileY(double lat, int zoom) {
     final latRad = lat * 3.141592653589793 / 180.0;
     final n = 1 << zoom;
-    return ((1.0 - (latRad.tan() + 1.0 / latRad.cos()).log() / 3.141592653589793) / 2.0 * n)
+    return ((1.0 -
+                math.log(math.tan(latRad) + 1.0 / math.cos(latRad)) /
+                    3.141592653589793) /
+            2.0 *
+            n)
         .floor()
         .clamp(0, n - 1);
   }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
@@ -171,6 +172,16 @@ class _HitdMapState extends State<HitdMap> {
   Future<void> _onStyleLoaded() async {
     setState(() => _styleLoaded = true);
 
+    // Style reload destroys all MapLibre sources/layers — recreate
+    // LayerManager and controller so internal tracking is fresh.
+    if (_mapLibreController != null) {
+      _layerManager = LayerManager(_mapLibreController!);
+      _hitdController = HitdMapController(
+        mapLibreController: _mapLibreController!,
+        layerManager: _layerManager!,
+      );
+    }
+
     if (_layerManager != null) {
       // Add all configured layers
       for (final layer in widget.layers) {
@@ -178,7 +189,7 @@ class _HitdMapState extends State<HitdMap> {
       }
     }
 
-    // Notify that map is ready
+    // Notify that map is ready — callers re-add their dynamic layers here
     if (_hitdController != null) {
       widget.onMapCreated?.call(_hitdController!);
     }

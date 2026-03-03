@@ -597,7 +597,7 @@ class WindDetailPanel extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: HitdColors.camolight2,
+              color: HitdColors.camoLight2,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(

@@ -93,7 +93,7 @@ class HitdMapLayer {
       type: HitdLayerType.parcels,
       sourceId: 'parcels-source',
       sourceLayer: 'parcels',
-      pmtilesPattern: 'parcels_{state}.pmtiles',
+      pmtilesPattern: 'parcels_{state}_statewide.pmtiles',
       isStateSpecific: true,
       minZoom: 10,
       maxZoom: 18,

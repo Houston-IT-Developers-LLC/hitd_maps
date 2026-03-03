@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:math' as math;
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
@@ -455,14 +457,15 @@ class HitdMapController {
   ///
   /// Returns empty list on error instead of throwing.
   Future<List<Map<String, dynamic>>> queryFeaturesAtPoint(
-    Point<double> point, {
+    math.Point<double> point, {
     List<String>? layerIds,
   }) async {
     if (_disposed) return [];
 
     try {
       final layers = layerIds ?? _layerManager.queryableLayers;
-      return await _mapLibreController.queryRenderedFeatures(point, layers, null);
+      final features = await _mapLibreController.queryRenderedFeatures(point, layers, null);
+      return features.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
     } catch (e, stack) {
       _handleError(HitdMapErrorType.query, 'Failed to query features at point', e, stack);
       return [];
@@ -480,7 +483,8 @@ class HitdMapController {
 
     try {
       final layers = layerIds ?? _layerManager.queryableLayers;
-      return await _mapLibreController.queryRenderedFeaturesInRect(bounds, layers, null);
+      final features = await _mapLibreController.queryRenderedFeaturesInRect(bounds, layers, null);
+      return features.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
     } catch (e, stack) {
       _handleError(HitdMapErrorType.query, 'Failed to query features in bounds', e, stack);
       return [];
@@ -659,11 +663,10 @@ class HitdMapController {
   /// Remove a custom image.
   Future<void> removeCustomImage(String imageId) async {
     _checkDisposed();
-    try {
-      await _mapLibreController.removeImage(imageId);
-    } catch (e, stack) {
-      _handleError(HitdMapErrorType.annotation, 'Failed to remove custom image $imageId', e, stack);
-      // Don't rethrow - image might not exist
+    // maplibre_gl 0.25.0 has addImage but no corresponding removeImage.
+    // Keep this method as a safe no-op for API compatibility.
+    if (kDebugMode) {
+      log('removeCustomImage($imageId) is not supported by maplibre_gl 0.25.0');
     }
   }
 

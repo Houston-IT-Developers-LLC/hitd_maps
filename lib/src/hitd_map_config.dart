@@ -136,7 +136,7 @@ class HitdMapPresets {
   /// the outdoor-focused basemap.
   static void useGSpotOutdoors({bool debugMode = false}) {
     HitdMapConfig.initialize(
-      pmtilesBaseUrl: 'https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev/parcels',
+      pmtilesBaseUrl: 'https://pub-2ecaf6bcd4974935938a5ec02cd32cc9.r2.dev',
       basemapStyleUrl: HitdMapStyles.osmSimple,
       debugMode: debugMode,
     );

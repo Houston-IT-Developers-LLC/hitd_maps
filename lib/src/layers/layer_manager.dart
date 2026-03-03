@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 
 import '../hitd_map_config.dart';
@@ -134,14 +133,15 @@ class LayerManager {
 
   /// Reload a layer with current state data.
   Future<void> _reloadLayer(HitdMapLayer layer) async {
+    final wasVisible = _visibility[layer.id] ?? true;
+
+    // Remove existing — wrap individually so a failed remove doesn't
+    // prevent the new source from being added (e.g. old source was 404)
+    try { await _controller.removeLayer('${layer.id}-fill'); } catch (_) {}
+    try { await _controller.removeLayer('${layer.id}-outline'); } catch (_) {}
+    try { await _controller.removeSource(layer.sourceId); } catch (_) {}
+
     try {
-      final wasVisible = _visibility[layer.id] ?? true;
-
-      // Remove existing
-      await _controller.removeLayer('${layer.id}-fill');
-      await _controller.removeLayer('${layer.id}-outline');
-      await _controller.removeSource(layer.sourceId);
-
       // Re-add with new state
       await _addSource(layer);
 
@@ -164,13 +164,14 @@ class LayerManager {
   /// Add a PMTiles source for a layer.
   Future<void> _addSource(HitdMapLayer layer) async {
     final url = layer.getPmtilesUrl(stateCode: _currentState);
+    _log('Adding source ${layer.sourceId}: $url (state=$_currentState)');
 
     await _controller.addSource(
       layer.sourceId,
       VectorSourceProperties(
         url: url,
-        minzoom: layer.minZoom.toInt(),
-        maxzoom: layer.maxZoom.toInt(),
+        minzoom: layer.minZoom,
+        maxzoom: layer.maxZoom,
       ),
     );
   }
@@ -242,9 +243,9 @@ class LayerManager {
   void _log(String message, {bool isError = false}) {
     if (HitdMapConfig.isInitialized && HitdMapConfig.instance.debugMode) {
       if (isError) {
-        log('[LayerManager] ERROR: $message');
+        debugPrint('[LayerManager] ERROR: $message');
       } else if (kDebugMode) {
-        log('[LayerManager] $message');
+        debugPrint('[LayerManager] $message');
       }
     }
   }
